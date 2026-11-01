@@ -1,0 +1,3 @@
+@echo off
+echo Starting POx Research Hub Backend...
+.\backend\venv\Scripts\python.exe run_backend.py
