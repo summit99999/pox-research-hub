@@ -31,14 +31,14 @@ async def generate_scientific_summary(
     """
     Calls Google Gemini using the google-genai SDK to generate a structured 13-section summary.
     """
-    active_model = model_name or settings.GEMINI_MODEL or "gemini-2.5-flash"
+    active_model = model_name or settings.GEMINI_MODEL or "gemini-flash-latest"
     
-    if not settings.GEMINI_API_KEY:
+    try:
+        client = genai.Client(api_key=settings.GEMINI_API_KEY) if settings.GEMINI_API_KEY else genai.Client()
+    except Exception as init_err:
         raise ValueError(
-            "GEMINI_API_KEY is not configured. Please provide a valid Gemini API key in your environment."
+            f"Could not initialize Google GenAI Client: {init_err}. Please set GEMINI_API_KEY in backend/.env"
         )
-
-    client = genai.Client(api_key=settings.GEMINI_API_KEY)
     
     title = paper.get("title", "Unknown Title")
     abstract = paper.get("abstract") or "No abstract text available in current record."

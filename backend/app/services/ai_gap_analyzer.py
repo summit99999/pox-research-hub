@@ -28,12 +28,12 @@ async def analyze_research_gaps(
     """
     Executes an evidence-grounded research gap analysis using Google Gemini.
     """
-    if not settings.GEMINI_API_KEY:
+    try:
+        client = genai.Client(api_key=settings.GEMINI_API_KEY) if settings.GEMINI_API_KEY else genai.Client()
+    except Exception as init_err:
         raise ValueError(
-            "GEMINI_API_KEY is not configured. Please supply a Gemini API key."
+            f"Could not initialize Google GenAI Client: {init_err}. Please set GEMINI_API_KEY in backend/.env"
         )
-
-    client = genai.Client(api_key=settings.GEMINI_API_KEY)
     
     # Retrieve sample corpus from DB if target_papers is not provided
     supabase = get_supabase_admin()
@@ -80,7 +80,7 @@ Format your response as a valid JSON object with the key "gaps" containing an ar
 
     try:
         response = client.models.generate_content(
-            model=settings.GEMINI_MODEL or "gemini-2.5-flash",
+            model=settings.GEMINI_MODEL or "gemini-flash-latest",
             contents=prompt,
             config=types.GenerateContentConfig(
                 system_instruction=GAP_SYSTEM_PROMPT,

@@ -59,10 +59,10 @@ async def generate_review_draft(
     if not papers:
         raise HTTPException(status_code=404, detail="Selected publications could not be retrieved from database.")
 
-    if not settings.GEMINI_API_KEY:
-        raise HTTPException(status_code=503, detail="Gemini API is not configured.")
-
-    client = genai.Client(api_key=settings.GEMINI_API_KEY)
+    try:
+        client = genai.Client(api_key=settings.GEMINI_API_KEY) if settings.GEMINI_API_KEY else genai.Client()
+    except Exception as init_err:
+        raise HTTPException(status_code=503, detail=f"Gemini API is not configured: {init_err}")
     
     # Format papers for prompt
     papers_context = ""
@@ -81,7 +81,7 @@ Please generate the Markdown literature review and comparison matrix according t
 
     try:
         response = client.models.generate_content(
-            model=settings.GEMINI_MODEL or "gemini-2.5-flash",
+            model=settings.GEMINI_MODEL or "gemini-flash-latest",
             contents=user_query,
             config=types.GenerateContentConfig(
                 system_instruction=REVIEW_PROMPT,
