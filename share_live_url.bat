@@ -6,10 +6,12 @@ echo   Developed by: Sumit Barik (IACS Kolkata)
 echo ========================================================
 echo.
 echo Make sure the website is running first (via start_hub.bat).
-echo Creating a secure public tunnel to http://localhost:5173 ...
+echo Creating a secure custom public tunnel...
+echo Custom Domain: https://polyoxazoline-research-hub.loca.lt
 echo.
-echo Your shareable URL will appear below (e.g. https://...loca.lt):
-echo You can copy and send that URL to anyone on WhatsApp, Email, or Slack!
+echo NOTE: If prompted for Tunnel Password / Host IP, enter:
+curl -s https://loca.lt/mytunnelpassword
 echo.
-npx localtunnel --port 5173
+echo Starting tunnel...
+npx localtunnel --port 5173 --subdomain polyoxazoline-research-hub
 pause
