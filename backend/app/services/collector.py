@@ -218,6 +218,13 @@ async def run_literature_collection(
             except Exception as e:
                 logger.warning(f"Could not update completion log: {e}")
 
+        # Invalidate analytics cache so new numbers appear immediately
+        try:
+            from app.services.analytics import invalidate_analytics_cache
+            invalidate_analytics_cache()
+        except Exception:
+            pass
+
         return {
             "status": "success",
             "source": source,

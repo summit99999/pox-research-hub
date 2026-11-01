@@ -10,7 +10,8 @@ import {
   RefreshCw, 
   ArrowRight,
   BookOpen,
-  FlaskConical
+  FlaskConical,
+  Database
 } from 'lucide-react';
 import { 
   ResponsiveContainer, 
@@ -55,9 +56,9 @@ export default function DashboardView({
         api.getCategories().catch(() => [])
       ]);
 
-      setAnalytics(analyticsData);
-      setRecentPapers(papersData?.items || []);
-      setCategories(categoriesData || []);
+      if (analyticsData) setAnalytics(analyticsData);
+      if (papersData?.items) setRecentPapers(papersData.items);
+      if (categoriesData) setCategories(categoriesData);
     } catch (e) {
       console.debug('Dashboard load error', e);
     } finally {
@@ -84,14 +85,24 @@ export default function DashboardView({
         { year: 2026, pox_count: 95, pozi_count: 35, total_count: 130 }
       ];
 
+  const totalIndexed = analytics?.total_papers || recentPapers.length || 0;
+
   return (
     <div className="space-y-8 pb-12">
       {/* Hero Welcome Header */}
       <div className="relative rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950/60 border border-slate-800 p-6 lg:p-8 overflow-hidden shadow-xl">
         <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold uppercase tracking-wider mb-4">
-            <Atom className="w-4 h-4 animate-spin text-teal-400" />
-            Poly(2-oxazoline) & Poly(2-oxazine) Literature Hub
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold uppercase tracking-wider">
+              <Atom className="w-4 h-4 animate-spin text-teal-400" />
+              Poly(2-oxazoline) & Poly(2-oxazine) Hub
+            </div>
+            {totalIndexed > 0 && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-xs text-slate-300">
+                <Database className="w-3.5 h-3.5 text-teal-400" />
+                <strong className="text-teal-300">{totalIndexed}</strong> publications in Cloud DB
+              </span>
+            )}
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight leading-tight">
             Scientific Literature Platform & AI Research Discovery
@@ -130,10 +141,14 @@ export default function DashboardView({
             <BookOpen className="w-4 h-4 text-teal-400" />
           </div>
           <div className="text-2xl font-bold text-slate-100 font-mono">
-            {analytics?.total_papers || 0}
+            {loading ? (
+              <span className="inline-block w-12 h-7 bg-slate-800 rounded animate-pulse"></span>
+            ) : (
+              analytics?.total_papers || recentPapers.length || 0
+            )}
           </div>
           <div className="text-[11px] text-teal-400/80 mt-1 flex items-center gap-1">
-            <span>Indexed in Cloud DB</span>
+            <span>Indexed in Supabase Cloud</span>
           </div>
         </div>
 
@@ -143,10 +158,14 @@ export default function DashboardView({
             <Calendar className="w-4 h-4 text-indigo-400" />
           </div>
           <div className="text-2xl font-bold text-indigo-300 font-mono">
-            {analytics?.papers_current_year || 0}
+            {loading ? (
+              <span className="inline-block w-12 h-7 bg-slate-800 rounded animate-pulse"></span>
+            ) : (
+              analytics?.papers_current_year || 0
+            )}
           </div>
           <div className="text-[11px] text-slate-400 mt-1">
-            Newly discovered articles
+            Newly published articles
           </div>
         </div>
 
@@ -156,7 +175,11 @@ export default function DashboardView({
             <Layers className="w-4 h-4 text-teal-400" />
           </div>
           <div className="text-2xl font-bold text-slate-100 font-mono">
-            {analytics?.pox_papers_count || 0}
+            {loading ? (
+              <span className="inline-block w-12 h-7 bg-slate-800 rounded animate-pulse"></span>
+            ) : (
+              analytics?.pox_papers_count || 0
+            )}
           </div>
           <div className="text-[11px] text-slate-400 mt-1">
             Poly(2-oxazoline) studies
@@ -169,7 +192,11 @@ export default function DashboardView({
             <Hexagon className="w-4 h-4 text-purple-400" />
           </div>
           <div className="text-2xl font-bold text-purple-300 font-mono">
-            {analytics?.pozi_papers_count || 0}
+            {loading ? (
+              <span className="inline-block w-12 h-7 bg-slate-800 rounded animate-pulse"></span>
+            ) : (
+              analytics?.pozi_papers_count || 0
+            )}
           </div>
           <div className="text-[11px] text-slate-400 mt-1">
             Poly(2-oxazine) studies
@@ -267,20 +294,44 @@ export default function DashboardView({
               <span>Recent Literature Updates</span>
             </h2>
             <p className="text-xs text-slate-400">
-              Latest publications indexed from scientific databases
+              Latest publications indexed in your private cloud repository
             </p>
           </div>
 
-          <button
-            onClick={() => onNavigateToSearch && onNavigateToSearch('')}
-            className="flex items-center gap-1 text-xs text-teal-400 hover:text-teal-300 font-medium"
-          >
-            <span>View All</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onOpenCollectorModal}
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-300 transition-colors"
+              title="Collect new papers from OpenAlex & Crossref"
+            >
+              <RefreshCw className="w-3.5 h-3.5 text-teal-400" />
+              <span>Ingest More Papers</span>
+            </button>
+            <button
+              onClick={() => onNavigateToSearch && onNavigateToSearch('')}
+              className="flex items-center gap-1 text-xs text-teal-400 hover:text-teal-300 font-medium"
+            >
+              <span>View All</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
 
-        {recentPapers.length > 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[1, 2, 3, 4].map(n => (
+              <div key={n} className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800/80 animate-pulse space-y-3">
+                <div className="h-4 bg-slate-800 rounded w-3/4"></div>
+                <div className="h-3 bg-slate-800/60 rounded w-1/3"></div>
+                <div className="h-12 bg-slate-800/30 rounded w-full"></div>
+                <div className="flex gap-2 pt-2">
+                  <div className="h-5 bg-slate-800/50 rounded-full w-20"></div>
+                  <div className="h-5 bg-slate-800/50 rounded-full w-24"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : recentPapers.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {recentPapers.map(paper => (
               <PaperCard
@@ -299,14 +350,14 @@ export default function DashboardView({
         ) : (
           <div className="p-8 rounded-2xl bg-slate-900/60 border border-slate-800 text-center space-y-3">
             <p className="text-xs text-slate-400">
-              No publications indexed yet. Start the automated literature collector to populate your private cloud database.
+              No recent publications available for preview.
             </p>
             <button
-              onClick={onOpenCollectorModal}
+              onClick={() => onNavigateToSearch && onNavigateToSearch('')}
               className="px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold shadow-sm inline-flex items-center gap-1.5"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>Collect Initial Research Papers</span>
+              <Search className="w-3.5 h-3.5" />
+              <span>Explore All Publications</span>
             </button>
           </div>
         )}

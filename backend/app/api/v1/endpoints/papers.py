@@ -12,11 +12,11 @@ router = APIRouter()
 @router.get("", response_model=PaperListResponse)
 async def list_papers(
     query: Optional[str] = Query(None, description="Free-text search across title, abstract, and journal"),
-    year_from: Optional[int] = Query(2020, description="Minimum publication year"),
-    year_to: Optional[int] = Query(2026, description="Maximum publication year"),
+    year_from: Optional[int] = Query(None, description="Minimum publication year"),
+    year_to: Optional[int] = Query(None, description="Maximum publication year"),
     category_slug: Optional[str] = Query(None, description="Filter by category slug"),
     journal: Optional[str] = Query(None, description="Filter by journal name"),
-    sort_by: str = Query("publication_year", pattern="^(publication_year|citation_count|publication_date|collected_at)$"),
+    sort_by: str = Query("collected_at", pattern="^(publication_year|citation_count|publication_date|collected_at)$"),
     sort_order: str = Query("desc", pattern="^(asc|desc)$"),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
