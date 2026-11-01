@@ -11,7 +11,8 @@ import {
   BookOpen,
   Clock,
   Calendar,
-  Award
+  Award,
+  Image as ImageIcon
 } from 'lucide-react';
 import { getJournalImpactFactor } from '../lib/journalMeta';
 import { getPaperDoiUrl, formatDoiDisplay } from '../lib/doiHelper';
@@ -147,10 +148,10 @@ export default function PaperCard({
               <button
                 onClick={() => onOpenDetails(paper)}
                 className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-teal-300 font-medium transition-colors ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-750 border border-slate-700"
-                title="View Table of Contents & Chemical Architecture"
+                title="View Table of Contents (TOC) & Journal Graphical Abstract"
               >
-                <BookOpen className="w-3.5 h-3.5 text-teal-400" />
-                <span>TOC & Scheme</span>
+                <ImageIcon className="w-3.5 h-3.5 text-teal-400" />
+                <span>TOC / Graphical Abstract</span>
               </button>
               <button
                 onClick={() => onOpenSummary(paper)}

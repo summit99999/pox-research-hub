@@ -7,9 +7,10 @@ import {
   Quote, 
   Tag, 
   Sparkles, 
-  Building2,
-  Check,
-  FileText
+  Building2, 
+  Check, 
+  FileText,
+  Image as ImageIcon
 } from 'lucide-react';
 import PaperTOC from './PaperTOC';
 import AISummaryViewer from './AISummaryViewer';
@@ -73,7 +74,7 @@ export default function PaperDetailModal({
         {/* Modal Top Bar */}
         <div className="px-4 sm:px-6 py-3.5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/80">
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-            {/* Table of Contents (TOC) Tab */}
+            {/* Table of Contents (TOC) & Graphical Abstract Tab */}
             <button
               onClick={() => setActiveTab('toc')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
@@ -82,8 +83,8 @@ export default function PaperDetailModal({
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>Table of Contents (TOC)</span>
+              <ImageIcon className="w-3.5 h-3.5" />
+              <span>TOC / Graphical Abstract</span>
             </button>
 
             {/* Publication Details Tab */}
