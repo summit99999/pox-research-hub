@@ -36,6 +36,10 @@ Thumbs.db
 *.swp
 *.swo
 
+# Tools & Binaries
+tools/
+*.exe
+
 # Logs
 logs/
 *.log

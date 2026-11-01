@@ -17,6 +17,61 @@ import {
 import { api } from '../lib/api';
 import PaperCard from '../components/PaperCard';
 
+const FALLBACK_DEVELOPER_PAPERS = [
+  {
+    id: "dev-macromol-2026",
+    title: "A Thioether-Functionalized Biomimetic Poly(2-oxazoline) Platform for Thermo-, Photo-, and Anion-Responsive Pseudopolypeptides",
+    journal: "Macromolecules",
+    publication_year: 2026,
+    publication_date: "2026-03-15",
+    doi: "10.1021/acs.macromol.6c00522",
+    landing_page_url: "https://doi.org/10.1021/acs.macromol.6c00522",
+    publisher: "American Chemical Society",
+    citation_count: 0,
+    authors: [
+      { name: "Sumit Barik" },
+      { name: "Sunetra Karmakar" },
+      { name: "Ambuz Basak" },
+      { name: "Tarun K. Mandal" }
+    ],
+    categories: [{ category_name: "Stimuli-Responsive & Smart Biomaterials", slug: "stimuli-responsive" }]
+  },
+  {
+    id: "dev-jmacromol-2026",
+    title: "Well-defined amphiphilic poly(2-oxazoline) multiblock copolymers: Synthesis, self-assembly and dye solubilization",
+    journal: "Journal of Macromolecular Science, Part A",
+    publication_year: 2026,
+    publication_date: "2026-02-10",
+    doi: "10.1080/10601325.2026.2680459",
+    landing_page_url: "https://doi.org/10.1080/10601325.2026.2680459",
+    publisher: "Taylor & Francis",
+    citation_count: 0,
+    authors: [
+      { name: "Sumit Barik" },
+      { name: "Mahammad Anas" },
+      { name: "Tarun K. Mandal" }
+    ],
+    categories: [{ category_name: "Polymer Synthesis & CROP Kinetics", slug: "synthesis-kinetics" }]
+  },
+  {
+    id: "dev-acsapm-2025",
+    title: "Polysulfonium and Poly(amino acid) Derived Functional Poly(2-oxazoline)s: Dual-Responsive Micellar Systems",
+    journal: "ACS Applied Polymer Materials",
+    publication_year: 2025,
+    publication_date: "2025-11-20",
+    doi: "10.1021/acsapm.5c03251",
+    landing_page_url: "https://doi.org/10.1021/acsapm.5c03251",
+    publisher: "American Chemical Society",
+    citation_count: 3,
+    authors: [
+      { name: "Sumit Barik" },
+      { name: "Bachchu Mondal" },
+      { name: "Tarun K. Mandal" }
+    ],
+    categories: [{ category_name: "Drug Delivery & Nanomedicine", slug: "drug-delivery" }]
+  }
+];
+
 export default function DeveloperPublicationsView({
   onOpenDetails,
   onOpenSummary,
@@ -26,15 +81,14 @@ export default function DeveloperPublicationsView({
   onUpdateReadingStatus,
   onUpdateScreening
 }) {
-  const [papers, setPapers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [papers, setPapers] = useState(FALLBACK_DEVELOPER_PAPERS);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     loadDeveloperPapers();
   }, []);
 
   const loadDeveloperPapers = async () => {
-    setLoading(true);
     try {
       const res = await api.getPapers({
         author: 'Sumit Barik',
@@ -42,11 +96,12 @@ export default function DeveloperPublicationsView({
         sort_by: 'publication_date',
         sort_order: 'desc'
       });
-      setPapers(res.items || res.papers || []);
+      const items = res?.items || res?.papers;
+      if (Array.isArray(items) && items.length > 0) {
+        setPapers(items);
+      }
     } catch (err) {
-      console.debug('Failed to load developer papers', err);
-    } finally {
-      setLoading(false);
+      console.debug('Failed to load developer papers, using static catalog', err);
     }
   };
 
