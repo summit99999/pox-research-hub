@@ -14,6 +14,8 @@ import PaperCard from '../components/PaperCard';
 import { api } from '../lib/api';
 
 export default function SearchView({ 
+  title,
+  subtitle,
   initialQuery = '', 
   initialCategory = '',
   onOpenDetails, 
@@ -137,10 +139,10 @@ export default function SearchView({
       <div>
         <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
           <Search className="w-5 h-5 text-teal-400" />
-          <span>Advanced Literature Search Engine</span>
+          <span>{title || "Advanced Literature Search Engine"}</span>
         </h1>
         <p className="text-xs text-slate-400 mt-1">
-          Query across titles, abstracts, DOIs, authors, CROP kinetics, monomers, and stimuli-responsive mechanisms.
+          {subtitle || "Query across titles, abstracts, DOIs, authors, CROP kinetics, monomers, and stimuli-responsive mechanisms."}
         </p>
       </div>
 

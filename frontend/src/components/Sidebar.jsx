@@ -45,13 +45,6 @@ export default function Sidebar({ activeView, setActiveView, onSelectCategory })
 
   const handleNavClick = (item) => {
     setActiveView(item.id);
-    // If clicking a specialized chemistry view, trigger appropriate category filter
-    if (item.id === 'pox' && onSelectCategory) onSelectCategory('poly-2-oxazoline');
-    else if (item.id === 'pozi' && onSelectCategory) onSelectCategory('poly-2-oxazine');
-    else if (item.id === 'monomers' && onSelectCategory) onSelectCategory('monomer-synthesis');
-    else if (item.id === 'polymerization' && onSelectCategory) onSelectCategory('crop-kinetics');
-    else if (item.id === 'stimuli' && onSelectCategory) onSelectCategory('thermoresponsive');
-    else if (item.id === 'biomedical' && onSelectCategory) onSelectCategory('drug-delivery');
   };
 
   return (

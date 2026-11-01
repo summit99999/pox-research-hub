@@ -8,6 +8,7 @@ import GapFinderView from './views/GapFinderView';
 import ReviewWorkspaceView from './views/ReviewWorkspaceView';
 import LibraryView from './views/LibraryView';
 import SettingsView from './views/SettingsView';
+import AISummariesView from './views/AISummariesView';
 import PaperDetailModal from './components/PaperDetailModal';
 import CollectorModal from './components/CollectorModal';
 import AuthModal from './components/AuthModal';
@@ -167,9 +168,11 @@ export default function App() {
             />
           )}
 
-          {(activeView === 'search' || activeView === 'publications' || activeView === 'pox' || activeView === 'pozi' || activeView === 'monomers' || activeView === 'polymerization' || activeView === 'stimuli' || activeView === 'biomedical') && (
+          {activeView === 'search' && (
             <SearchView
-              key={`${activeView}-${selectedCategory}-${searchQuery}`}
+              key={`search-${selectedCategory}-${searchQuery}`}
+              title="Literature Search Engine"
+              subtitle="Search across 251 indexed papers by keyword, author, DOI, or category."
               initialQuery={searchQuery}
               initialCategory={selectedCategory}
               onOpenDetails={handleOpenDetails}
@@ -181,6 +184,146 @@ export default function App() {
               onToggleFavourite={handleToggleFavourite}
               onUpdateReadingStatus={handleUpdateReadingStatus}
               onUpdateScreening={handleUpdateScreening}
+            />
+          )}
+
+          {activeView === 'publications' && (
+            <SearchView
+              key="publications"
+              title="All Scientific Publications"
+              subtitle="Complete repository of 251 publications indexed from OpenAlex and Crossref (2020–2026+)."
+              initialQuery=""
+              initialCategory=""
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
+              selectedPaperIds={selectedPaperIds}
+              onToggleSelectPaper={handleToggleSelectPaper}
+              onClearSelection={handleClearSelection}
+              onOpenReviewWorkspace={() => setActiveView('review')}
+              onToggleFavourite={handleToggleFavourite}
+              onUpdateReadingStatus={handleUpdateReadingStatus}
+              onUpdateScreening={handleUpdateScreening}
+            />
+          )}
+
+          {activeView === 'pox' && (
+            <SearchView
+              key="pox"
+              title="Poly(2-oxazoline) (POx) Chemistry"
+              subtitle="Research on PMOx, PEtOx, PiPOx, PPhOx, amphiphilic copolymers, and CROP synthesis."
+              initialQuery="oxazoline"
+              initialCategory=""
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
+              selectedPaperIds={selectedPaperIds}
+              onToggleSelectPaper={handleToggleSelectPaper}
+              onClearSelection={handleClearSelection}
+              onOpenReviewWorkspace={() => setActiveView('review')}
+              onToggleFavourite={handleToggleFavourite}
+              onUpdateReadingStatus={handleUpdateReadingStatus}
+              onUpdateScreening={handleUpdateScreening}
+            />
+          )}
+
+          {activeView === 'pozi' && (
+            <SearchView
+              key="pozi"
+              title="Poly(2-oxazine) (POzi) Chemistry"
+              subtitle="Research on poly(2-oxazine)s, PMOzi, PEtOzi, and POx/POzi comparative studies."
+              initialQuery="oxazine"
+              initialCategory="poly-2-oxazine"
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
+              selectedPaperIds={selectedPaperIds}
+              onToggleSelectPaper={handleToggleSelectPaper}
+              onClearSelection={handleClearSelection}
+              onOpenReviewWorkspace={() => setActiveView('review')}
+              onToggleFavourite={handleToggleFavourite}
+              onUpdateReadingStatus={handleUpdateReadingStatus}
+              onUpdateScreening={handleUpdateScreening}
+            />
+          )}
+
+          {activeView === 'monomers' && (
+            <SearchView
+              key="monomers"
+              title="Oxazoline & Oxazine Monomer Database"
+              subtitle="Synthesis and functionalization of 2-substituted monomers, thiols, esters, and stimuli-responsive monomers."
+              initialQuery="monomer"
+              initialCategory="monomer-synthesis"
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
+              selectedPaperIds={selectedPaperIds}
+              onToggleSelectPaper={handleToggleSelectPaper}
+              onClearSelection={handleClearSelection}
+              onOpenReviewWorkspace={() => setActiveView('review')}
+              onToggleFavourite={handleToggleFavourite}
+              onUpdateReadingStatus={handleUpdateReadingStatus}
+              onUpdateScreening={handleUpdateScreening}
+            />
+          )}
+
+          {activeView === 'polymerization' && (
+            <SearchView
+              key="polymerization"
+              title="Polymerization Chemistry & CROP Kinetics"
+              subtitle="Cationic ring-opening polymerization (CROP), initiator development, termination kinetics, and living control."
+              initialQuery="polymerization OR crop OR ring-opening"
+              initialCategory=""
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
+              selectedPaperIds={selectedPaperIds}
+              onToggleSelectPaper={handleToggleSelectPaper}
+              onClearSelection={handleClearSelection}
+              onOpenReviewWorkspace={() => setActiveView('review')}
+              onToggleFavourite={handleToggleFavourite}
+              onUpdateReadingStatus={handleUpdateReadingStatus}
+              onUpdateScreening={handleUpdateScreening}
+            />
+          )}
+
+          {activeView === 'stimuli' && (
+            <SearchView
+              key="stimuli"
+              title="Stimuli-Responsive & Smart Polymers"
+              subtitle="Thermoresponsive (LCST/UCST), ROS-responsive, photoresponsive, and dual-responsive polymer architectures."
+              initialQuery="responsive OR thermoresponsive OR ros OR photoresponsive OR lcst OR ucst"
+              initialCategory=""
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
+              selectedPaperIds={selectedPaperIds}
+              onToggleSelectPaper={handleToggleSelectPaper}
+              onClearSelection={handleClearSelection}
+              onOpenReviewWorkspace={() => setActiveView('review')}
+              onToggleFavourite={handleToggleFavourite}
+              onUpdateReadingStatus={handleUpdateReadingStatus}
+              onUpdateScreening={handleUpdateScreening}
+            />
+          )}
+
+          {activeView === 'biomedical' && (
+            <SearchView
+              key="biomedical"
+              title="Biomedical & Delivery Systems"
+              subtitle="Drug delivery, gene delivery, micelles, nanoparticles, hydrogels, and polymer therapeutics."
+              initialQuery="delivery OR biomedical OR micelle OR nanoparticle OR hydrogel"
+              initialCategory=""
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
+              selectedPaperIds={selectedPaperIds}
+              onToggleSelectPaper={handleToggleSelectPaper}
+              onClearSelection={handleClearSelection}
+              onOpenReviewWorkspace={() => setActiveView('review')}
+              onToggleFavourite={handleToggleFavourite}
+              onUpdateReadingStatus={handleUpdateReadingStatus}
+              onUpdateScreening={handleUpdateScreening}
+            />
+          )}
+
+          {activeView === 'summaries' && (
+            <AISummariesView
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
             />
           )}
 
@@ -199,10 +342,11 @@ export default function App() {
             />
           )}
 
-          {(activeView === 'library' || activeView === 'summaries') && (
+          {activeView === 'library' && (
             <LibraryView
               onOpenDetails={handleOpenDetails}
               onOpenSummary={handleOpenSummary}
+              onNavigateToSearch={() => setActiveView('search')}
             />
           )}
 

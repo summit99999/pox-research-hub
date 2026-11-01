@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { api } from '../lib/api';
 
-export default function LibraryView({ onOpenDetails, onOpenSummary }) {
+export default function LibraryView({ onOpenDetails, onOpenSummary, onNavigateToSearch }) {
   const [activeTab, setActiveTab] = useState('all'); // all, favourites, reading, screening
   const [screeningFilter, setScreeningFilter] = useState('included');
   const [libraryItems, setLibraryItems] = useState([]);
@@ -323,12 +323,20 @@ export default function LibraryView({ onOpenDetails, onOpenSummary }) {
             );
           })}
           {libraryItems.length === 0 && (
-            <div className="py-16 text-center text-slate-400 bg-slate-900/40 rounded-2xl border border-slate-800">
-              <Bookmark className="w-8 h-8 text-slate-600 mx-auto mb-3" />
-              <p className="text-sm font-semibold text-slate-300">Your library is currently empty</p>
+            <div className="py-16 text-center text-slate-400 bg-slate-900/40 rounded-2xl border border-slate-800 space-y-3">
+              <Bookmark className="w-8 h-8 text-teal-500/60 mx-auto mb-1" />
+              <p className="text-sm font-semibold text-slate-200">Your Personal Research Library is Ready</p>
               <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
-                Save papers from the literature search engine to build your private annotated collection.
+                Bookmark publications, add personal research notes, and track your reading and systematic screening progress here.
               </p>
+              {onNavigateToSearch && (
+                <button
+                  onClick={onNavigateToSearch}
+                  className="px-4 py-2 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold shadow-md transition-colors"
+                >
+                  Browse Indexed Publications to Add
+                </button>
+              )}
             </div>
           )}
         </div>
