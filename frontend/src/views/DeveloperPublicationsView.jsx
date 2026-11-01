@@ -72,12 +72,8 @@ export default function DeveloperPublicationsView({
                 </span>
               </div>
 
-              <p className="text-xs sm:text-sm font-medium text-teal-400">
-                Polymer Chemist & Researcher · Indian Association for the Cultivation of Science (IACS), Kolkata
-              </p>
-
-              <p className="text-xs text-slate-300 leading-relaxed max-w-3xl pt-1">
-                Specialized in the design and cationic ring-opening polymerization (CROP) of functionalized 2-oxazoline and 2-oxazine monomers, stimuli-responsive (thermo-, photo-, and anion-responsive) pseudopolypeptides, and polysulfonium smart biomaterials.
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl pt-1">
+                Polymer Chemist and Full-Stack Developer at <span className="font-semibold text-slate-100">Indian Association for the Cultivation of Science (IACS), Kolkata</span>. Lead researcher on stimuli-responsive cyclic imino ether architectures for biomedical applications.
               </p>
             </div>
           </div>

@@ -245,11 +245,8 @@ export default function SettingsView({ health, onRefreshHealth }) {
                 Lead Developer & Polymer Chemist
               </span>
             </div>
-            <p className="text-xs text-slate-300">
-              School of Chemical Sciences, Indian Association for the Cultivation of Science (IACS), Kolkata
-            </p>
-            <p className="text-[11px] text-slate-400 pt-1">
-              Primary author of <em>"A Thioether-Functionalized Biomimetic Poly(2-oxazoline) Platform for Thermo-, Photo-, and Anion-Responsive Pseudopolypeptides"</em> (ACS <em>Macromolecules</em>, DOI: 10.1021/acs.macromol.6c00522).
+            <p className="text-xs text-slate-300 leading-relaxed pt-1">
+              Polymer Chemist and Full-Stack Developer at Indian Association for the Cultivation of Science (IACS), Kolkata. Lead researcher on stimuli-responsive cyclic imino ether architectures for biomedical applications.
             </p>
           </div>
 

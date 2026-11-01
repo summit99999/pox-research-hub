@@ -395,7 +395,7 @@ export default function DashboardView({
                 </span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
-                Polymer Chemist and Full-Stack Developer at <span className="font-semibold text-slate-100">Indian Association for the Cultivation of Science (IACS), Kolkata</span>. Lead researcher on stimuli-responsive cyclic imino ether architectures and first author in ACS <em className="text-teal-300">Macromolecules</em>.
+                Polymer Chemist and Full-Stack Developer at <span className="font-semibold text-slate-100">Indian Association for the Cultivation of Science (IACS), Kolkata</span>. Lead researcher on stimuli-responsive cyclic imino ether architectures for biomedical applications.
               </p>
               <div className="flex flex-wrap items-center gap-3 pt-2 text-[11px] text-slate-400">
                 <span className="flex items-center gap-1 text-slate-300">
