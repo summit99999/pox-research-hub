@@ -1,17 +1,14 @@
 @echo off
-title Share POx Research Hub Live URL (Developed by Sumit Barik)
+title Share POx Research Hub (No Password / Direct Live Access)
 echo ========================================================
-echo   POx Research Hub — Public Shareable Link Generator
+echo   POx Research Hub — Instant Public Link (NO PASSWORD)
 echo   Developed by: Sumit Barik (IACS Kolkata)
 echo ========================================================
 echo.
-echo Make sure the website is running first (via start_hub.bat).
-echo Creating a secure custom public tunnel...
-echo Custom Domain: https://polyoxazoline-research-hub.loca.lt
+echo Launching Cloudflare Global Edge Tunnel...
+echo No password or IP address will be required!
 echo.
-echo NOTE: If prompted for Tunnel Password / Host IP, enter:
-curl -s https://loca.lt/mytunnelpassword
+echo Your public https://*.trycloudflare.com link will appear below:
 echo.
-echo Starting tunnel...
-npx localtunnel --port 5173 --subdomain polyoxazoline-research-hub
+.\tools\cloudflared.exe tunnel --url http://localhost:5173
 pause
