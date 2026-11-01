@@ -165,7 +165,7 @@ async def list_papers(
 
     except Exception as e:
         logger.error(f"Error listing papers: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        return PaperListResponse(items=[], total=0, page=page, page_size=page_size, total_pages=0)
 
 @router.get("/{paper_id}", response_model=PaperResponse)
 async def get_paper(

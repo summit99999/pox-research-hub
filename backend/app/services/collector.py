@@ -110,6 +110,7 @@ async def run_literature_collection(
             except Exception as e:
                 logger.warning(f"Failed to fetch categories map: {e}")
 
+            author_cache: Dict[str, str] = {}
             for paper_data in collected_papers:
                 norm_doi = paper_data.get("doi_normalized")
                 if norm_doi and norm_doi in existing_dois:
@@ -141,39 +142,43 @@ async def run_literature_collection(
                     paper_id = paper_insert.data[0]["id"]
                     records_saved += 1
                     
-                    # Insert authors & linkages
+                    # Insert authors & linkages efficiently
+                    paper_author_links = []
                     for author_info in paper_data.get("authors", []):
                         author_name = author_info.get("name")
                         if not author_name:
                             continue
-                        author_record = {
-                            "name": author_name,
-                            "affiliation": author_info.get("affiliation"),
-                            "orcid": author_info.get("orcid"),
-                            "external_author_id": author_info.get("external_author_id")
-                        }
                         
-                        # Find or create author
-                        author_id = None
-                        try:
-                            # Try to match by orcid if present, else by name and affiliation
-                            if author_info.get("orcid"):
-                                a_match = supabase.table("authors").select("id").eq("orcid", author_info["orcid"]).execute()
-                                if a_match.data:
-                                    author_id = a_match.data[0]["id"]
-                            if not author_id:
+                        cache_key = author_info.get("orcid") or author_name.lower().strip()
+                        author_id = author_cache.get(cache_key)
+                        
+                        if not author_id:
+                            author_record = {
+                                "name": author_name,
+                                "affiliation": author_info.get("affiliation"),
+                                "orcid": author_info.get("orcid"),
+                                "external_author_id": author_info.get("external_author_id")
+                            }
+                            try:
                                 a_res = supabase.table("authors").insert(author_record).execute()
                                 if a_res.data:
                                     author_id = a_res.data[0]["id"]
-                                    
-                            if author_id:
-                                supabase.table("paper_authors").insert({
-                                    "paper_id": paper_id,
-                                    "author_id": author_id,
-                                    "author_order": author_info.get("order", 1)
-                                }).execute()
-                        except Exception as auth_err:
-                            logger.debug(f"Author link non-critical error: {auth_err}")
+                                    author_cache[cache_key] = author_id
+                            except Exception as a_err:
+                                logger.debug(f"Author create: {a_err}")
+                                
+                        if author_id:
+                            paper_author_links.append({
+                                "paper_id": paper_id,
+                                "author_id": author_id,
+                                "author_order": author_info.get("order", 1)
+                            })
+                            
+                    if paper_author_links:
+                        try:
+                            supabase.table("paper_authors").insert(paper_author_links).execute()
+                        except Exception as pa_err:
+                            logger.debug(f"Paper author links batch error: {pa_err}")
 
                     # Automatically classify into scientific categories
                     categories_classified = classify_paper(
@@ -181,18 +186,21 @@ async def run_literature_collection(
                         paper_data.get("abstract")
                     )
                     
+                    cat_links = []
                     for slug, confidence in categories_classified[:3]: # top 3 matching categories
                         cat_id = category_map.get(slug)
                         if cat_id:
-                            try:
-                                supabase.table("paper_categories").insert({
-                                    "paper_id": paper_id,
-                                    "category_id": cat_id,
-                                    "classification_confidence": confidence,
-                                    "classification_source": "keyword_rule"
-                                }).execute()
-                            except Exception as cat_err:
-                                logger.debug(f"Category link error: {cat_err}")
+                            cat_links.append({
+                                "paper_id": paper_id,
+                                "category_id": cat_id,
+                                "classification_confidence": confidence,
+                                "classification_source": "keyword_rule"
+                            })
+                    if cat_links:
+                        try:
+                            supabase.table("paper_categories").insert(cat_links).execute()
+                        except Exception as cat_err:
+                            logger.debug(f"Category link batch error: {cat_err}")
                                 
                 except Exception as ins_err:
                     logger.error(f"Failed to insert paper {norm_doi}: {ins_err}")
