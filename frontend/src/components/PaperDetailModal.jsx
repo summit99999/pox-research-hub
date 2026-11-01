@@ -13,8 +13,20 @@ import {
 import AISummaryViewer from './AISummaryViewer';
 import { api } from '../lib/api';
 
-export default function PaperDetailModal({ paper, allCategories, onClose, onCategoriesUpdated }) {
-  const [activeTab, setActiveTab] = useState('metadata'); // metadata, summary, categories
+export default function PaperDetailModal({ 
+  paper, 
+  allCategories, 
+  initialTab = 'metadata', 
+  onClose, 
+  onCategoriesUpdated 
+}) {
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  React.useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab, paper?.id]);
   const [selectedCategories, setSelectedCategories] = useState(
     paper.categories?.map(c => c.slug) || []
   );

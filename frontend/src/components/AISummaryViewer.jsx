@@ -12,7 +12,8 @@ import {
   Activity, 
   Compass, 
   ShieldAlert,
-  ArrowRight
+  ArrowRight,
+  Database
 } from 'lucide-react';
 import { api } from '../lib/api';
 
@@ -21,7 +22,7 @@ export default function AISummaryViewer({ paper, onClose }) {
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('overview'); // overview, chemistry, results, values
+  const [activeTab, setActiveTab] = useState('overview'); // overview, chemistry, results, values, outlook
 
   useEffect(() => {
     if (paper?.id) {
@@ -36,8 +37,8 @@ export default function AISummaryViewer({ paper, onClose }) {
       const res = await api.getSummary(paper.id);
       setSummaryData(res.summary);
     } catch (err) {
-      // 404 means not yet generated
-      if (err.message && err.message.includes('404')) {
+      // 404 or "No AI summary" means not yet generated
+      if (err.status === 404 || (err.message && (err.message.includes('404') || err.message.toLowerCase().includes('no ai summary')))) {
         setSummaryData(null);
       } else {
         setError(err.message);
@@ -54,7 +55,7 @@ export default function AISummaryViewer({ paper, onClose }) {
       const res = await api.generateSummary(paper.id);
       setSummaryData(res.summary);
     } catch (err) {
-      setError(err.message || 'Failed to generate AI summary.');
+      setError(err.message || 'Failed to generate AI summary with Gemini.');
     } finally {
       setGenerating(false);
     }
@@ -62,10 +63,24 @@ export default function AISummaryViewer({ paper, onClose }) {
 
   const s = summaryData;
 
+  const renderTextOrList = (val) => {
+    if (!val) return <p className="text-slate-400 italic">Not reported in the accessible source.</p>;
+    if (Array.isArray(val)) {
+      return (
+        <ul className="space-y-1.5 list-disc list-inside">
+          {val.map((item, idx) => (
+            <li key={idx} className="text-slate-200 leading-relaxed">{item}</li>
+          ))}
+        </ul>
+      );
+    }
+    return <p className="text-slate-200 leading-relaxed whitespace-pre-line">{val}</p>;
+  };
+
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-800">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
         <div>
           <div className="flex items-center gap-2">
             <span className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/30">
@@ -75,7 +90,7 @@ export default function AISummaryViewer({ paper, onClose }) {
               AI Scientific Evaluation (13 Structured Sections)
             </h2>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-400 mt-1 line-clamp-1">
             Grounded evaluation for: <span className="text-slate-200 font-medium">{paper.title}</span>
           </p>
         </div>
@@ -84,79 +99,90 @@ export default function AISummaryViewer({ paper, onClose }) {
           <button
             onClick={handleGenerate}
             disabled={generating}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg text-xs font-medium transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg text-xs font-medium transition-colors shrink-0"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${generating ? 'animate-spin' : ''}`} />
-            <span>Regenerate</span>
+            <RefreshCw className={`w-3.5 h-3.5 ${generating ? 'animate-spin text-purple-400' : ''}`} />
+            <span>{generating ? 'Regenerating...' : 'Regenerate'}</span>
           </button>
         )}
       </div>
 
       {/* Critical Verification Notice */}
-      <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-start gap-2.5 text-xs text-amber-300">
-        <ShieldAlert className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
+      <div className="p-3 bg-indigo-950/40 border border-indigo-500/30 rounded-lg flex items-start gap-2.5 text-xs text-indigo-200">
+        <ShieldAlert className="w-4 h-4 shrink-0 text-indigo-400 mt-0.5" />
         <div>
-          <span className="font-semibold">Scientific Accuracy Protocol:</span> The AI synthesizes reported findings and extracts experimental values. It does not fabricate missing data. Unreported values are explicitly marked. Verify against the primary text before citation.
+          <span className="font-semibold">Scientific Accuracy Protocol:</span> The AI synthesizes reported findings and extracts experimental values. It does not fabricate missing data. Unreported values are explicitly marked.
         </div>
       </div>
 
-      {/* Loading or Uncreated State */}
+      {/* Loading State */}
       {loading && (
         <div className="py-16 text-center text-slate-400">
           <RefreshCw className="w-8 h-8 animate-spin mx-auto text-indigo-500 mb-3" />
-          <p className="text-sm font-medium">Loading scientific evaluation...</p>
+          <p className="text-sm font-medium">Checking cloud repository for existing AI summary...</p>
         </div>
       )}
 
-      {error && (
+      {/* Error State */}
+      {error && !loading && (
         <div className="p-4 bg-rose-500/10 border border-rose-500/30 rounded-lg text-rose-300 text-xs">
           <div className="font-semibold flex items-center gap-1.5 mb-1">
             <AlertTriangle className="w-4 h-4 text-rose-400" />
             Evaluation Error
           </div>
-          <p>{error}</p>
-        </div>
-      )}
-
-      {!loading && !summaryData && !error && (
-        <div className="py-12 px-6 rounded-2xl bg-slate-900 border border-slate-800 text-center max-w-xl mx-auto">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mx-auto mb-4 border border-indigo-500/20">
-            <Sparkles className="w-6 h-6" />
-          </div>
-          <h3 className="text-base font-semibold text-slate-200">
-            Generate 13-Section Scientific Summary
-          </h3>
-          <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-            Extract research objectives, CROP polymerization conditions, characterization methods, experimental values (Mw, Đ, cloud points, release rates), limitations, and relevance to the POx field.
-          </p>
+          <p className="mb-3">{error}</p>
           <button
             onClick={handleGenerate}
             disabled={generating}
-            className="mt-5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-white font-medium text-xs shadow-lg shadow-indigo-500/20 inline-flex items-center gap-2 transition-all"
+            className="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-medium text-xs transition-colors"
           >
-            {generating ? (
-              <>
-                <RefreshCw className="w-4 h-4 animate-spin" />
-                <span>Analyzing Publication with Gemini...</span>
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-4 h-4" />
-                <span>Generate Scientific Evaluation</span>
-              </>
-            )}
+            Try Generating Again
           </button>
         </div>
       )}
 
+      {/* Not Yet Generated State (Prompt & 1-Click Action) */}
+      {!loading && !summaryData && !error && (
+        <div className="py-12 px-6 rounded-2xl bg-slate-900 border border-slate-800 text-center max-w-xl mx-auto space-y-4">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mx-auto border border-indigo-500/20">
+            <Sparkles className="w-6 h-6 text-purple-400" />
+          </div>
+          <h3 className="text-base font-semibold text-slate-200">
+            No Summary Generated Yet
+          </h3>
+          <p className="text-xs text-slate-400 leading-relaxed max-w-md mx-auto">
+            Extract research objectives, CROP polymerization conditions, characterization methods, experimental values (Mn, Đ, cloud points, release rates), limitations, and relevance to the POx field.
+          </p>
+          <div>
+            <button
+              onClick={handleGenerate}
+              disabled={generating}
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-white font-medium text-xs shadow-lg shadow-indigo-500/20 inline-flex items-center gap-2 transition-all cursor-pointer"
+            >
+              {generating ? (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  <span>Synthesizing with Gemini (13 Sections)...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-4 h-4" />
+                  <span>Generate 13-Section AI Summary</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Render 13 Structured Sections */}
-      {s && (
+      {s && !loading && (
         <div className="space-y-6">
           {/* Navigation Sub-Tabs */}
-          <div className="flex border-b border-slate-800 gap-2">
+          <div className="flex border-b border-slate-800 gap-1 overflow-x-auto pb-1 text-xs">
             {[
               { id: 'overview', label: '1. Overview & Objective' },
-              { id: 'chemistry', label: '2. Polymer System & Methods' },
+              { id: 'chemistry', label: '2. Polymer System & CROP' },
               { id: 'results', label: '3. Results & Novelty' },
               { id: 'values', label: '4. Experimental Metrics (Values)' },
               { id: 'outlook', label: '5. Limitations & Future Directions' }
@@ -164,9 +190,9 @@ export default function AISummaryViewer({ paper, onClose }) {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-3 py-2 text-xs font-medium border-b-2 transition-colors ${
+                className={`px-3 py-2 rounded-t-lg font-medium border-b-2 transition-colors whitespace-nowrap ${
                   activeTab === tab.id
-                    ? 'border-teal-400 text-teal-300 font-semibold'
+                    ? 'border-teal-400 text-teal-300 font-semibold bg-teal-500/10'
                     : 'border-transparent text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -177,73 +203,67 @@ export default function AISummaryViewer({ paper, onClose }) {
 
           {/* TAB 1: OVERVIEW & OBJECTIVE */}
           {activeTab === 'overview' && (
-            <div className="space-y-4">
+            <div className="space-y-4 text-xs">
               {/* 1. Bibliographic Info */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400 mb-2">
+                <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-2">
                   1. Bibliographic Reference
                 </h4>
                 <div className="text-sm font-medium text-slate-100">
-                  {s.bibliographic_info?.full_title}
+                  {s.bibliographic_info?.full_title || paper.title}
                 </div>
-                <div className="text-xs text-slate-400 mt-1">
-                  {s.bibliographic_info?.authors?.join(', ')} — <span className="italic text-slate-300">{s.bibliographic_info?.journal}</span> ({s.bibliographic_info?.publication_year})
+                <div className="text-slate-400 mt-1">
+                  {s.bibliographic_info?.authors?.join(', ') || paper.authors?.map(a => a.name).join(', ')} — <span className="italic text-slate-300">{s.bibliographic_info?.journal || paper.journal}</span> ({s.bibliographic_info?.publication_year || paper.publication_year})
                 </div>
-                {s.bibliographic_info?.doi && (
-                  <div className="mt-2 text-xs font-mono text-teal-400">
-                    DOI: {s.bibliographic_info.doi}
+                {(s.bibliographic_info?.doi || paper.doi) && (
+                  <div className="mt-2 font-mono text-teal-400">
+                    DOI: {s.bibliographic_info?.doi || paper.doi}
                   </div>
                 )}
               </div>
 
               {/* 2. Research Background */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400 mb-2">
+                <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-2">
                   2. Research Background
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  {s.research_background}
-                </p>
+                {renderTextOrList(s.research_background)}
               </div>
 
               {/* 3. Research Objective */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400 mb-2">
+                <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-2">
                   3. Research Objective
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed font-medium">
-                  {s.research_objective}
-                </p>
+                {renderTextOrList(s.research_objective)}
               </div>
 
               {/* 4. Research Gap */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400 mb-2">
+                <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-2">
                   4. Addressed Research Gap
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  {s.research_gap}
-                </p>
+                {renderTextOrList(s.research_gap)}
               </div>
             </div>
           )}
 
           {/* TAB 2: POLYMER SYSTEM & METHODOLOGY */}
           {activeTab === 'chemistry' && (
-            <div className="space-y-4">
+            <div className="space-y-4 text-xs">
               {/* 5. Polymer and Chemical System */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400 mb-3">
+                <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-3">
                   5. Polymer and Chemical System
                 </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="p-2.5 rounded bg-slate-800/60 border border-slate-700/60">
                     <span className="text-slate-400 block font-medium">Polymer Type:</span>
-                    <span className="text-slate-200">{s.polymer_and_chemical_system?.polymer_type}</span>
+                    <span className="text-slate-200">{s.polymer_and_chemical_system?.polymer_type || 'Not reported'}</span>
                   </div>
                   <div className="p-2.5 rounded bg-slate-800/60 border border-slate-700/60">
                     <span className="text-slate-400 block font-medium">Initiator(s):</span>
-                    <span className="text-slate-200">{s.polymer_and_chemical_system?.initiators}</span>
+                    <span className="text-slate-200">{s.polymer_and_chemical_system?.initiators || 'Not reported'}</span>
                   </div>
                   <div className="p-2.5 rounded bg-slate-800/60 border border-slate-700/60">
                     <span className="text-slate-400 block font-medium">Monomers:</span>
@@ -255,41 +275,39 @@ export default function AISummaryViewer({ paper, onClose }) {
                   </div>
                   <div className="p-2.5 rounded bg-slate-800/60 border border-slate-700/60">
                     <span className="text-slate-400 block font-medium">Architecture:</span>
-                    <span className="text-slate-200">{s.polymer_and_chemical_system?.block_architecture}</span>
+                    <span className="text-slate-200">{s.polymer_and_chemical_system?.block_architecture || 'Not reported'}</span>
                   </div>
                   <div className="p-2.5 rounded bg-slate-800/60 border border-slate-700/60 sm:col-span-2">
                     <span className="text-slate-400 block font-medium">Molecular Weight & Dispersity:</span>
-                    <span className="text-slate-200 font-mono">{s.polymer_and_chemical_system?.molecular_weight_dispersity}</span>
+                    <span className="text-slate-200 font-mono">{s.polymer_and_chemical_system?.molecular_weight_dispersity || 'Not reported'}</span>
                   </div>
                 </div>
               </div>
 
               {/* 6. Experimental Methodology */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400 mb-2">
-                  6. Experimental Methodology
+                <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-2">
+                  6. Experimental Methodology (CROP / Synthesis Conditions)
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-line">
-                  {s.experimental_methodology}
-                </p>
+                {renderTextOrList(s.experimental_methodology)}
               </div>
 
               {/* 7. Characterization Techniques */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400 mb-3">
+                <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-3">
                   7. Characterization Techniques Identified
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {s.characterization_techniques?.map((tech, idx) => (
                     <span 
                       key={idx}
-                      className="px-2.5 py-1 rounded-lg bg-indigo-950/60 border border-indigo-800 text-indigo-300 text-xs font-medium"
+                      className="px-2.5 py-1 rounded-lg bg-indigo-950/60 border border-indigo-800 text-indigo-300 font-medium"
                     >
                       {tech}
                     </span>
                   ))}
                   {(!s.characterization_techniques || s.characterization_techniques.length === 0) && (
-                    <span className="text-xs text-slate-400">None explicitly listed in accessible text.</span>
+                    <span className="text-slate-400">None explicitly listed in accessible source.</span>
                   )}
                 </div>
               </div>
@@ -298,45 +316,39 @@ export default function AISummaryViewer({ paper, onClose }) {
 
           {/* TAB 3: RESULTS & NOVELTY */}
           {activeTab === 'results' && (
-            <div className="space-y-4">
+            <div className="space-y-4 text-xs">
               {/* 8. Major Results */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400 mb-2">
+                <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-2">
                   8. Major Experimental Findings
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-line">
-                  {s.major_results}
-                </p>
+                {renderTextOrList(s.major_results)}
               </div>
 
               {/* 9. Scientific Novelty */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400 mb-2">
+                <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-2">
                   9. Scientific Novelty
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  {s.scientific_novelty}
-                </p>
+                {renderTextOrList(s.scientific_novelty)}
               </div>
 
               {/* 12. Relevance to POx Research */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400 mb-2">
-                  12. Relevance to POx / POzi Research
+                <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-2">
+                  12. Relevance to Poly(2-oxazoline) / Poly(2-oxazine) Research
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  {s.relevance_to_pox_research}
-                </p>
+                {renderTextOrList(s.relevance_to_pox_research)}
               </div>
             </div>
           )}
 
           {/* TAB 4: IMPORTANT EXPERIMENTAL VALUES */}
           {activeTab === 'values' && (
-            <div className="space-y-4">
+            <div className="space-y-4 text-xs">
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400">
+                  <h4 className="font-semibold uppercase tracking-wider text-teal-400">
                     13. Extracted Experimental Values & Metrics
                   </h4>
                   <span className="text-[11px] text-slate-400 font-mono">
@@ -362,8 +374,8 @@ export default function AISummaryViewer({ paper, onClose }) {
                       <span className="text-[11px] text-slate-400 block font-medium truncate">
                         {metric.label}
                       </span>
-                      <span className={`text-xs mt-1 block font-mono ${
-                        metric.val && !metric.val.includes('Not reported')
+                      <span className={`mt-1 block font-mono ${
+                        metric.val && !metric.val.toLowerCase().includes('not reported')
                           ? 'text-teal-300 font-semibold' 
                           : 'text-slate-400 italic'
                       }`}>
@@ -378,19 +390,19 @@ export default function AISummaryViewer({ paper, onClose }) {
 
           {/* TAB 5: LIMITATIONS & FUTURE OUTLOOK */}
           {activeTab === 'outlook' && (
-            <div className="space-y-4">
+            <div className="space-y-4 text-xs">
               {/* 10. Limitations (Distinguishing author vs AI inferred) */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400 mb-3">
+                <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-3">
                   10. Critical Limitations
                 </h4>
-                <div className="space-y-3 text-xs">
+                <div className="space-y-3">
                   <div className="p-3 rounded-lg bg-slate-800/80 border border-slate-700">
                     <span className="text-slate-400 font-semibold block mb-1">
                       Directly Reported by Authors:
                     </span>
                     <p className="text-slate-200 leading-relaxed">
-                      {s.limitations?.author_reported_limitations || 'None explicitly stated in the accessible text.'}
+                      {s.limitations?.author_reported_limitations || 'None explicitly stated in the accessible source.'}
                     </p>
                   </div>
                   <div className="p-3 rounded-lg bg-slate-800/80 border border-slate-700">
@@ -406,10 +418,10 @@ export default function AISummaryViewer({ paper, onClose }) {
 
               {/* 11. Future Research Opportunities */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-teal-400 mb-3">
+                <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-3">
                   11. Concrete Future Research Directions
                 </h4>
-                <ul className="space-y-2 text-xs">
+                <ul className="space-y-2">
                   {s.future_research_opportunities?.map((opp, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-slate-300">
                       <ArrowRight className="w-3.5 h-3.5 text-teal-400 shrink-0 mt-0.5" />
@@ -417,7 +429,7 @@ export default function AISummaryViewer({ paper, onClose }) {
                     </li>
                   ))}
                   {(!s.future_research_opportunities || s.future_research_opportunities.length === 0) && (
-                    <span className="text-xs text-slate-400">None generated.</span>
+                    <span className="text-slate-400">None generated.</span>
                   )}
                 </ul>
               </div>

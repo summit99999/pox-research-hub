@@ -31,7 +31,10 @@ async function request(endpoint, options = {}) {
   
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({ detail: response.statusText }));
-    throw new Error(errorData.detail || `Request failed with status ${response.status}`);
+    const err = new Error(errorData.detail || `Request failed with status ${response.status}`);
+    err.status = response.status;
+    err.detail = errorData.detail;
+    throw err;
   }
   
   // Return blob if response is CSV or BibTeX

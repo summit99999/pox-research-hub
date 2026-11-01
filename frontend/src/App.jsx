@@ -23,6 +23,7 @@ export default function App() {
   
   // Modals
   const [detailModalPaper, setDetailModalPaper] = useState(null);
+  const [detailModalInitialTab, setDetailModalInitialTab] = useState('metadata');
   const [collectorModalOpen, setCollectorModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   
@@ -84,10 +85,12 @@ export default function App() {
 
   const handleOpenDetails = (paper) => {
     setDetailModalPaper(paper);
+    setDetailModalInitialTab('metadata');
   };
 
   const handleOpenSummary = (paper) => {
     setDetailModalPaper(paper);
+    setDetailModalInitialTab('summary');
   };
 
   const handleToggleFavourite = async (paperId, isFav) => {
@@ -364,6 +367,7 @@ export default function App() {
         <PaperDetailModal
           paper={detailModalPaper}
           allCategories={allCategories}
+          initialTab={detailModalInitialTab}
           onClose={() => setDetailModalPaper(null)}
           onCategoriesUpdated={loadInitialData}
         />
