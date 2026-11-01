@@ -1,29 +1,30 @@
 services:
-  # POx Research Hub FastAPI Backend
   - type: web
-    name: pox-research-hub-api
-    env: python
-    rootDir: backend
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    name: pox-backend
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: ENVIRONMENT
-        value: production
       - key: SUPABASE_URL
-        sync: false
-      - key: SUPABASE_ANON_KEY
-        sync: false
-      - key: SUPABASE_SERVICE_ROLE_KEY
+        value: https://lvxygeylhhbggdwsvdfq.supabase.co
+      - key: SUPABASE_SERVICE_KEY
         sync: false
       - key: GEMINI_API_KEY
         sync: false
-      - key: GEMINI_MODEL
-        value: gemini-2.5-flash
-      - key: OPENALEX_EMAIL
-        value: researcher@oxazoline-hub.org
-      - key: CROSSREF_EMAIL
-        value: researcher@oxazoline-hub.org
-      - key: CRON_SECRET
-        generateValue: true
-      - key: CORS_ORIGINS
-        sync: false
+
+  - type: web
+    name: polyoxazoline-research-hub
+    runtime: static
+    region: oregon
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://pox-backend.onrender.com/api/*
+      - type: rewrite
+        source: /*
+        destination: /index.html
