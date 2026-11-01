@@ -246,7 +246,7 @@ export default function SettingsView({ health, onRefreshHealth }) {
               </span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed pt-1">
-              Polymer Chemist and Full-Stack Developer at Indian Association for the Cultivation of Science (IACS), Kolkata. Lead researcher on stimuli-responsive cyclic imino ether architectures for biomedical applications.
+              Polymer Chemist at Indian Association for the Cultivation of Science (IACS), Kolkata. Researcher on stimuli-responsive cyclic imino ether architectures for biomedical applications.
             </p>
           </div>
 

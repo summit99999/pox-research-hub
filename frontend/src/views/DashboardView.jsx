@@ -130,7 +130,7 @@ export default function DashboardView({
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight leading-tight">
-            Scientific Literature Platform & AI Research Discovery
+            Scientific Research Platform
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
             Real-time systematic indexing from OpenAlex & Crossref (2020–2026+), structured 13-section scientific summarization, cationic ring-opening polymerization (CROP) kinetics, and evidence-grounded research-gap intelligence.
@@ -408,24 +408,8 @@ export default function DashboardView({
                 </span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
-                Polymer Chemist and Full-Stack Developer at <span className="font-semibold text-slate-100">Indian Association for the Cultivation of Science (IACS), Kolkata</span>. Lead researcher on stimuli-responsive cyclic imino ether architectures for biomedical applications.
+                Polymer Chemist at <span className="font-semibold text-slate-100">Indian Association for the Cultivation of Science (IACS), Kolkata</span>. Researcher on stimuli-responsive cyclic imino ether architectures for biomedical applications.
               </p>
-              <div className="flex flex-wrap items-center gap-3 pt-2 text-[11px] text-slate-400">
-                <span className="flex items-center gap-1 text-slate-300">
-                  <Database className="w-3.5 h-3.5 text-teal-400" />
-                  Supabase Cloud PostgreSQL
-                </span>
-                <span>•</span>
-                <span className="flex items-center gap-1 text-slate-300">
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-                  Gemini AI 13-Section Summarizer
-                </span>
-                <span>•</span>
-                <span className="flex items-center gap-1 text-slate-300">
-                  <FlaskConical className="w-3.5 h-3.5 text-teal-400" />
-                  Crossref & OpenAlex Systematic Ingestion
-                </span>
-              </div>
             </div>
           </div>
 

@@ -128,7 +128,7 @@ export default function DeveloperPublicationsView({
               </div>
 
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl pt-1">
-                Polymer Chemist and Full-Stack Developer at <span className="font-semibold text-slate-100">Indian Association for the Cultivation of Science (IACS), Kolkata</span>. Lead researcher on stimuli-responsive cyclic imino ether architectures for biomedical applications.
+                Polymer Chemist at <span className="font-semibold text-slate-100">Indian Association for the Cultivation of Science (IACS), Kolkata</span>. Researcher on stimuli-responsive cyclic imino ether architectures for biomedical applications.
               </p>
             </div>
           </div>
