@@ -41,7 +41,48 @@ export default function App() {
   useEffect(() => {
     loadInitialData();
     checkAuthSession();
+
+    // Read initial URL query parameters for direct navigation & fresh searches
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const viewParam = params.get('view') || params.get('tab');
+      const qParam = params.get('q') || params.get('search');
+      const catParam = params.get('category');
+
+      if (qParam) {
+        setSearchQuery(qParam);
+        setActiveView('search');
+      } else if (catParam) {
+        setSelectedCategory(catParam);
+        setActiveView('search');
+      } else if (viewParam) {
+        setActiveView(viewParam);
+      }
+    } catch (e) {
+      console.debug('Failed to parse URL query params', e);
+    }
   }, []);
+
+  // Sync browser URL with active view and search query for easy sharing
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams();
+      if (activeView && activeView !== 'dashboard') {
+        params.set('view', activeView);
+      }
+      if (activeView === 'search') {
+        if (searchQuery) params.set('q', searchQuery);
+        if (selectedCategory) params.set('category', selectedCategory);
+      }
+      const newQueryString = params.toString();
+      const newUrl = newQueryString 
+        ? `${window.location.pathname}?${newQueryString}` 
+        : window.location.pathname;
+      window.history.replaceState(null, '', newUrl);
+    } catch (e) {
+      console.debug('Failed to update URL search params', e);
+    }
+  }, [activeView, searchQuery, selectedCategory]);
 
   const loadInitialData = async () => {
     try {
