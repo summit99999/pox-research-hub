@@ -8,7 +8,9 @@ import {
   User, 
   LogOut, 
   ShieldCheck, 
-  AlertCircle 
+  AlertCircle,
+  Menu,
+  PanelLeftClose
 } from 'lucide-react';
 
 export default function Navbar({ 
@@ -21,7 +23,9 @@ export default function Navbar({
   onOpenAuthModal, 
   user, 
   onSignOut,
-  health
+  health,
+  onToggleSidebar,
+  sidebarOpen
 }) {
   const [localQuery, setLocalQuery] = useState(searchQuery || '');
 
@@ -39,26 +43,38 @@ export default function Navbar({
   return (
     <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 lg:px-6 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-        {/* Logo and Brand */}
-        <div 
-          onClick={() => setActiveView('dashboard')}
-          className="flex items-center gap-3 cursor-pointer group select-none"
-        >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-teal-500/20 group-hover:scale-105 transition-transform">
-            <Atom className="w-6 h-6 text-white animate-pulse" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-teal-400 via-indigo-300 to-indigo-400 bg-clip-text text-transparent">
-                POx Research Hub
-              </span>
-              <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/30">
-                Cloud
-              </span>
+        {/* Left Side: Menu Toggle + Logo & Brand */}
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          {onToggleSidebar && (
+            <button
+              onClick={onToggleSidebar}
+              title={sidebarOpen ? "Fold Sidebar Navigation" : "Open Sidebar Navigation"}
+              className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-teal-300 border border-slate-700/80 transition-all flex items-center justify-center shadow-sm group"
+            >
+              <Menu className="w-5 h-5 text-teal-400 group-hover:scale-110 transition-transform" />
+            </button>
+          )}
+
+          <div 
+            onClick={() => setActiveView('dashboard')}
+            className="flex items-center gap-3 cursor-pointer group select-none"
+          >
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-teal-500/20 group-hover:scale-105 transition-transform">
+              <Atom className="w-6 h-6 text-white animate-pulse" />
             </div>
-            <p className="text-xs text-slate-400 hidden sm:block">
-              Poly(2-oxazoline) & Poly(2-oxazine) Scientific Intelligence
-            </p>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-teal-400 via-indigo-300 to-indigo-400 bg-clip-text text-transparent">
+                  POx Research Hub
+                </span>
+                <span className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                  Cloud
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 hidden sm:block">
+                Poly(2-oxazoline) & Poly(2-oxazine) Scientific Intelligence
+              </p>
+            </div>
           </div>
         </div>
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Menu } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import DashboardView from './views/DashboardView';
@@ -20,6 +21,10 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPaperIds, setSelectedPaperIds] = useState([]);
+  
+  // Folding Sidebar Navigation (appears when clicked)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarPinned, setSidebarPinned] = useState(false);
   
   // Modals
   const [detailModalPaper, setDetailModalPaper] = useState(null);
@@ -143,16 +148,44 @@ export default function App() {
         user={user}
         onSignOut={handleSignOut}
         health={health}
+        onToggleSidebar={() => setSidebarOpen(prev => !prev)}
+        sidebarOpen={sidebarOpen}
       />
 
       {/* Main Layout Area */}
-      <div className="flex-1 flex max-w-[1600px] w-full mx-auto">
-        {/* Left Sidebar (15 Scientific Views) */}
+      <div className="flex-1 flex max-w-[1600px] w-full mx-auto relative">
+        {/* Backdrop for folded sidebar (when open and not pinned) */}
+        {sidebarOpen && !sidebarPinned && (
+          <div 
+            onClick={() => setSidebarOpen(false)}
+            className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-40 transition-opacity duration-300"
+            title="Click to fold sidebar"
+          />
+        )}
+
+        {/* Sliding & Folding Left Sidebar (16 Scientific Views) */}
         <Sidebar
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+          isPinned={sidebarPinned}
+          onTogglePin={() => setSidebarPinned(prev => !prev)}
           activeView={activeView}
           setActiveView={setActiveView}
           onSelectCategory={handleSelectCategory}
         />
+
+        {/* Floating Quick Open Pill (visible when folded) */}
+        {!sidebarOpen && (
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="fixed left-4 bottom-6 z-30 flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-teal-300 border border-slate-700/80 shadow-2xl backdrop-blur-md text-xs font-semibold transition-all group hover:scale-105"
+            title="Open Navigation Menu"
+          >
+            <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse group-hover:scale-125 transition-transform" />
+            <Menu className="w-4 h-4 text-teal-400" />
+            <span>Menu & Views</span>
+          </button>
+        )}
 
         {/* View Router Content */}
         <main className="flex-1 min-w-0 p-4 lg:p-8 overflow-y-auto">
