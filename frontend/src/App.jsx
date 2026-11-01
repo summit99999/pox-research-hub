@@ -10,6 +10,7 @@ import ReviewWorkspaceView from './views/ReviewWorkspaceView';
 import LibraryView from './views/LibraryView';
 import SettingsView from './views/SettingsView';
 import AISummariesView from './views/AISummariesView';
+import DeveloperPublicationsView from './views/DeveloperPublicationsView';
 import PaperDetailModal from './components/PaperDetailModal';
 import CollectorModal from './components/CollectorModal';
 import AuthModal from './components/AuthModal';
@@ -201,6 +202,7 @@ export default function App() {
               onToggleFavourite={handleToggleFavourite}
               onUpdateReadingStatus={handleUpdateReadingStatus}
               onUpdateScreening={handleUpdateScreening}
+              onOpenDeveloperView={() => setActiveView('developer')}
             />
           )}
 
@@ -255,6 +257,18 @@ export default function App() {
               onUpdateReadingStatus={handleUpdateReadingStatus}
               onUpdateScreening={handleUpdateScreening}
               initialTab="published"
+            />
+          )}
+
+          {activeView === 'developer' && (
+            <DeveloperPublicationsView
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
+              selectedPaperIds={selectedPaperIds}
+              onToggleSelectPaper={handleToggleSelectPaper}
+              onToggleFavourite={handleToggleFavourite}
+              onUpdateReadingStatus={handleUpdateReadingStatus}
+              onUpdateScreening={handleUpdateScreening}
             />
           )}
 

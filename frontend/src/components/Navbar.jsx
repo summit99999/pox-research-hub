@@ -102,16 +102,16 @@ export default function Navbar({
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Developer Attribution Pill */}
           <div 
-            onClick={() => setActiveView('settings')}
-            title="Platform Architect & Developer: Sumit Barik (IACS Kolkata)"
-            className="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/90 border border-slate-700/80 text-xs text-slate-300 cursor-pointer hover:border-teal-500/40 transition-colors"
+            onClick={() => setActiveView('developer')}
+            title="View Developer's Publications (Sumit Barik, IACS Kolkata)"
+            className="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/90 border border-slate-700/80 text-xs text-slate-300 cursor-pointer hover:border-teal-500/50 hover:bg-slate-800 transition-all group"
           >
-            <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
+            <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center text-[10px] font-bold text-white shadow-sm group-hover:scale-110 transition-transform">
               SB
             </div>
             <div className="text-[11px] leading-tight">
               <span className="text-slate-400">Dev: </span>
-              <span className="font-semibold text-teal-300">Sumit Barik</span>
+              <span className="font-semibold text-teal-300 group-hover:underline">Sumit Barik</span>
             </div>
           </div>
 

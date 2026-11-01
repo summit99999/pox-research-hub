@@ -28,6 +28,7 @@ export const NAV_ITEMS = [
   { id: 'search', label: 'Literature Search', icon: Search, section: 'Core' },
   { id: 'publications', label: 'All Publications', icon: BookOpen, section: 'Core' },
   { id: 'reviews', label: 'POx Review Articles', icon: BookMarked, section: 'Core' },
+  { id: 'developer', label: "Developer's Publications", icon: Award, section: 'Core' },
   
   { id: 'pox', label: 'POx Research', icon: Layers, section: 'Polymer Classes' },
   { id: 'pozi', label: 'POzi Research', icon: Hexagon, section: 'Polymer Classes' },
@@ -145,15 +146,20 @@ export default function Sidebar({
 
       {/* Developer Credit & Info */}
       <div className="p-3 border-t border-slate-800/80 bg-slate-950/60 text-[11px] space-y-2 shrink-0">
-        <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5 shadow-sm">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-sm shrink-0">
+        <div 
+          onClick={() => handleNavClick({ id: 'developer' })}
+          title="Click to view all publications by Sumit Barik"
+          className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 hover:bg-slate-800/80 flex items-center gap-2.5 shadow-sm cursor-pointer transition-all group"
+        >
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-sm shrink-0 group-hover:scale-105 transition-transform">
             SB
           </div>
           <div className="min-w-0">
-            <div className="text-[9px] uppercase font-bold text-teal-400 tracking-wider">
-              Developer & Architect
+            <div className="text-[9px] uppercase font-bold text-teal-400 tracking-wider flex items-center justify-between">
+              <span>Developer's Works</span>
+              <span className="text-[9px] text-teal-300 font-normal">View →</span>
             </div>
-            <div className="font-semibold text-slate-200 text-xs truncate">
+            <div className="font-semibold text-slate-200 text-xs truncate group-hover:text-teal-300 transition-colors">
               Sumit Barik
             </div>
             <div className="text-[10px] text-slate-400 truncate">

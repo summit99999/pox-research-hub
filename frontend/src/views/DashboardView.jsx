@@ -35,7 +35,8 @@ export default function DashboardView({
   onToggleSelectPaper,
   onToggleFavourite,
   onUpdateReadingStatus,
-  onUpdateScreening 
+  onUpdateScreening,
+  onOpenDeveloperView 
 }) {
   const [analytics, setAnalytics] = useState(null);
   const [recentPapers, setRecentPapers] = useState([]);
@@ -416,11 +417,11 @@ export default function DashboardView({
           </div>
 
           <button
-            onClick={() => onNavigateToSearch && onNavigateToSearch('Sumit Barik')}
-            className="shrink-0 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 hover:border-teal-500/50 text-xs font-semibold transition-all shadow-sm flex items-center gap-2"
+            onClick={() => onOpenDeveloperView ? onOpenDeveloperView() : onNavigateToSearch && onNavigateToSearch('Sumit Barik')}
+            className="shrink-0 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 hover:border-teal-500/50 text-xs font-semibold transition-all shadow-sm flex items-center gap-2 group"
           >
             <span>View Developer's Publications</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
       </div>
