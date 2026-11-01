@@ -15,11 +15,13 @@ import {
   ArrowRight,
   Database,
   Atom,
-  Binary
+  Binary,
+  ExternalLink
 } from 'lucide-react';
 import { api } from '../lib/api';
 import ChemicalStructureViewer from './ChemicalStructureViewer';
 import ReactionSchemeViewer from './ReactionSchemeViewer';
+import { getPaperDoiUrl, formatDoiDisplay } from '../lib/doiHelper';
 
 export default function AISummaryViewer({ paper, onClose }) {
   const [summaryData, setSummaryData] = useState(null);
@@ -248,7 +250,16 @@ export default function AISummaryViewer({ paper, onClose }) {
                 </div>
                 {(s.bibliographic_info?.doi || paper.doi) && (
                   <div className="mt-2 font-mono text-teal-400">
-                    DOI: {s.bibliographic_info?.doi || paper.doi}
+                    <a
+                      href={getPaperDoiUrl(paper)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 hover:text-teal-300 transition-colors"
+                      title="Open full paper via DOI"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>DOI: {formatDoiDisplay(s.bibliographic_info?.doi || paper.doi)}</span>
+                    </a>
                   </div>
                 )}
               </div>

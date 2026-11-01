@@ -8,34 +8,41 @@ import {
   Tag, 
   Sparkles, 
   Building2,
-  Check
+  Check,
+  FileText
 } from 'lucide-react';
+import PaperTOC from './PaperTOC';
 import AISummaryViewer from './AISummaryViewer';
 import { api } from '../lib/api';
+import { getPaperDoiUrl, formatDoiDisplay } from '../lib/doiHelper';
+import { getJournalImpactFactor } from '../lib/journalMeta';
 
 export default function PaperDetailModal({ 
   paper, 
   allCategories, 
-  initialTab = 'metadata', 
+  initialTab = 'toc', 
   onClose, 
   onCategoriesUpdated 
 }) {
-  const [activeTab, setActiveTab] = useState(initialTab);
+  const [activeTab, setActiveTab] = useState(initialTab || 'toc');
 
   React.useEffect(() => {
     if (initialTab) {
       setActiveTab(initialTab);
     }
   }, [initialTab, paper?.id]);
+
   const [selectedCategories, setSelectedCategories] = useState(
-    paper.categories?.map(c => c.slug) || []
+    paper?.categories?.map(c => c.slug) || []
   );
   const [savingCategories, setSavingCategories] = useState(false);
   const [categorySuccess, setCategorySuccess] = useState(false);
 
   if (!paper) return null;
 
-  const doiUrl = paper.doi ? `https://doi.org/${paper.doi_normalized || paper.doi}` : paper.landing_page_url;
+  const doiUrl = getPaperDoiUrl(paper);
+  const displayDoi = formatDoiDisplay(paper.doi);
+  const ifScore = getJournalImpactFactor(paper.journal);
 
   const handleToggleCategory = (slug) => {
     if (selectedCategories.includes(slug)) {
@@ -64,18 +71,35 @@ export default function PaperDetailModal({
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
         {/* Modal Top Bar */}
-        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/60">
-          <div className="flex items-center gap-2">
+        <div className="px-4 sm:px-6 py-3.5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/80">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            {/* Table of Contents (TOC) Tab */}
+            <button
+              onClick={() => setActiveTab('toc')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                activeTab === 'toc'
+                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>Table of Contents (TOC)</span>
+            </button>
+
+            {/* Publication Details Tab */}
             <button
               onClick={() => setActiveTab('metadata')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 activeTab === 'metadata'
                   ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Publication Details
+              <FileText className="w-3.5 h-3.5" />
+              <span>Publication Details</span>
             </button>
+
+            {/* 13-Section AI Summary Tab */}
             <button
               onClick={() => setActiveTab('summary')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
@@ -85,30 +109,43 @@ export default function PaperDetailModal({
               }`}
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>13-Section AI Summary</span>
+              <span>13-Section Summary</span>
             </button>
+
+            {/* Category Manager Tab */}
             <button
               onClick={() => setActiveTab('categories')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 activeTab === 'categories'
                   ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              Category Manager
+              <Tag className="w-3.5 h-3.5" />
+              <span>Categories</span>
             </button>
           </div>
 
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-200 p-1 rounded-lg hover:bg-slate-800 transition-colors"
+            className="text-slate-400 hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-800 transition-colors shrink-0 ml-2"
+            title="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Content Body */}
-        <div className="p-6 overflow-y-auto flex-1 space-y-6">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-6">
+          {/* TAB 1: TABLE OF CONTENTS (TOC) */}
+          {activeTab === 'toc' && (
+            <PaperTOC 
+              paper={paper} 
+              onOpenSummary={() => setActiveTab('summary')} 
+            />
+          )}
+
+          {/* TAB 2: METADATA / PUBLICATION DETAILS */}
           {activeTab === 'metadata' && (
             <div className="space-y-6">
               {/* Paper Title & DOI */}
@@ -122,10 +159,11 @@ export default function PaperDetailModal({
                       href={doiUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-teal-400 hover:text-teal-300 font-mono"
+                      className="flex items-center gap-1.5 text-teal-400 hover:text-teal-300 font-mono font-medium"
+                      title="Open full-text paper via publisher DOI resolver"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
-                      <span>{paper.doi || 'Publisher Landing Page'}</span>
+                      <span>{displayDoi ? `doi:${displayDoi}` : 'Publisher Article Link'}</span>
                     </a>
                   )}
                   {paper.open_access_url && (
@@ -151,12 +189,19 @@ export default function PaperDetailModal({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-xl bg-slate-800/40 border border-slate-800 text-xs">
                 <div>
                   <span className="text-slate-400 block mb-0.5">Journal / Venue:</span>
-                  <span className="text-slate-200 font-medium">{paper.journal || 'Not specified'}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-slate-200 font-medium">{paper.journal || 'Not specified'}</span>
+                    {ifScore && (
+                      <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                        IF: {ifScore}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <span className="text-slate-400 block mb-0.5">Publication Year:</span>
                   <span className="text-slate-200 font-medium font-mono">
-                    {paper.publication_year || 'Not specified'}
+                    {paper.publication_date || paper.publication_year || 'Not specified'}
                   </span>
                 </div>
                 <div>
@@ -184,6 +229,11 @@ export default function PaperDetailModal({
                             <span>{a.affiliation}</span>
                           </div>
                         )}
+                        {a.orcid && (
+                          <span className="text-[11px] text-teal-400 font-mono mt-0.5 block">
+                            ORCID: {a.orcid}
+                          </span>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -205,10 +255,12 @@ export default function PaperDetailModal({
             </div>
           )}
 
+          {/* TAB 3: AI SUMMARY */}
           {activeTab === 'summary' && (
             <AISummaryViewer paper={paper} onClose={onClose} />
           )}
 
+          {/* TAB 4: CATEGORY MANAGER */}
           {activeTab === 'categories' && (
             <div className="space-y-4">
               <div>

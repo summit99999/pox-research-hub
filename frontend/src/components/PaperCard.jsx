@@ -8,12 +8,13 @@ import {
   XCircle, 
   HelpCircle, 
   Quote, 
-  FileText,
+  BookOpen,
   Clock,
   Calendar,
   Award
 } from 'lucide-react';
 import { getJournalImpactFactor } from '../lib/journalMeta';
+import { getPaperDoiUrl, formatDoiDisplay } from '../lib/doiHelper';
 
 export default function PaperCard({ 
   paper, 
@@ -22,11 +23,12 @@ export default function PaperCard({
   onOpenDetails, 
   onOpenSummary, 
   onToggleFavourite, 
-  onUpdateReadingStatus,
+  onUpdateReadingStatus, 
   onUpdateScreening 
 }) {
   const authorsList = paper.authors?.map(a => a.name).join(', ') || 'Authors not listed';
-  const doiUrl = paper.doi ? `https://doi.org/${paper.doi_normalized || paper.doi}` : paper.landing_page_url;
+  const doiUrl = getPaperDoiUrl(paper);
+  const displayDoi = formatDoiDisplay(paper.doi);
 
   return (
     <div className={`p-4 rounded-xl border transition-all ${
@@ -62,7 +64,7 @@ export default function PaperCard({
                 </span>
                 {getJournalImpactFactor(paper.journal) && (
                   <span 
-                    className="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/25 shrink-0 cursor-default" 
+                    className="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30"
                     title={`${paper.journal} Impact Factor: ${getJournalImpactFactor(paper.journal)} (Clarivate JCR)`}
                   >
                     IF: {getJournalImpactFactor(paper.journal)}
@@ -71,9 +73,9 @@ export default function PaperCard({
               </div>
             )}
             {paper.citation_count > 0 && (
-              <span className="flex items-center gap-1 text-slate-400 bg-slate-800 px-2 py-0.5 rounded border border-slate-700/60">
-                <Quote className="w-3 h-3 text-slate-400" />
-                <span>{paper.citation_count} citations</span>
+              <span className="flex items-center gap-1 text-[11px] text-slate-400 font-mono bg-slate-800/80 px-1.5 py-0.5 rounded border border-slate-700/60">
+                <Quote className="w-2.5 h-2.5" />
+                <span>{paper.citation_count}</span>
               </span>
             )}
             {paper.open_access_url && (
@@ -135,7 +137,8 @@ export default function PaperCard({
                   href={doiUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs text-slate-400 hover:text-teal-400 transition-colors"
+                  className="flex items-center gap-1 text-xs text-teal-400 hover:text-teal-300 font-mono transition-colors"
+                  title="Direct verified publisher DOI link"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   <span>DOI</span>
@@ -143,14 +146,15 @@ export default function PaperCard({
               )}
               <button
                 onClick={() => onOpenDetails(paper)}
-                className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-200 transition-colors ml-2"
+                className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-teal-300 font-medium transition-colors ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-750 border border-slate-700"
+                title="View Table of Contents & Chemical Architecture"
               >
-                <FileText className="w-3.5 h-3.5" />
-                <span>Details</span>
+                <BookOpen className="w-3.5 h-3.5 text-teal-400" />
+                <span>TOC & Scheme</span>
               </button>
               <button
                 onClick={() => onOpenSummary(paper)}
-                className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition-colors ml-2 font-medium"
+                className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition-colors ml-1 font-medium"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>{paper.has_summary ? 'View Summary' : 'AI Summary'}</span>
@@ -173,19 +177,8 @@ export default function PaperCard({
                   <CheckCircle2 className="w-3.5 h-3.5" />
                 </button>
                 <button
-                  onClick={() => onUpdateScreening && onUpdateScreening(paper.id, 'maybe')}
-                  title="Screen: Maybe / Ambiguous"
-                  className={`px-1.5 py-0.5 rounded transition-colors ${
-                    paper.screening_status === 'maybe' 
-                      ? 'bg-amber-600 text-white font-medium' 
-                      : 'text-slate-400 hover:text-amber-300'
-                  }`}
-                >
-                  <HelpCircle className="w-3.5 h-3.5" />
-                </button>
-                <button
                   onClick={() => onUpdateScreening && onUpdateScreening(paper.id, 'excluded')}
-                  title="Screen: Exclude"
+                  title="Screen: Exclude from Systematic Review"
                   className={`px-1.5 py-0.5 rounded transition-colors ${
                     paper.screening_status === 'excluded' 
                       ? 'bg-rose-600 text-white font-medium' 
@@ -194,26 +187,41 @@ export default function PaperCard({
                 >
                   <XCircle className="w-3.5 h-3.5" />
                 </button>
+                <button
+                  onClick={() => onUpdateScreening && onUpdateScreening(paper.id, 'maybe')}
+                  title="Screen: Mark as Uncertain / Review Full Text"
+                  className={`px-1.5 py-0.5 rounded transition-colors ${
+                    paper.screening_status === 'maybe' 
+                      ? 'bg-amber-600 text-white font-medium' 
+                      : 'text-slate-400 hover:text-amber-300'
+                  }`}
+                >
+                  <HelpCircle className="w-3.5 h-3.5" />
+                </button>
               </div>
 
-              {/* Reading Status Pill */}
+              {/* Reading Status Selector */}
               <select
                 value={paper.reading_status || 'unread'}
                 onChange={(e) => onUpdateReadingStatus && onUpdateReadingStatus(paper.id, e.target.value)}
-                className="bg-slate-800 text-slate-300 border border-slate-700 text-[11px] rounded-lg px-2 py-1 focus:outline-none focus:border-teal-500 cursor-pointer"
+                className="bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg px-2 py-1 focus:outline-none focus:border-teal-500 cursor-pointer"
               >
                 <option value="unread">Unread</option>
                 <option value="in_progress">Reading</option>
-                <option value="completed">Completed</option>
+                <option value="completed">Read</option>
               </select>
 
-              {/* Favourite Star */}
+              {/* Favourite Star Toggle */}
               <button
                 onClick={() => onToggleFavourite && onToggleFavourite(paper.id, !paper.is_favourite)}
-                title={paper.is_favourite ? 'Remove from favourites' : 'Add to favourites'}
-                className="p-1 text-slate-400 hover:text-amber-400 transition-colors"
+                className={`p-1.5 rounded-lg border transition-colors ${
+                  paper.is_favourite 
+                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' 
+                    : 'bg-slate-800 border-slate-700 text-slate-500 hover:text-amber-400'
+                }`}
+                title={paper.is_favourite ? 'Remove from favourites' : 'Save to favourites'}
               >
-                <Star className={`w-4 h-4 ${paper.is_favourite ? 'fill-amber-400 text-amber-400' : ''}`} />
+                <Star className={`w-3.5 h-3.5 ${paper.is_favourite ? 'fill-amber-400' : ''}`} />
               </button>
             </div>
           </div>

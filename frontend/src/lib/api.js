@@ -350,6 +350,7 @@ export const api = {
           id: w.id ? w.id.replace('https://openalex.org/', '') : `collected-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
           doi: cleanDoi,
           doi_normalized: cleanDoi.toLowerCase(),
+          doi_url: cleanDoi.startsWith('10.') ? `https://doi.org/${cleanDoi}` : (w.primary_location?.landing_page_url || w.doi || ''),
           title: w.title || 'Untitled Polymer Investigation',
           abstract: abstract || 'Abstract available via primary publisher DOI link.',
           publication_year: w.publication_year || new Date().getFullYear(),

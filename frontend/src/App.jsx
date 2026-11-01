@@ -29,7 +29,7 @@ export default function App() {
   
   // Modals
   const [detailModalPaper, setDetailModalPaper] = useState(null);
-  const [detailModalInitialTab, setDetailModalInitialTab] = useState('metadata');
+  const [detailModalInitialTab, setDetailModalInitialTab] = useState('toc');
   const [collectorModalOpen, setCollectorModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   
@@ -132,7 +132,7 @@ export default function App() {
 
   const handleOpenDetails = (paper) => {
     setDetailModalPaper(paper);
-    setDetailModalInitialTab('metadata');
+    setDetailModalInitialTab('toc');
   };
 
   const handleOpenSummary = (paper) => {
