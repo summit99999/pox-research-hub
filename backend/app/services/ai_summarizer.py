@@ -24,14 +24,23 @@ CRITICAL RULES:
 5. In section 10 (Limitations), separate "author_reported_limitations" from "ai_inferred_limitations".
 """
 
+FALLBACK_MODELS = [
+    "gemini-3.1-flash-lite",
+    "gemini-3.5-flash",
+    "gemini-flash-latest",
+    "gemini-3.8-flash"
+]
+
 async def generate_scientific_summary(
     paper: Dict[str, Any],
     model_name: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Calls Google Gemini using the google-genai SDK to generate a structured 13-section summary.
+    Includes automated fallback across high-availability Gemini models.
     """
-    active_model = model_name or settings.GEMINI_MODEL or "gemini-flash-latest"
+    primary_model = model_name or settings.GEMINI_MODEL or "gemini-2.5-flash"
+    candidate_models = [primary_model] + [m for m in FALLBACK_MODELS if m != primary_model]
     
     try:
         client = genai.Client(api_key=settings.GEMINI_API_KEY) if settings.GEMINI_API_KEY else genai.Client()
@@ -75,43 +84,65 @@ Please generate the structured JSON matching the 13 required sections:
 13. important_experimental_values (molecular_weight, dispersity, conversion, yield_percentage, cloud_point_lcst_ucst, particle_size, cmc, drug_loading, release_percentage, reaction_temperature_time, biological_activity)
 """
 
-    try:
-        response = client.models.generate_content(
-            model=active_model,
-            contents=user_prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=SYSTEM_PROMPT,
-                response_mime_type="application/json",
-                temperature=0.1
+    last_error = None
+    for model_candidate in candidate_models:
+        try:
+            logger.info(f"Attempting summary generation with model: {model_candidate}")
+            response = client.models.generate_content(
+                model=model_candidate,
+                contents=user_prompt,
+                config=types.GenerateContentConfig(
+                    system_instruction=SYSTEM_PROMPT,
+                    response_mime_type="application/json",
+                    temperature=0.1
+                )
             )
-        )
-        
-        raw_text = response.text
-        summary_dict = json.loads(raw_text)
-        
-        # Validate through Pydantic schema
-        validated_summary = ScientificSummary13Sections.model_validate(summary_dict)
-        
-        # Save to database if connected and paper has an ID
-        supabase = get_supabase_admin()
-        paper_id = paper.get("id")
-        if supabase and paper_id:
-            try:
-                supabase.table("paper_summaries").upsert({
-                    "paper_id": paper_id,
-                    "model_name": active_model,
-                    "summary_json": validated_summary.model_dump(),
-                    "source_content_type": "abstract_and_metadata"
-                }, on_conflict="paper_id").execute()
-            except Exception as db_err:
-                logger.warning(f"Could not persist paper summary to Supabase: {db_err}")
-                
-        return {
-            "model_name": active_model,
-            "summary": validated_summary.model_dump(),
-            "source_content_type": "abstract_and_metadata"
-        }
-        
-    except Exception as e:
-        logger.error(f"Failed to generate summary with Gemini: {e}")
-        raise
+            
+            raw_text = response.text
+            summary_dict = json.loads(raw_text)
+            
+            # Normalize list outputs for text fields
+            string_fields = [
+                "research_background", "research_objective", "research_gap",
+                "experimental_methodology", "major_results", "scientific_novelty",
+                "relevance_to_pox_research"
+            ]
+            for sf in string_fields:
+                if isinstance(summary_dict.get(sf), list):
+                    summary_dict[sf] = "\n".join(f"- {item}" for item in summary_dict[sf])
+                    
+            limits = summary_dict.get("limitations")
+            if isinstance(limits, dict):
+                for k in ["author_reported_limitations", "ai_inferred_limitations"]:
+                    if isinstance(limits.get(k), list):
+                        limits[k] = "\n".join(f"- {item}" for item in limits[k])
+            
+            # Validate through Pydantic schema
+            validated_summary = ScientificSummary13Sections.model_validate(summary_dict)
+            
+            # Save to database if connected and paper has an ID
+            supabase = get_supabase_admin()
+            paper_id = paper.get("id")
+            if supabase and paper_id:
+                try:
+                    supabase.table("paper_summaries").upsert({
+                        "paper_id": paper_id,
+                        "model_name": model_candidate,
+                        "summary_json": validated_summary.model_dump(),
+                        "source_content_type": "abstract_and_metadata"
+                    }, on_conflict="paper_id").execute()
+                except Exception as db_err:
+                    logger.warning(f"Could not persist paper summary to Supabase: {db_err}")
+                    
+            return {
+                "model_name": model_candidate,
+                "summary": validated_summary.model_dump(),
+                "source_content_type": "abstract_and_metadata"
+            }
+        except Exception as e:
+            logger.warning(f"Model {model_candidate} generation failed: {e}. Retrying next available model...")
+            last_error = e
+            continue
+            
+    logger.error(f"All candidate Gemini models failed: {last_error}")
+    raise last_error

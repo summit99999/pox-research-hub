@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Union
 from datetime import date, datetime
 from pydantic import BaseModel, Field
 
@@ -99,13 +99,13 @@ class ScientificSummary13Sections(BaseModel):
     bibliographic_info: BibliographicInfo
     
     # 2. Research Background
-    research_background: str
+    research_background: Union[str, List[str]]
     
     # 3. Research Objective
-    research_objective: str
+    research_objective: Union[str, List[str]]
     
     # 4. Research Gap
-    research_gap: str
+    research_gap: Union[str, List[str]]
     
     # 5. Polymer and Chemical System
     polymer_and_chemical_system: Dict[str, Any] = Field(
@@ -121,19 +121,19 @@ class ScientificSummary13Sections(BaseModel):
     )
     
     # 6. Experimental Methodology
-    experimental_methodology: str
+    experimental_methodology: Union[str, List[str]]
     
     # 7. Characterization Techniques
     characterization_techniques: List[str] = []
     
     # 8. Major Results
-    major_results: str
+    major_results: Union[str, List[str]]
     
     # 9. Scientific Novelty
-    scientific_novelty: str
+    scientific_novelty: Union[str, List[str]]
     
     # 10. Limitations (explicitly distinguishing authors' reported limitations vs AI inferred)
-    limitations: Dict[str, str] = Field(
+    limitations: Dict[str, Any] = Field(
         default_factory=lambda: {
             "author_reported_limitations": "None stated in the accessible text",
             "ai_inferred_limitations": "Limited accessible data to full experimental section"
@@ -144,7 +144,7 @@ class ScientificSummary13Sections(BaseModel):
     future_research_opportunities: List[str] = []
     
     # 12. Relevance to POx Research
-    relevance_to_pox_research: str
+    relevance_to_pox_research: Union[str, List[str]]
     
     # 13. Important Experimental Values
     important_experimental_values: ExperimentalValues

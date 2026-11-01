@@ -20,6 +20,13 @@ MANDATORY RULES:
 5. Provide actionable experimental strategies, potential synthetic hurdles, and analytical characterization pathways.
 """
 
+FALLBACK_MODELS = [
+    "gemini-3.1-flash-lite",
+    "gemini-3.5-flash",
+    "gemini-flash-latest",
+    "gemini-3.8-flash"
+]
+
 async def analyze_research_gaps(
     focus_area: Optional[str] = "Poly(2-oxazoline) and Poly(2-oxazine) functional architectures",
     target_papers: Optional[List[Dict[str, Any]]] = None,
@@ -78,41 +85,49 @@ Format your response as a valid JSON object with the key "gaps" containing an ar
 - disclaimer: "Potentially underexplored based on the currently indexed literature."
 """
 
-    try:
-        response = client.models.generate_content(
-            model=settings.GEMINI_MODEL or "gemini-flash-latest",
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=GAP_SYSTEM_PROMPT,
-                response_mime_type="application/json",
-                temperature=0.2
+    candidate_models = [settings.GEMINI_MODEL or "gemini-3.5-flash"] + [m for m in FALLBACK_MODELS if m != settings.GEMINI_MODEL]
+    last_error = None
+    for model_candidate in candidate_models:
+        try:
+            logger.info(f"Attempting gap analysis with model: {model_candidate}")
+            response = client.models.generate_content(
+                model=model_candidate,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    system_instruction=GAP_SYSTEM_PROMPT,
+                    response_mime_type="application/json",
+                    temperature=0.2
+                )
             )
-        )
-        
-        parsed = json.loads(response.text)
-        gaps = parsed.get("gaps", [])
-        
-        report_data = {
-            "title": f"POx/POzi Research Gap Analysis: {focus_area}",
-            "query_context": focus_area,
-            "gaps": gaps
-        }
-        
-        # Save to database if connected
-        if supabase and user_id:
-            try:
-                save_res = supabase.table("research_gap_reports").insert({
-                    "user_id": user_id,
-                    "title": report_data["title"],
-                    "query_context": focus_area,
-                    "report_json": report_data
-                }).execute()
-                if save_res.data:
-                    report_data["id"] = save_res.data[0]["id"]
-            except Exception as db_err:
-                logger.warning(f"Could not persist research gap report: {db_err}")
-                
-        return report_data
-    except Exception as e:
-        logger.error(f"Failed to generate gap analysis: {e}")
-        raise
+            
+            parsed = json.loads(response.text)
+            gaps = parsed.get("gaps", [])
+            
+            report_data = {
+                "title": f"POx/POzi Research Gap Analysis: {focus_area}",
+                "query_context": focus_area,
+                "gaps": gaps
+            }
+            
+            # Save to database if connected
+            if supabase and user_id:
+                try:
+                    save_res = supabase.table("research_gap_reports").insert({
+                        "user_id": user_id,
+                        "title": report_data["title"],
+                        "query_context": focus_area,
+                        "report_json": report_data
+                    }).execute()
+                    if save_res.data:
+                        report_data["id"] = save_res.data[0]["id"]
+                except Exception as db_err:
+                    logger.warning(f"Could not persist research gap report: {db_err}")
+                    
+            return report_data
+        except Exception as e:
+            logger.warning(f"Gap analysis with model {model_candidate} failed: {e}. Trying fallback...")
+            last_error = e
+            continue
+            
+    logger.error(f"All candidate Gemini models failed for gap analysis: {last_error}")
+    raise last_error

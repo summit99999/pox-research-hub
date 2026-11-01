@@ -38,6 +38,13 @@ CRITICAL RULES:
 - Output valid JSON with keys: "review_markdown" and "comparison_table".
 """
 
+FALLBACK_MODELS = [
+    "gemini-3.1-flash-lite",
+    "gemini-3.5-flash",
+    "gemini-flash-latest",
+    "gemini-3.8-flash"
+]
+
 @router.post("/draft", response_model=ReviewDraftResponse)
 async def generate_review_draft(
     payload: ReviewDraftRequest,
@@ -79,46 +86,55 @@ Selected Publications ({len(papers)} papers):
 Please generate the Markdown literature review and comparison matrix according to system instructions.
 """
 
-    try:
-        response = client.models.generate_content(
-            model=settings.GEMINI_MODEL or "gemini-flash-latest",
-            contents=user_query,
-            config=types.GenerateContentConfig(
-                system_instruction=REVIEW_PROMPT,
-                response_mime_type="application/json",
-                temperature=0.2
-            )
-        )
-        
-        parsed = json.loads(response.text)
-        review_md = parsed.get("review_markdown", "No review markdown generated.")
-        comp_table = parsed.get("comparison_table", [])
-        
-        review_record_id = None
-        user_id = current_user.get("id")
-        if supabase and user_id:
-            try:
-                save_res = supabase.table("literature_reviews").insert({
-                    "user_id": user_id,
-                    "title": payload.title,
-                    "topic": payload.topic,
-                    "paper_ids": payload.paper_ids,
-                    "review_markdown": review_md,
-                    "comparison_table_json": comp_table
-                }).execute()
-                if save_res.data:
-                    review_record_id = save_res.data[0]["id"]
-            except Exception as db_err:
-                logger.warning(f"Could not persist literature review record: {db_err}")
+    candidate_models = [settings.GEMINI_MODEL or "gemini-3.5-flash"] + [m for m in FALLBACK_MODELS if m != settings.GEMINI_MODEL]
+    last_error = None
 
-        return ReviewDraftResponse(
-            id=review_record_id,
-            title=payload.title,
-            topic=payload.topic,
-            paper_count=len(papers),
-            review_markdown=review_md,
-            comparison_table=comp_table
-        )
-    except Exception as e:
-        logger.error(f"Error drafting review: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    for model_candidate in candidate_models:
+        try:
+            logger.info(f"Attempting review draft generation with model: {model_candidate}")
+            response = client.models.generate_content(
+                model=model_candidate,
+                contents=user_query,
+                config=types.GenerateContentConfig(
+                    system_instruction=REVIEW_PROMPT,
+                    response_mime_type="application/json",
+                    temperature=0.2
+                )
+            )
+            
+            parsed = json.loads(response.text)
+            review_md = parsed.get("review_markdown", "No review markdown generated.")
+            comp_table = parsed.get("comparison_table", [])
+            
+            review_record_id = None
+            user_id = current_user.get("id")
+            if supabase and user_id:
+                try:
+                    save_res = supabase.table("literature_reviews").insert({
+                        "user_id": user_id,
+                        "title": payload.title,
+                        "topic": payload.topic,
+                        "paper_ids": payload.paper_ids,
+                        "review_markdown": review_md,
+                        "comparison_table_json": comp_table
+                    }).execute()
+                    if save_res.data:
+                        review_record_id = save_res.data[0]["id"]
+                except Exception as db_err:
+                    logger.warning(f"Could not persist literature review record: {db_err}")
+
+            return ReviewDraftResponse(
+                id=review_record_id,
+                title=payload.title,
+                topic=payload.topic,
+                paper_count=len(papers),
+                review_markdown=review_md,
+                comparison_table=comp_table
+            )
+        except Exception as e:
+            logger.warning(f"Review synthesis with model {model_candidate} failed: {e}. Trying fallback...")
+            last_error = e
+            continue
+
+    logger.error(f"All candidate Gemini models failed for review: {last_error}")
+    raise HTTPException(status_code=500, detail=str(last_error))

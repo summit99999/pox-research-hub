@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     
     # Google Gemini AI
     GEMINI_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-flash-latest"
+    GEMINI_MODEL: str = "gemini-3.1-flash-lite"
     
     # Scientific Literature APIs
     OPENALEX_EMAIL: str = "researcher@oxazoline-hub.org"
