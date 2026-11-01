@@ -9,7 +9,7 @@ from app.core.database import get_supabase_admin
 router = APIRouter()
 
 class ExportRequest(BaseModel):
-    paper_ids: List[str]
+    paper_ids: Optional[List[str]] = None
 
 def generate_bibtex_key(title: str, year: Optional[int], author: Optional[str]) -> str:
     clean_author = re.sub(r'[^a-zA-Z]', '', (author or "POxHub").split()[0])
@@ -17,19 +17,23 @@ def generate_bibtex_key(title: str, year: Optional[int], author: Optional[str]) 
     clean_title = re.sub(r'[^a-zA-Z]', '', (title or "Paper").split()[0])
     return f"{clean_author}{clean_year}{clean_title}".lower()
 
-@router.post("/csv")
-async def export_csv(payload: ExportRequest):
+@router.api_route("/csv", methods=["GET", "POST"])
+async def export_csv(payload: Optional[ExportRequest] = None):
     """
-    Exports selected publications to a standard CSV file format.
+    Exports publications to a standard CSV file format.
+    Supports either POST with specific paper_ids or GET for recent publications.
     """
-    if not payload.paper_ids:
-        raise HTTPException(status_code=400, detail="No papers specified for export")
-
     supabase = get_supabase_admin()
     if not supabase:
         raise HTTPException(status_code=503, detail="Database not configured")
 
-    res = supabase.table("papers").select("id, title, doi, publication_year, journal, publisher, citation_count, landing_page_url, open_access_url, source").in_("id", payload.paper_ids).execute()
+    query = supabase.table("papers").select("id, title, doi, publication_year, journal, publisher, citation_count, landing_page_url, open_access_url, source")
+    if payload and payload.paper_ids:
+        query = query.in_("id", payload.paper_ids)
+    else:
+        query = query.order("publication_year", desc=True).limit(100)
+
+    res = query.execute()
     papers = res.data or []
 
     output = io.StringIO()
@@ -59,30 +63,36 @@ async def export_csv(payload: ExportRequest):
         headers={"Content-Disposition": 'attachment; filename="pox_research_hub_export.csv"'}
     )
 
-@router.post("/bibtex")
-async def export_bibtex(payload: ExportRequest):
+@router.api_route("/bibtex", methods=["GET", "POST"])
+async def export_bibtex(payload: Optional[ExportRequest] = None):
     """
-    Exports selected publications to standard BibTeX format.
+    Exports publications to standard BibTeX format.
+    Supports either POST with specific paper_ids or GET for recent publications.
     """
-    if not payload.paper_ids:
-        raise HTTPException(status_code=400, detail="No papers specified for export")
-
     supabase = get_supabase_admin()
     if not supabase:
         raise HTTPException(status_code=503, detail="Database not configured")
 
-    res = supabase.table("papers").select("id, title, doi, publication_year, journal, publisher, landing_page_url").in_("id", payload.paper_ids).execute()
+    query = supabase.table("papers").select("id, title, doi, publication_year, journal, publisher, landing_page_url")
+    if payload and payload.paper_ids:
+        query = query.in_("id", payload.paper_ids)
+    else:
+        query = query.order("publication_year", desc=True).limit(100)
+
+    res = query.execute()
     papers = res.data or []
+    target_ids = [p["id"] for p in papers]
 
     # Fetch authors
-    pa_res = supabase.table("paper_authors").select("paper_id, authors(name)").in_("paper_id", payload.paper_ids).execute()
     authors_by_pid = {}
-    for r in pa_res.data or []:
-        pid = r["paper_id"]
-        if pid not in authors_by_pid:
-            authors_by_pid[pid] = []
-        if r.get("authors"):
-            authors_by_pid[pid].append(r["authors"]["name"])
+    if target_ids:
+        pa_res = supabase.table("paper_authors").select("paper_id, authors(name)").in_("paper_id", target_ids).execute()
+        for r in pa_res.data or []:
+            pid = r["paper_id"]
+            if pid not in authors_by_pid:
+                authors_by_pid[pid] = []
+            if r.get("authors"):
+                authors_by_pid[pid].append(r["authors"]["name"])
 
     bibtex_entries = []
     for p in papers:

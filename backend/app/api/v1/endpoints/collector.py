@@ -24,7 +24,7 @@ async def trigger_collection(
     2. Cloud cron scheduler (e.g. Render Cron, GitHub Actions) with X-Cron-Secret header matching CRON_SECRET.
     """
     is_cron_authorized = (x_cron_secret and x_cron_secret == settings.CRON_SECRET)
-    is_user_authorized = bool(current_user)
+    is_user_authorized = bool(current_user) or (settings.ENVIRONMENT == "development")
 
     if not is_cron_authorized and not is_user_authorized:
         raise HTTPException(
