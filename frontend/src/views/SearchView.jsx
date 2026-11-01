@@ -18,6 +18,8 @@ export default function SearchView({
   subtitle,
   initialQuery = '', 
   initialCategory = '',
+  initialIsReview = null,
+  initialYearFrom = null,
   onOpenDetails, 
   onOpenSummary,
   selectedPaperIds = [],
@@ -29,10 +31,11 @@ export default function SearchView({
   onUpdateScreening 
 }) {
   const [query, setQuery] = useState(initialQuery);
-  const [yearFrom, setYearFrom] = useState(2020);
+  const [yearFrom, setYearFrom] = useState(initialYearFrom !== null && initialYearFrom !== undefined ? initialYearFrom : (initialIsReview ? 2000 : 2020));
   const [yearTo, setYearTo] = useState(2026);
   const [categorySlug, setCategorySlug] = useState(initialCategory || '');
   const [journal, setJournal] = useState('');
+  const [isReview, setIsReview] = useState(initialIsReview);
   const [sortBy, setSortBy] = useState('publication_year');
   const [sortOrder, setSortOrder] = useState('desc');
   const [page, setPage] = useState(1);
@@ -51,7 +54,7 @@ export default function SearchView({
 
   useEffect(() => {
     searchPapers();
-  }, [page, sortBy, sortOrder, categorySlug]);
+  }, [page, sortBy, sortOrder, categorySlug, isReview]);
 
   const loadCategories = async () => {
     try {
@@ -71,6 +74,7 @@ export default function SearchView({
         year_to: parseInt(yearTo) || 2026,
         category_slug: categorySlug || undefined,
         journal: journal.trim() || undefined,
+        is_review: isReview !== null ? isReview : undefined,
         sort_by: sortBy,
         sort_order: sortOrder,
         page,
@@ -102,6 +106,7 @@ export default function SearchView({
     setYearTo(2026);
     setCategorySlug('');
     setJournal('');
+    setIsReview(initialIsReview !== undefined ? initialIsReview : null);
     setSortBy('publication_year');
     setSortOrder('desc');
     setPage(1);
@@ -166,7 +171,7 @@ export default function SearchView({
         </div>
 
         {/* Filter Controls Row */}
-        <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
+        <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 text-xs">
           <div>
             <label className="text-slate-400 block font-medium mb-1">Year Range</label>
             <div className="flex items-center gap-2">
@@ -188,6 +193,23 @@ export default function SearchView({
                 className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-teal-500"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="text-slate-400 block font-medium mb-1">Article Type</label>
+            <select
+              value={isReview === null ? '' : isReview ? 'review' : 'research'}
+              onChange={(e) => {
+                const val = e.target.value;
+                setIsReview(val === 'review' ? true : val === 'research' ? false : null);
+                setPage(1);
+              }}
+              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-teal-500 font-medium"
+            >
+              <option value="">All Publications</option>
+              <option value="review">Reviews Only</option>
+              <option value="research">Primary Research</option>
+            </select>
           </div>
 
           <div>

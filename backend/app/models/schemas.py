@@ -119,6 +119,30 @@ class ScientificSummary13Sections(BaseModel):
             "molecular_weight_dispersity": "Not reported"
         }
     )
+
+    # Chemical Structures (monomers, repeat unit, initiator, terminator)
+    chemical_structures: Optional[Dict[str, Any]] = Field(
+        default_factory=lambda: {
+            "monomers": [],
+            "polymer_repeat_unit": {},
+            "initiator_structure": {},
+            "terminator_structure": {}
+        }
+    )
+    
+    # Reaction Scheme & CROP Mechanism (overall equation, reaction steps, conditions)
+    reaction_scheme: Optional[Dict[str, Any]] = Field(
+        default_factory=lambda: {
+            "scheme_title": "Synthetic Scheme & Polymerization Pathway",
+            "overall_equation": "Not reported in the accessible source",
+            "mechanism_type": "Cationic Ring-Opening Polymerization (CROP)",
+            "reaction_steps": [],
+            "polymer_architecture": "Not reported",
+            "initiator": "Not reported",
+            "terminator_or_end_group": "Not reported",
+            "solvent_and_temperature": "Not reported"
+        }
+    )
     
     # 6. Experimental Methodology
     experimental_methodology: Union[str, List[str]]

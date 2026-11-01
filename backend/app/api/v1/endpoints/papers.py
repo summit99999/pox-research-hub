@@ -1,5 +1,6 @@
 import logging
 import math
+import re
 from typing import Optional, List, Dict, Any
 from fastapi import APIRouter, Query, HTTPException, Depends
 from app.core.database import get_supabase_admin
@@ -16,7 +17,9 @@ async def list_papers(
     year_to: Optional[int] = Query(None, description="Maximum publication year"),
     category_slug: Optional[str] = Query(None, description="Filter by category slug"),
     journal: Optional[str] = Query(None, description="Filter by journal name"),
-    sort_by: str = Query("collected_at", pattern="^(publication_year|citation_count|publication_date|collected_at)$"),
+    author: Optional[str] = Query(None, description="Filter by author name"),
+    is_review: Optional[bool] = Query(None, description="Filter for review articles only (True) or primary research articles only (False)"),
+    sort_by: str = Query("publication_date", pattern="^(publication_year|citation_count|publication_date|collected_at)$"),
     sort_order: str = Query("desc", pattern="^(asc|desc)$"),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -33,21 +36,57 @@ async def list_papers(
             count="exact"
         )
 
-        if year_from:
+        if isinstance(year_from, int):
             db_query = db_query.gte("publication_year", year_from)
-        if year_to:
+        if isinstance(year_to, int):
             db_query = db_query.lte("publication_year", year_to)
-        if journal:
-            db_query = db_query.ilike("journal", f"%{journal}%")
+        if isinstance(journal, str) and journal.strip():
+            db_query = db_query.ilike("journal", f"%{journal.strip()}%")
 
-        # Full-text or title/abstract search
-        if query and query.strip():
-            term = query.strip()
-            # If search contains spaces or boolean keywords, use textSearch or ilike
-            db_query = db_query.or_(f"title.ilike.%{term}%,abstract.ilike.%{term}%,journal.ilike.%{term}%")
+        # Author filtering through junction
+        if author and isinstance(author, str) and author.strip():
+            author_term = author.strip()
+            matching_authors = supabase.table("authors").select("id").ilike("name", f"%{author_term}%").execute()
+            if matching_authors.data:
+                a_ids = [a["id"] for a in matching_authors.data]
+                pa_res = supabase.table("paper_authors").select("paper_id").in_("author_id", a_ids).execute()
+                paper_ids_by_author = list({r["paper_id"] for r in (pa_res.data or []) if r.get("paper_id")})
+                if paper_ids_by_author:
+                    db_query = db_query.in_("id", paper_ids_by_author)
+                else:
+                    return PaperListResponse(items=[], total=0, page=page, page_size=page_size, total_pages=0)
+            else:
+                return PaperListResponse(items=[], total=0, page=page, page_size=page_size, total_pages=0)
+
+        # Review article filtering
+        if is_review is True:
+            db_query = db_query.or_("raw_metadata->>type.eq.review,title.ilike.%review%,title.ilike.%advances%,title.ilike.%progress in%,title.ilike.%perspective%,journal.ilike.%progress in polymer science%,journal.ilike.%chemical society reviews%,journal.ilike.%chemical reviews%")
+        elif is_review is False:
+            db_query = db_query.not_.ilike("title", "%review%")
+
+        # Smart multi-term or boolean search across title, abstract, and journal
+        if query and isinstance(query, str) and query.strip():
+            raw_query = query.strip()
+            if " or " in raw_query.lower():
+                subterms = [t.strip() for t in re.split(r'\s+OR\s+', raw_query, flags=re.IGNORECASE) if t.strip()]
+            elif "," in raw_query:
+                subterms = [t.strip() for t in raw_query.split(",") if t.strip()]
+            else:
+                subterms = [raw_query]
+
+            cond_list = []
+            for st in subterms[:10]:
+                clean_st = re.sub(r'["\',%]', '', st).strip()
+                if clean_st:
+                    cond_list.append(f"title.ilike.%{clean_st}%")
+                    cond_list.append(f"abstract.ilike.%{clean_st}%")
+                    cond_list.append(f"journal.ilike.%{clean_st}%")
+
+            if cond_list:
+                db_query = db_query.or_(",".join(cond_list))
 
         # Category filtering through junction
-        if category_slug:
+        if isinstance(category_slug, str) and category_slug.strip():
             cat_res = supabase.table("categories").select("id").eq("slug", category_slug).execute()
             if cat_res.data:
                 cat_id = cat_res.data[0]["id"]
@@ -59,12 +98,20 @@ async def list_papers(
                     return PaperListResponse(items=[], total=0, page=page, page_size=page_size, total_pages=0)
 
         # Sorting
-        descending = (sort_order == "desc")
-        db_query = db_query.order(sort_by, desc=descending)
+        clean_sort_by = sort_by if isinstance(sort_by, str) else getattr(sort_by, "default", "publication_date")
+        if clean_sort_by not in ("publication_year", "citation_count", "publication_date", "collected_at"):
+            clean_sort_by = "publication_date"
+        clean_sort_order = sort_order if isinstance(sort_order, str) else getattr(sort_order, "default", "desc")
+        descending = (clean_sort_order.lower() == "desc")
+        db_query = db_query.order(clean_sort_by, desc=descending, nullsfirst=False if descending else True)
+        if clean_sort_by in ("publication_date", "publication_year"):
+            db_query = db_query.order("collected_at", desc=True)
 
         # Pagination
-        offset = (page - 1) * page_size
-        db_query = db_query.range(offset, offset + page_size - 1)
+        clean_page = page if isinstance(page, int) and page >= 1 else 1
+        clean_page_size = page_size if isinstance(page_size, int) and 1 <= page_size <= 100 else 20
+        offset = (clean_page - 1) * clean_page_size
+        db_query = db_query.range(offset, offset + clean_page_size - 1)
 
         result = db_query.execute()
         total_count = result.count or 0
@@ -115,7 +162,7 @@ async def list_papers(
             # Fetch user library status if user logged in
             user_lib_map = {}
             user_scr_map = {}
-            if current_user and current_user.get("id"):
+            if isinstance(current_user, dict) and current_user.get("id"):
                 uid = current_user["id"]
                 ul_res = supabase.table("user_library").select("paper_id, favourite, reading_status").eq("user_id", uid).in_("paper_id", paper_ids).execute()
                 for r in ul_res.data or []:
@@ -208,7 +255,7 @@ async def get_paper(
     reading_status = None
     screening_status = None
     
-    if current_user and current_user.get("id"):
+    if isinstance(current_user, dict) and current_user.get("id"):
         uid = current_user["id"]
         lib_res = supabase.table("user_library").select("favourite, reading_status").eq("user_id", uid).eq("paper_id", paper_id).execute()
         if lib_res.data:

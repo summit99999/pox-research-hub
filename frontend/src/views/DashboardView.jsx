@@ -52,12 +52,19 @@ export default function DashboardView({
     try {
       const [analyticsData, papersData, categoriesData] = await Promise.all([
         api.getAnalyticsOverview().catch(() => null),
-        api.getPapers({ page_size: 6, sort_by: 'collected_at', sort_order: 'desc' }).catch(() => ({ items: [] })),
+        api.getPapers({ page_size: 8, sort_by: 'publication_date', sort_order: 'desc' }).catch(() => ({ items: [] })),
         api.getCategories().catch(() => [])
       ]);
 
       if (analyticsData) setAnalytics(analyticsData);
-      if (papersData?.items) setRecentPapers(papersData.items);
+      if (papersData?.items) {
+        const sorted = [...(papersData.items || [])].sort((a, b) => {
+          const dateA = a.publication_date || `${a.publication_year || 2020}-01-01`;
+          const dateB = b.publication_date || `${b.publication_year || 2020}-01-01`;
+          return dateB.localeCompare(dateA);
+        });
+        setRecentPapers(sorted);
+      }
       if (categoriesData) setCategories(categoriesData);
     } catch (e) {
       console.debug('Dashboard load error', e);
@@ -103,6 +110,10 @@ export default function DashboardView({
                 <strong className="text-teal-300">{totalIndexed}</strong> publications in Cloud DB
               </span>
             )}
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-xs text-slate-300">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Developer: <strong className="text-teal-300 font-semibold">Sumit Barik</strong> (IACS Kolkata)</span>
+            </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight leading-tight">
             Scientific Literature Platform & AI Research Discovery
@@ -292,9 +303,12 @@ export default function DashboardView({
             <h2 className="text-base font-bold text-slate-100 flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-teal-400" />
               <span>Recent Literature Updates</span>
+              <span className="text-[10px] font-medium font-mono text-teal-300 bg-teal-500/10 border border-teal-500/25 px-2 py-0.5 rounded-full">
+                Date (Newest First)
+              </span>
             </h2>
             <p className="text-xs text-slate-400">
-              Latest publications indexed in your private cloud repository
+              Chronologically ordered by publication date with the most recent articles appearing first
             </p>
           </div>
 
@@ -361,6 +375,54 @@ export default function DashboardView({
             </button>
           </div>
         )}
+      </div>
+
+      {/* Developer & Platform Architecture Footer Showcase */}
+      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950/40 border border-slate-800 p-6 shadow-xl">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-teal-500/20 shrink-0">
+              SB
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="text-base font-bold text-slate-100">
+                  Developed & Engineered by Sumit Barik
+                </h3>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                  Platform Developer & Researcher
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
+                Polymer Chemist and Full-Stack Developer at <span className="font-semibold text-slate-100">Indian Association for the Cultivation of Science (IACS), Kolkata</span>. Lead researcher on stimuli-responsive cyclic imino ether architectures and first author in ACS <em className="text-teal-300">Macromolecules</em>.
+              </p>
+              <div className="flex flex-wrap items-center gap-3 pt-2 text-[11px] text-slate-400">
+                <span className="flex items-center gap-1 text-slate-300">
+                  <Database className="w-3.5 h-3.5 text-teal-400" />
+                  Supabase Cloud PostgreSQL
+                </span>
+                <span>•</span>
+                <span className="flex items-center gap-1 text-slate-300">
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                  Gemini AI 13-Section Summarizer
+                </span>
+                <span>•</span>
+                <span className="flex items-center gap-1 text-slate-300">
+                  <FlaskConical className="w-3.5 h-3.5 text-teal-400" />
+                  Crossref & OpenAlex Systematic Ingestion
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={() => onNavigateToSearch && onNavigateToSearch('Sumit Barik')}
+            className="shrink-0 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 hover:border-teal-500/50 text-xs font-semibold transition-all shadow-sm flex items-center gap-2"
+          >
+            <span>View Developer's Publications</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
     </div>
   );

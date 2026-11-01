@@ -9,8 +9,11 @@ import {
   HelpCircle, 
   Quote, 
   FileText,
-  Clock
+  Clock,
+  Calendar,
+  Award
 } from 'lucide-react';
+import { getJournalImpactFactor } from '../lib/journalMeta';
 
 export default function PaperCard({ 
   paper, 
@@ -43,15 +46,29 @@ export default function PaperCard({
         <div className="flex-1 min-w-0">
           {/* Top Metadata Bar */}
           <div className="flex flex-wrap items-center gap-2 mb-1 text-xs">
-            {paper.publication_year && (
-              <span className="font-semibold text-teal-400 font-mono bg-teal-950/60 border border-teal-800/60 px-2 py-0.5 rounded">
-                {paper.publication_year}
+            {(paper.publication_date || paper.publication_year) && (
+              <span 
+                className="font-semibold text-teal-400 font-mono bg-teal-950/60 border border-teal-800/60 px-2 py-0.5 rounded inline-flex items-center gap-1"
+                title={`Publication Date: ${paper.publication_date || paper.publication_year}`}
+              >
+                <Calendar className="w-3 h-3 text-teal-400 shrink-0" />
+                <span>{paper.publication_date || paper.publication_year}</span>
               </span>
             )}
             {paper.journal && (
-              <span className="text-slate-300 font-medium truncate max-w-xs" title={paper.journal}>
-                {paper.journal}
-              </span>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span className="text-slate-300 font-medium truncate max-w-[200px]" title={paper.journal}>
+                  {paper.journal}
+                </span>
+                {getJournalImpactFactor(paper.journal) && (
+                  <span 
+                    className="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/25 shrink-0 cursor-default" 
+                    title={`${paper.journal} Impact Factor: ${getJournalImpactFactor(paper.journal)} (Clarivate JCR)`}
+                  >
+                    IF: {getJournalImpactFactor(paper.journal)}
+                  </span>
+                )}
+              </div>
             )}
             {paper.citation_count > 0 && (
               <span className="flex items-center gap-1 text-slate-400 bg-slate-800 px-2 py-0.5 rounded border border-slate-700/60">

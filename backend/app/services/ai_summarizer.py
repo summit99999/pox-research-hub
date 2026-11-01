@@ -22,6 +22,7 @@ CRITICAL RULES:
    - Suggested future research avenues
 4. Extract numerical experimental metrics accurately, ensuring each reported figure corresponds strictly to what is stated.
 5. In section 10 (Limitations), separate "author_reported_limitations" from "ai_inferred_limitations".
+6. In chemical_structures and reaction_scheme, extract or infer authentic chemical structures (monomer SMILES, repeat unit, initiator, terminator) and CROP reaction mechanism steps (Initiation, Propagation, Termination with conditions and intermediates).
 """
 
 FALLBACK_MODELS = [
@@ -68,12 +69,26 @@ Publication to analyze:
 Abstract and Metadata:
 {abstract}
 
-Please generate the structured JSON matching the 13 required sections:
+Please generate the structured JSON matching the 13 required sections plus chemical structures and reaction scheme:
 1. bibliographic_info (full_title, authors, journal, publication_year, doi, publication_link)
 2. research_background
 3. research_objective
 4. research_gap
 5. polymer_and_chemical_system (polymer_type, monomers, initiators, functional_groups, block_architecture, chemical_modifications, molecular_weight_dispersity)
+   - chemical_structures:
+     - monomers: list of objects with name, abbreviation, smiles, chemical_formula, role
+     - polymer_repeat_unit: object with name, formula_or_smiles, backbone_type, side_chain
+     - initiator_structure: object with name, smiles, type
+     - terminator_structure: object with name, smiles, functional_group
+   - reaction_scheme:
+     - scheme_title: synthetic scheme title
+     - overall_equation: reaction equation string with reactants, conditions, and product
+     - mechanism_type: Cationic Ring-Opening Polymerization (CROP) or relevant mechanism
+     - reaction_steps: list of sequential step objects each with step_number (integer), step_name, reactants, conditions, intermediates_or_products, description
+     - polymer_architecture: Linear homopolymer, Diblock copolymer, etc.
+     - initiator: initiator name
+     - terminator_or_end_group: termination agent or end group
+     - solvent_and_temperature: solvent and temperature string
 6. experimental_methodology
 7. characterization_techniques (list of techniques identified, e.g. NMR, GPC, DLS, etc.)
 8. major_results
@@ -116,6 +131,48 @@ Please generate the structured JSON matching the 13 required sections:
                 for k in ["author_reported_limitations", "ai_inferred_limitations"]:
                     if isinstance(limits.get(k), list):
                         limits[k] = "\n".join(f"- {item}" for item in limits[k])
+
+            # Normalize bibliographic_info
+            bib_info = summary_dict.get("bibliographic_info")
+            if isinstance(bib_info, dict):
+                if isinstance(bib_info.get("authors"), str):
+                    bib_info["authors"] = [a.strip() for a in bib_info["authors"].split(",") if a.strip()]
+                if isinstance(bib_info.get("publication_year"), str):
+                    try:
+                        bib_info["publication_year"] = int("".join(c for c in bib_info["publication_year"] if c.isdigit())[:4])
+                    except Exception:
+                        bib_info["publication_year"] = None
+
+            # Normalize important_experimental_values so all values are strings
+            exp_vals = summary_dict.get("important_experimental_values")
+            if isinstance(exp_vals, dict):
+                for k, v in exp_vals.items():
+                    if v is not None and not isinstance(v, str):
+                        exp_vals[k] = str(v)
+            elif not exp_vals:
+                summary_dict["important_experimental_values"] = {}
+
+            # Normalize characterization_techniques and future_research_opportunities
+            if isinstance(summary_dict.get("characterization_techniques"), str):
+                summary_dict["characterization_techniques"] = [
+                    t.strip() for t in summary_dict["characterization_techniques"].split(",") if t.strip()
+                ]
+            if isinstance(summary_dict.get("future_research_opportunities"), str):
+                summary_dict["future_research_opportunities"] = [summary_dict["future_research_opportunities"]]
+
+            # Lift nested chemical_structures and reaction_scheme if inside polymer_and_chemical_system
+            pcs = summary_dict.get("polymer_and_chemical_system")
+            if isinstance(pcs, dict):
+                if not summary_dict.get("chemical_structures") and pcs.get("chemical_structures"):
+                    summary_dict["chemical_structures"] = pcs["chemical_structures"]
+                if not summary_dict.get("reaction_scheme") and pcs.get("reaction_scheme"):
+                    summary_dict["reaction_scheme"] = pcs["reaction_scheme"]
+
+            # Normalize chemical_structures and reaction_scheme
+            if not summary_dict.get("chemical_structures") or not isinstance(summary_dict.get("chemical_structures"), dict):
+                summary_dict["chemical_structures"] = {}
+            if not summary_dict.get("reaction_scheme") or not isinstance(summary_dict.get("reaction_scheme"), dict):
+                summary_dict["reaction_scheme"] = {}
             
             # Validate through Pydantic schema
             validated_summary = ScientificSummary13Sections.model_validate(summary_dict)

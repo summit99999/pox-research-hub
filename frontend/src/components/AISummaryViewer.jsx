@@ -13,16 +13,21 @@ import {
   Compass, 
   ShieldAlert,
   ArrowRight,
-  Database
+  Database,
+  Atom,
+  Binary
 } from 'lucide-react';
 import { api } from '../lib/api';
+import ChemicalStructureViewer from './ChemicalStructureViewer';
+import ReactionSchemeViewer from './ReactionSchemeViewer';
 
 export default function AISummaryViewer({ paper, onClose }) {
   const [summaryData, setSummaryData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('overview'); // overview, chemistry, results, values, outlook
+  const [activeTab, setActiveTab] = useState('overview'); // overview, scheme, chemistry, results, values, outlook
+  const [schemeViewMode, setSchemeViewMode] = useState('both'); // both, scheme, structures
 
   useEffect(() => {
     if (paper?.id) {
@@ -182,21 +187,23 @@ export default function AISummaryViewer({ paper, onClose }) {
           <div className="flex border-b border-slate-800 gap-1 overflow-x-auto pb-1 text-xs">
             {[
               { id: 'overview', label: '1. Overview & Objective' },
-              { id: 'chemistry', label: '2. Polymer System & CROP' },
-              { id: 'results', label: '3. Results & Novelty' },
-              { id: 'values', label: '4. Experimental Metrics (Values)' },
-              { id: 'outlook', label: '5. Limitations & Future Directions' }
+              { id: 'scheme', label: '2. Chemical Structure & Scheme' },
+              { id: 'chemistry', label: '3. Polymer System & CROP' },
+              { id: 'results', label: '4. Results & Novelty' },
+              { id: 'values', label: '5. Experimental Metrics (Values)' },
+              { id: 'outlook', label: '6. Limitations & Future Directions' }
             ].map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-3 py-2 rounded-t-lg font-medium border-b-2 transition-colors whitespace-nowrap ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-t-lg font-medium border-b-2 transition-colors whitespace-nowrap ${
                   activeTab === tab.id
                     ? 'border-teal-400 text-teal-300 font-semibold bg-teal-500/10'
                     : 'border-transparent text-slate-400 hover:text-slate-200'
                 }`}
               >
-                {tab.label}
+                {tab.id === 'scheme' && <Atom className="w-3.5 h-3.5 text-teal-400" />}
+                <span>{tab.label}</span>
               </button>
             ))}
           </div>
@@ -204,6 +211,30 @@ export default function AISummaryViewer({ paper, onClose }) {
           {/* TAB 1: OVERVIEW & OBJECTIVE */}
           {activeTab === 'overview' && (
             <div className="space-y-4 text-xs">
+              {/* Quick Jump to Structure & Scheme */}
+              <div 
+                onClick={() => setActiveTab('scheme')}
+                className="p-3 rounded-xl bg-gradient-to-r from-teal-950/40 via-indigo-950/30 to-slate-900 border border-teal-500/30 hover:border-teal-400/60 cursor-pointer transition-all flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2.5">
+                  <span className="p-1.5 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/30">
+                    <Atom className="w-4 h-4" />
+                  </span>
+                  <div>
+                    <span className="text-xs font-bold text-slate-100 block">
+                      Chemical Structure & CROP Reaction Scheme Ready
+                    </span>
+                    <span className="text-[11px] text-slate-400">
+                      View monomer 2D depictions, living cationic polymerization steps, and repeat unit structures.
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 text-teal-400 text-xs font-semibold shrink-0">
+                  <span>Explore Scheme</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </div>
+              </div>
+
               {/* 1. Bibliographic Info */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
                 <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-2">
@@ -248,14 +279,101 @@ export default function AISummaryViewer({ paper, onClose }) {
             </div>
           )}
 
-          {/* TAB 2: POLYMER SYSTEM & METHODOLOGY */}
+          {/* TAB 2: CHEMICAL STRUCTURE & SCHEME */}
+          {activeTab === 'scheme' && (
+            <div className="space-y-6 text-xs">
+              {/* Toggle Switch between Scheme & Structures */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+                <div className="flex items-center gap-2">
+                  <span className="p-1.5 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/30">
+                    <Atom className="w-4 h-4" />
+                  </span>
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-100">
+                      Molecular Structures & Synthetic Scheme
+                    </h3>
+                    <p className="text-[11px] text-slate-400">
+                      Oxazoline / oxazine monomer 2D structures, living CROP reaction mechanism & polymer architecture
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-[11px] self-end sm:self-auto">
+                  <button
+                    onClick={() => setSchemeViewMode('both')}
+                    className={`px-3 py-1 rounded-md font-medium transition-colors ${
+                      schemeViewMode === 'both' ? 'bg-teal-500/20 text-teal-300 font-semibold' : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    All
+                  </button>
+                  <button
+                    onClick={() => setSchemeViewMode('scheme')}
+                    className={`px-3 py-1 rounded-md font-medium transition-colors ${
+                      schemeViewMode === 'scheme' ? 'bg-teal-500/20 text-teal-300 font-semibold' : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    Reaction Scheme
+                  </button>
+                  <button
+                    onClick={() => setSchemeViewMode('structures')}
+                    className={`px-3 py-1 rounded-md font-medium transition-colors ${
+                      schemeViewMode === 'structures' ? 'bg-teal-500/20 text-teal-300 font-semibold' : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                  >
+                    2D Structures
+                  </button>
+                </div>
+              </div>
+
+              {/* Reaction Scheme Section */}
+              {(schemeViewMode === 'both' || schemeViewMode === 'scheme') && (
+                <ReactionSchemeViewer
+                  scheme={s.reaction_scheme || s.polymer_and_chemical_system?.reaction_scheme}
+                  polymerSystem={s.polymer_and_chemical_system}
+                  experimentalValues={s.important_experimental_values}
+                />
+              )}
+
+              {/* Chemical Structure Gallery Section */}
+              {(schemeViewMode === 'both' || schemeViewMode === 'structures') && (
+                <div className="pt-2">
+                  <div className="mb-3 flex items-center justify-between">
+                    <h4 className="font-semibold uppercase tracking-wider text-teal-400 text-xs flex items-center gap-1.5">
+                      <Atom className="w-3.5 h-3.5" />
+                      2D Chemical Structures & Monomer Library
+                    </h4>
+                    <span className="text-[10px] text-slate-400">
+                      PubChem PUG REST + High-Res SVG Vectors
+                    </span>
+                  </div>
+                  <ChemicalStructureViewer
+                    structures={s.chemical_structures || s.polymer_and_chemical_system?.chemical_structures}
+                    polymerSystem={s.polymer_and_chemical_system}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 3: POLYMER SYSTEM & METHODOLOGY */}
           {activeTab === 'chemistry' && (
             <div className="space-y-4 text-xs">
               {/* 5. Polymer and Chemical System */}
               <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
-                <h4 className="font-semibold uppercase tracking-wider text-teal-400 mb-3">
-                  5. Polymer and Chemical System
-                </h4>
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-semibold uppercase tracking-wider text-teal-400">
+                    5. Polymer and Chemical System
+                  </h4>
+                  <button
+                    onClick={() => setActiveTab('scheme')}
+                    className="flex items-center gap-1 text-[11px] text-teal-400 hover:text-teal-300 font-medium cursor-pointer"
+                  >
+                    <Atom className="w-3.5 h-3.5" />
+                    <span>View Chemical Structures & Scheme</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="p-2.5 rounded bg-slate-800/60 border border-slate-700/60">
                     <span className="text-slate-400 block font-medium">Polymer Type:</span>

@@ -3,6 +3,7 @@ import {
   LayoutDashboard, 
   Search, 
   BookOpen, 
+  BookMarked,
   Layers, 
   Hexagon, 
   TestTube, 
@@ -21,6 +22,7 @@ export const NAV_ITEMS = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, section: 'Core' },
   { id: 'search', label: 'Literature Search', icon: Search, section: 'Core' },
   { id: 'publications', label: 'All Publications', icon: BookOpen, section: 'Core' },
+  { id: 'reviews', label: 'POx Review Articles', icon: BookMarked, section: 'Core' },
   
   { id: 'pox', label: 'POx Research', icon: Layers, section: 'Polymer Classes' },
   { id: 'pozi', label: 'POzi Research', icon: Hexagon, section: 'Polymer Classes' },
@@ -79,15 +81,34 @@ export default function Sidebar({ activeView, setActiveView, onSelectCategory })
         ))}
       </nav>
 
-      {/* Footer Info */}
-      <div className="p-3 border-t border-slate-800/80 bg-slate-950/40 text-[11px] text-slate-400">
-        <div className="flex items-center justify-between">
-          <span>Target Scope</span>
-          <span className="text-slate-300 font-mono">2020–2026+</span>
+      {/* Developer Credit & Info */}
+      <div className="p-3 border-t border-slate-800/80 bg-slate-950/60 text-[11px] space-y-2">
+        <div className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-sm shrink-0">
+            SB
+          </div>
+          <div className="min-w-0">
+            <div className="text-[9px] uppercase font-bold text-teal-400 tracking-wider">
+              Developer & Architect
+            </div>
+            <div className="font-semibold text-slate-200 text-xs truncate">
+              Sumit Barik
+            </div>
+            <div className="text-[10px] text-slate-400 truncate">
+              IACS Kolkata · Macromolecules
+            </div>
+          </div>
         </div>
-        <div className="flex items-center justify-between mt-1 text-slate-400">
-          <span>Sources</span>
-          <span className="text-slate-300">OpenAlex, Crossref</span>
+
+        <div className="text-[10px] text-slate-400 space-y-0.5 px-0.5">
+          <div className="flex items-center justify-between">
+            <span>Indexed Scope</span>
+            <span className="text-slate-300 font-mono">2020–2026+</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span>Sources</span>
+            <span className="text-slate-300">OpenAlex, Crossref</span>
+          </div>
         </div>
       </div>
     </aside>

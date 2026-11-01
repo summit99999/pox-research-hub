@@ -209,12 +209,28 @@ export default function App() {
             />
           )}
 
+          {activeView === 'reviews' && (
+            <ReviewWorkspaceView
+              key="reviews-view"
+              selectedPaperIds={selectedPaperIds}
+              onOpenSearch={() => setActiveView('search')}
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
+              onToggleSelectPaper={handleToggleSelectPaper}
+              onClearSelection={handleClearSelection}
+              onToggleFavourite={handleToggleFavourite}
+              onUpdateReadingStatus={handleUpdateReadingStatus}
+              onUpdateScreening={handleUpdateScreening}
+              initialTab="published"
+            />
+          )}
+
           {activeView === 'pox' && (
             <SearchView
               key="pox"
               title="Poly(2-oxazoline) (POx) Chemistry"
               subtitle="Research on PMOx, PEtOx, PiPOx, PPhOx, amphiphilic copolymers, and CROP synthesis."
-              initialQuery="oxazoline"
+              initialQuery="oxazoline OR pox OR polyoxazoline"
               initialCategory=""
               onOpenDetails={handleOpenDetails}
               onOpenSummary={handleOpenSummary}
@@ -233,8 +249,8 @@ export default function App() {
               key="pozi"
               title="Poly(2-oxazine) (POzi) Chemistry"
               subtitle="Research on poly(2-oxazine)s, PMOzi, PEtOzi, and POx/POzi comparative studies."
-              initialQuery="oxazine"
-              initialCategory="poly-2-oxazine"
+              initialQuery="oxazine OR pozi OR polyoxazine"
+              initialCategory=""
               onOpenDetails={handleOpenDetails}
               onOpenSummary={handleOpenSummary}
               selectedPaperIds={selectedPaperIds}
@@ -252,8 +268,8 @@ export default function App() {
               key="monomers"
               title="Oxazoline & Oxazine Monomer Database"
               subtitle="Synthesis and functionalization of 2-substituted monomers, thiols, esters, and stimuli-responsive monomers."
-              initialQuery="monomer"
-              initialCategory="monomer-synthesis"
+              initialQuery="monomer OR 2-oxazoline OR 2-oxazine"
+              initialCategory=""
               onOpenDetails={handleOpenDetails}
               onOpenSummary={handleOpenSummary}
               selectedPaperIds={selectedPaperIds}
@@ -331,7 +347,11 @@ export default function App() {
           )}
 
           {activeView === 'trends' && (
-            <AnalyticsView />
+            <AnalyticsView
+              onNavigateToSearch={handleNavigateToSearch}
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
+            />
           )}
 
           {activeView === 'gaps' && (
@@ -340,8 +360,17 @@ export default function App() {
 
           {activeView === 'review' && (
             <ReviewWorkspaceView
+              key="synthesis-view"
               selectedPaperIds={selectedPaperIds}
               onOpenSearch={() => setActiveView('search')}
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
+              onToggleSelectPaper={handleToggleSelectPaper}
+              onClearSelection={handleClearSelection}
+              onToggleFavourite={handleToggleFavourite}
+              onUpdateReadingStatus={handleUpdateReadingStatus}
+              onUpdateScreening={handleUpdateScreening}
+              initialTab="synthesis"
             />
           )}
 

@@ -153,6 +153,16 @@ async def run_literature_collection(
                         author_id = author_cache.get(cache_key)
                         
                         if not author_id:
+                            # Check if author already exists in database
+                            try:
+                                existing_a = supabase.table("authors").select("id").ilike("name", author_name.strip()).execute()
+                                if existing_a.data:
+                                    author_id = existing_a.data[0]["id"]
+                                    author_cache[cache_key] = author_id
+                            except Exception:
+                                pass
+
+                        if not author_id:
                             author_record = {
                                 "name": author_name,
                                 "affiliation": author_info.get("affiliation"),

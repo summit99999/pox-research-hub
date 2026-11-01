@@ -10,7 +10,10 @@ import {
   ExternalLink, 
   RefreshCw,
   Copy,
-  Check
+  Check,
+  User,
+  Code,
+  BookOpen
 } from 'lucide-react';
 import { api } from '../lib/api';
 import { isSupabaseConfigured } from '../lib/supabase';
@@ -218,6 +221,42 @@ export default function SettingsView({ health, onRefreshHealth }) {
             <div className="pl-4">-H "X-Cron-Secret: $CRON_SECRET" \</div>
             <div className="pl-4">-H "Content-Type: application/json" \</div>
             <div className="pl-4">-d '{`{"query": "poly(2-oxazoline) OR poly(2-oxazine)", "source": "both", "max_results": 50}`}'</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Developer Attribution Card */}
+      <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950/40 border border-slate-800 space-y-4">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-teal-500/10 text-teal-400 border border-teal-500/20">
+            <User className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-slate-100">5. Platform Developer & Attribution</h3>
+            <p className="text-xs text-slate-400">Architectural design and scientific engineering credits</p>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-slate-100 text-sm">Sumit Barik</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30 font-medium">
+                Lead Developer & Polymer Chemist
+              </span>
+            </div>
+            <p className="text-xs text-slate-300">
+              School of Chemical Sciences, Indian Association for the Cultivation of Science (IACS), Kolkata
+            </p>
+            <p className="text-[11px] text-slate-400 pt-1">
+              Primary author of <em>"A Thioether-Functionalized Biomimetic Poly(2-oxazoline) Platform for Thermo-, Photo-, and Anion-Responsive Pseudopolypeptides"</em> (ACS <em>Macromolecules</em>, DOI: 10.1021/acs.macromol.6c00522).
+            </p>
+          </div>
+
+          <div className="shrink-0 flex items-center gap-2">
+            <span className="text-xs font-mono text-teal-400 bg-teal-950/60 border border-teal-800 px-3 py-1.5 rounded-lg">
+              v1.0.0 Production
+            </span>
           </div>
         </div>
       </div>
