@@ -1,0 +1,2 @@
+-- Reference to supabase/schema.sql
+-- Run supabase/schema.sql in the Supabase SQL Editor
