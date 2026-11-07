@@ -44,7 +44,12 @@ import {
   RELEVANCE_LEVELS,
   CLASSIFICATION_CATEGORIES
 } from '../lib/polymerClassifier.js';
-import { getPaperDoiUrl } from '../lib/doiHelper.js';
+import { 
+  getPaperDoiUrl, 
+  getOfficialPublisherUrl, 
+  cleanDoi, 
+  formatDoiDisplay 
+} from '../lib/doiHelper.js';
 import PaperDetailModal from '../components/PaperDetailModal';
 import ThreeDTiltCard from '../components/ThreeDTiltCard';
 
@@ -509,14 +514,16 @@ export default function JournalsTrackerView({
         ) : feedData.articles.length > 0 ? (
           <div className="space-y-4">
             {feedData.articles.map(article => {
-              const doiUrl = getPaperDoiUrl(article.doi);
-              const articleKey = article.id || article.doi;
+              const publisherUrl = getOfficialPublisherUrl(article);
+              const displayDoi = formatDoiDisplay(article.doi);
+              const articleKey = article.id || (article.doi ? `doi-${cleanDoi(article.doi)}` : Math.random().toString());
               const isEvidenceExpanded = Boolean(expandedEvidence[articleKey]);
 
               return (
                 <div
                   key={articleKey}
-                  className="p-5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition-all space-y-3 relative group"
+                  onClick={() => onOpenDetails && onOpenDetails(article)}
+                  className="p-5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-700 hover:bg-slate-850/60 transition-all space-y-3 relative group cursor-pointer"
                 >
                   {/* Top Badge Row */}
                   <div className="flex flex-wrap items-center justify-between gap-2">
@@ -571,11 +578,15 @@ export default function JournalsTrackerView({
                     </div>
                   </div>
 
-                  {/* Article Title */}
-                  <h3 className="text-base font-bold text-slate-100 hover:text-teal-300 transition-colors leading-snug">
-                    <a href={doiUrl} target="_blank" rel="noopener noreferrer">
-                      {article.title}
-                    </a>
+                  {/* Article Title: Opens Internal Article Details */}
+                  <h3 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onOpenDetails) onOpenDetails(article);
+                    }}
+                    className="text-base font-bold text-slate-100 hover:text-teal-300 transition-colors leading-snug cursor-pointer"
+                  >
+                    {article.title}
                   </h3>
 
                   {/* Authors List */}
@@ -612,7 +623,11 @@ export default function JournalsTrackerView({
                   {/* "Why is this paper included?" Accordion Toggle */}
                   <div className="pt-1">
                     <button
-                      onClick={() => toggleEvidence(articleKey)}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleEvidence(articleKey);
+                      }}
                       className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-teal-400 hover:text-teal-300 transition-colors cursor-pointer group/evid"
                     >
                       <HelpCircle className="w-3.5 h-3.5 text-teal-400 group-hover/evid:scale-110 transition-transform" />
@@ -622,7 +637,10 @@ export default function JournalsTrackerView({
 
                     {/* Expandable Evidence Card */}
                     {isEvidenceExpanded && (
-                      <div className="mt-2 p-3.5 rounded-xl bg-slate-950 border border-teal-500/30 text-xs space-y-2.5 font-sans shadow-lg animate-in fade-in duration-200">
+                      <div 
+                        onClick={(e) => e.stopPropagation()}
+                        className="mt-2 p-3.5 rounded-xl bg-slate-950 border border-teal-500/30 text-xs space-y-2.5 font-sans shadow-lg animate-in fade-in duration-200"
+                      >
                         <div className="flex items-center justify-between gap-2 flex-wrap text-[11px] border-b border-slate-800 pb-2">
                           <span className="font-semibold text-teal-300 flex items-center gap-1.5">
                             <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -663,25 +681,44 @@ export default function JournalsTrackerView({
 
                   {/* Actions & Links Bar */}
                   <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800/80 text-xs">
-                    <div className="flex items-center gap-2">
-                      {article.doi && (
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {/* Official Publisher Link: Opens verified external article page in new tab */}
+                      {publisherUrl ? (
                         <a
-                          href={doiUrl}
+                          href={publisherUrl}
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
                           className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs font-semibold transition-colors"
+                          title="Open official publisher article page in a new browser tab"
                         >
                           <span>Open Publisher Article</span>
                           <ExternalLink className="w-3.5 h-3.5" />
                         </a>
+                      ) : (
+                        <button
+                          type="button"
+                          disabled
+                          onClick={(e) => e.stopPropagation()}
+                          className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-500 border border-slate-700/60 text-xs font-medium cursor-not-allowed"
+                          title="Official publisher link is unavailable for this record"
+                        >
+                          <span>Publisher Link Unavailable</span>
+                        </button>
                       )}
 
+                      {/* Internal Article Details / TOC Button */}
                       {onOpenDetails && (
                         <button
-                          onClick={() => onOpenDetails(article)}
-                          className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-medium transition-colors"
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenDetails(article);
+                          }}
+                          className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-teal-300 border border-slate-700 text-xs font-medium transition-colors"
+                          title="View complete article details and TOC"
                         >
-                          TOC / Graphical Abstract
+                          Article Details / TOC
                         </button>
                       )}
                     </div>
@@ -689,7 +726,11 @@ export default function JournalsTrackerView({
                     <div className="flex items-center gap-2">
                       {onToggleFavourite && (
                         <button
-                          onClick={() => onToggleFavourite(article.id, !article.is_favourite)}
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onToggleFavourite(article.id, !article.is_favourite);
+                          }}
                           className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-amber-400 border border-slate-700 transition-colors"
                           title="Save to Library"
                         >
@@ -697,9 +738,19 @@ export default function JournalsTrackerView({
                         </button>
                       )}
 
-                      <span className="text-[11px] font-mono text-slate-400 truncate max-w-[200px]">
-                        DOI: {article.doi || 'N/A'}
-                      </span>
+                      {displayDoi && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigator.clipboard.writeText(article.doi);
+                          }}
+                          className="text-[11px] font-mono text-slate-400 hover:text-teal-300 transition-colors truncate max-w-[200px]"
+                          title="Click to copy DOI string"
+                        >
+                          DOI: {displayDoi}
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

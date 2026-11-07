@@ -1,11 +1,22 @@
 /**
- * DOI Normalization and URL Resolution Utility
- * Ensures all DOIs across the POx Research Hub resolve directly to the publisher
- * without double-prefixing ('https://doi.org/https://doi.org/10.xxxx') or 404 errors.
+ * Polymer Research Intelligence Hub (PRIH)
+ * DOI Normalization and Official Publisher URL Resolution Utility
+ * 
+ * Implements strict resolution priorities:
+ * 1. Official publisher-provided article URL (verified article-specific landing page).
+ * 2. Official DOI resolver URL: https://doi.org/{DOI}.
+ * 3. Verified alternative article-specific landing page from a trusted scholarly source.
+ * 
+ * Explicitly rejects:
+ * - Journal homepages (e.g. /journal/mamobx)
+ * - Journal issue/TOC pages (e.g. /issues, /toc)
+ * - Search query URLs
+ * - Generic publisher root homepages
+ * - Fabricated or non-article links
  */
 
 export function cleanDoi(doi) {
-  if (!doi) return '';
+  if (!doi || typeof doi !== 'string') return '';
   return doi
     .trim()
     .replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, '')
@@ -20,47 +31,140 @@ export function formatDoiDisplay(doi) {
   return cleaned;
 }
 
-export function getPaperDoiUrl(paper) {
-  if (!paper) return '';
+/**
+ * Validates whether a URL points to a specific article rather than a journal homepage,
+ * issue archive, search page, or generic portal.
+ */
+export function isArticleSpecificUrl(url) {
+  if (!url || typeof url !== 'string') return false;
+  const trimmed = url.trim();
+  if (!trimmed.startsWith('http://') && !trimmed.startsWith('https://')) return false;
 
-  // 1. If explicit clean doi_url is present, check and sanitize
-  if (paper.doi_url && typeof paper.doi_url === 'string') {
-    if (paper.doi_url.includes('doi.org/https:') || paper.doi_url.includes('doi.org/http:')) {
-      const extracted = paper.doi_url.replace(/https?:\/\/doi\.org\//g, '');
-      return `https://doi.org/${cleanDoi(extracted)}`;
+  try {
+    const parsed = new URL(trimmed);
+    const path = parsed.pathname.toLowerCase();
+
+    // 1. Root domain only is never an article URL (e.g. https://pubs.acs.org/)
+    if (path === '' || path === '/') {
+      return false;
     }
-    if (paper.doi_url.startsWith('http://') || paper.doi_url.startsWith('https://')) {
-      return paper.doi_url;
+
+    // 2. Reject journal homepage / issue browse patterns
+    const journalHomePatterns = [
+      /\/journal\/[a-z0-9_-]+\/?$/i,
+      /\/journals\/[a-z0-9_-]+\/?$/i,
+      /\/journalissues/i,
+      /\/toc\/[a-z0-9_-]+\/?/i,
+      /\/issues?\/?$/i,
+      /\/issues?\/[a-z0-9_-]+\/?$/i,
+      /\/browse\/?/i,
+      /\/search\/?/i,
+      /\/action\/dosearch/i,
+      /\/page\/about/i
+    ];
+
+    for (const pat of journalHomePatterns) {
+      if (pat.test(path)) return false;
     }
+
+    // 3. Known high-confidence article URL patterns:
+    // - DOI resolver: doi.org/10.xxxx/...
+    // - ACS: /doi/10.1021/... or /doi/abs/10.1021/... or /doi/full/10.1021/...
+    // - Wiley: /doi/10.1002/... or /doi/abs/10.1002/...
+    // - RSC: /content/articlelanding/...
+    // - Elsevier / ScienceDirect: /science/article/pii/...
+    // - Springer / Nature: /articles/10.1038/... or /article/10.1007/...
+    if (parsed.hostname.includes('doi.org')) {
+      const doiPart = path.replace(/^\//, '');
+      return doiPart.startsWith('10.');
+    }
+
+    if (path.includes('/doi/') || path.includes('/article/') || path.includes('/articles/') || path.includes('/pii/') || path.includes('/articlelanding/')) {
+      return true;
+    }
+
+    // Default: If URL has query or path with alphanumeric ID, assume valid article URL
+    return path.length > 5;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Returns the verified official publisher article URL following the 3-tier priority rule:
+ * Priority 1: Official publisher-provided article URL.
+ * Priority 2: Official DOI resolver: https://doi.org/{DOI}.
+ * Priority 3: Verified alternative landing page.
+ * Returns null if no verified article link can be established.
+ */
+export function getOfficialPublisherUrl(paperOrDoi) {
+  if (!paperOrDoi) return null;
+
+  // Case 1: Direct string passed (DOI or URL)
+  if (typeof paperOrDoi === 'string') {
+    const raw = paperOrDoi.trim();
+    if (raw.startsWith('http://') || raw.startsWith('https://')) {
+      if (raw.includes('doi.org/https:') || raw.includes('doi.org/http:')) {
+        const extracted = raw.replace(/https?:\/\/doi\.org\//g, '');
+        const c = cleanDoi(extracted);
+        return c.startsWith('10.') ? `https://doi.org/${c}` : null;
+      }
+      return isArticleSpecificUrl(raw) ? raw : null;
+    }
+    const c = cleanDoi(raw);
+    return c.startsWith('10.') ? `https://doi.org/${c}` : null;
   }
 
-  // 2. Clean DOI string
+  // Case 2: Paper object passed
+  const paper = paperOrDoi;
   const rawDoi = paper.doi || paper.doi_normalized || '';
-  const cleaned = cleanDoi(rawDoi);
+  const cleanedDoi = cleanDoi(rawDoi);
+  const hasValidDoi = Boolean(cleanedDoi && cleanedDoi.startsWith('10.'));
 
-  if (cleaned && cleaned.startsWith('10.')) {
-    return `https://doi.org/${cleaned}`;
+  // Priority 1: Official publisher-provided article URL
+  const candidateUrls = [
+    paper.publisher_url,
+    paper.landing_page_url,
+    paper.doi_url
+  ].filter(Boolean);
+
+  for (const url of candidateUrls) {
+    if (typeof url === 'string') {
+      let candidate = url.trim();
+      if (candidate.includes('doi.org/https:') || candidate.includes('doi.org/http:')) {
+        const extracted = candidate.replace(/https?:\/\/doi\.org\//g, '');
+        candidate = `https://doi.org/${cleanDoi(extracted)}`;
+      }
+
+      if (isArticleSpecificUrl(candidate)) {
+        return candidate;
+      }
+    }
   }
 
-  // 3. Fallback to direct landing page URL
-  if (paper.landing_page_url && (paper.landing_page_url.startsWith('http://') || paper.landing_page_url.startsWith('https://'))) {
-    return paper.landing_page_url;
+  // Priority 2: Direct DOI resolver URL
+  if (hasValidDoi) {
+    return `https://doi.org/${cleanedDoi}`;
   }
 
-  // 4. Fallback to open access URL
-  if (paper.open_access_url && (paper.open_access_url.startsWith('http://') || paper.open_access_url.startsWith('https://'))) {
-    return paper.open_access_url;
+  // Priority 3: Alternative article landing page (e.g. open_access_url)
+  if (paper.open_access_url && typeof paper.open_access_url === 'string') {
+    if (isArticleSpecificUrl(paper.open_access_url)) {
+      return paper.open_access_url;
+    }
   }
 
-  // 5. Fallback if cleaned is not empty
-  if (cleaned) {
-    return `https://doi.org/${cleaned}`;
+  if (cleanedDoi) {
+    return `https://doi.org/${cleanedDoi}`;
   }
 
-  // 6. Universal fallback: Google Scholar search
-  if (paper.title) {
-    return `https://scholar.google.com/scholar?q=${encodeURIComponent(paper.title)}`;
-  }
+  return null;
+}
 
-  return '';
+/**
+ * Backward-compatible helper for components expecting getPaperDoiUrl(paper).
+ * Supports both object and string inputs.
+ */
+export function getPaperDoiUrl(paperOrDoi) {
+  return getOfficialPublisherUrl(paperOrDoi) || '';
 }

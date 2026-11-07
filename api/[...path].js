@@ -79,18 +79,29 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // 4. Single Paper
-    const paperMatch = pathname.match(/^\/api(?:\/v1)?\/papers\/([0-9a-fA-F-]+)$/);
+    // 4. Single Paper (Supports UUID, raw DOI, normalized DOI, or prefixed ID)
+    const paperMatch = pathname.match(/^\/api(?:\/v1)?\/papers\/(.+)$/);
     if (paperMatch) {
-      const paperId = paperMatch[1];
-      const { data, error } = await sb.from('papers').select(`
+      const rawId = decodeURIComponent(paperMatch[1]);
+      const isUuid = /^[0-9a-fA-F-]{36}$/.test(rawId);
+      const cleanedDoi = rawId.replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, '').replace(/^doi:\s*/i, '').replace(/^cr-/, '').trim();
+
+      let queryBuilder = sb.from('papers').select(`
         *,
         authors:paper_authors(author:authors(*)),
         categories:paper_categories(category:categories(*))
-      `).eq('id', paperId).maybeSingle();
+      `);
+
+      if (isUuid) {
+        queryBuilder = queryBuilder.eq('id', rawId);
+      } else {
+        queryBuilder = queryBuilder.or(`id.eq.${rawId},doi.eq.${rawId},doi.eq.${cleanedDoi},doi_normalized.eq.${cleanedDoi.toLowerCase()}`);
+      }
+
+      const { data, error } = await queryBuilder.maybeSingle();
 
       if (error || !data) {
-        return res.status(404).json({ detail: 'Paper not found' });
+        return res.status(404).json({ detail: 'Publication not found', id: rawId });
       }
 
       return res.status(200).json({

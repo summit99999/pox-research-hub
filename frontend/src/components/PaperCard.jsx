@@ -17,7 +17,7 @@ import {
   ChevronUp
 } from 'lucide-react';
 import { getJournalImpactFactor } from '../lib/journalMeta';
-import { getPaperDoiUrl, formatDoiDisplay } from '../lib/doiHelper';
+import { getPaperDoiUrl, getOfficialPublisherUrl, formatDoiDisplay, cleanDoi } from '../lib/doiHelper';
 
 export default function PaperCard({ 
   paper, 
@@ -31,7 +31,7 @@ export default function PaperCard({
 }) {
   const [expandedAbstract, setExpandedAbstract] = useState(false);
   const authorsList = paper.authors?.map(a => a.name).join(', ') || 'Authors not listed';
-  const doiUrl = getPaperDoiUrl(paper);
+  const publisherUrl = getOfficialPublisherUrl(paper);
   const displayDoi = formatDoiDisplay(paper.doi);
   const impactFactor = getJournalImpactFactor(paper.journal);
 
@@ -39,7 +39,8 @@ export default function PaperCard({
 
   return (
     <article 
-      className={`p-4 sm:p-5 rounded-2xl border transition-all duration-200 group relative ${
+      onClick={() => onOpenDetails && onOpenDetails(paper)}
+      className={`p-4 sm:p-5 rounded-2xl border transition-all duration-200 group relative cursor-pointer ${
         isSelected 
           ? 'bg-teal-950/20 border-teal-500/60 shadow-lg shadow-teal-500/10 ring-1 ring-teal-500/30' 
           : 'bg-slate-900/85 hover:bg-slate-850/90 border-slate-800/80 hover:border-slate-700/90 shadow-md hover:shadow-xl hover:-translate-y-0.5'
@@ -47,7 +48,7 @@ export default function PaperCard({
     >
       <div className="flex items-start gap-3 sm:gap-3.5">
         {/* Selection Checkbox */}
-        <div className="pt-1">
+        <div className="pt-1" onClick={(e) => e.stopPropagation()}>
           <input
             type="checkbox"
             checked={isSelected || false}
@@ -120,7 +121,10 @@ export default function PaperCard({
 
           {/* Paper Title */}
           <h3 
-            onClick={() => onOpenDetails(paper)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenDetails && onOpenDetails(paper);
+            }}
             className="text-base sm:text-lg font-bold text-slate-100 hover:text-teal-300 transition-colors cursor-pointer leading-snug tracking-tight"
           >
             {paper.title}
@@ -140,7 +144,10 @@ export default function PaperCard({
               {hasLongAbstract && (
                 <button
                   type="button"
-                  onClick={() => setExpandedAbstract(prev => !prev)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setExpandedAbstract(prev => !prev);
+                  }}
                   className="text-[11px] font-medium text-teal-400 hover:text-teal-300 mt-1 inline-flex items-center gap-0.5 transition-colors"
                 >
                   <span>{expandedAbstract ? 'Collapse abstract' : 'Read full abstract'}</span>
@@ -171,24 +178,29 @@ export default function PaperCard({
 
           {/* Bottom Action Footer */}
           <div className="flex flex-wrap items-center justify-between gap-3 mt-4 pt-3.5 border-t border-slate-800/80">
-            {/* Quick Actions (DOI, TOC / Graphical Abstract, AI Summary) */}
+            {/* Quick Actions (Publisher Link, Details, AI Summary) */}
             <div className="flex items-center gap-2 flex-wrap">
-              {doiUrl && (
+              {publisherUrl ? (
                 <a
-                  href={doiUrl}
+                  href={publisherUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs text-teal-400 hover:text-teal-300 font-mono transition-colors px-2 py-1 rounded-lg bg-teal-950/30 border border-teal-800/40 hover:bg-teal-900/40"
-                  title="Direct verified publisher DOI link"
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center gap-1 text-xs text-teal-400 hover:text-teal-300 font-mono transition-colors px-2.5 py-1 rounded-lg bg-teal-950/30 border border-teal-800/40 hover:bg-teal-900/40"
+                  title="Direct verified publisher article DOI link"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   <span>DOI</span>
                 </a>
-              )}
+              ) : null}
 
               {/* Prominent TOC / Graphical Abstract Button */}
               <button
-                onClick={() => onOpenDetails(paper)}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenDetails(paper);
+                }}
                 className="flex items-center gap-1.5 text-xs text-slate-200 hover:text-teal-300 font-semibold transition-all px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-750 border border-slate-700/80 hover:border-teal-500/40 shadow-sm"
                 title="View Table of Contents (TOC) & Journal Graphical Abstract"
               >
@@ -197,7 +209,11 @@ export default function PaperCard({
               </button>
 
               <button
-                onClick={() => onOpenSummary(paper)}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenSummary(paper);
+                }}
                 className="flex items-center gap-1 text-xs text-indigo-300 hover:text-indigo-200 transition-colors px-2 py-1 rounded-lg bg-indigo-950/40 border border-indigo-800/40 hover:bg-indigo-900/40 font-medium"
               >
                 <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
@@ -206,10 +222,11 @@ export default function PaperCard({
             </div>
 
             {/* Research Management (Screening, Status, Favourite) */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
               {/* Systematic Screening decision buttons */}
               <div className="flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700/80 text-xs shadow-inner">
                 <button
+                  type="button"
                   onClick={() => onUpdateScreening && onUpdateScreening(paper.id, 'included')}
                   title="Screen: Include in Systematic Review"
                   className={`px-1.5 py-1 rounded transition-colors ${
@@ -221,6 +238,7 @@ export default function PaperCard({
                   <CheckCircle2 className="w-3.5 h-3.5" />
                 </button>
                 <button
+                  type="button"
                   onClick={() => onUpdateScreening && onUpdateScreening(paper.id, 'excluded')}
                   title="Screen: Exclude from Systematic Review"
                   className={`px-1.5 py-1 rounded transition-colors ${
@@ -232,6 +250,7 @@ export default function PaperCard({
                   <XCircle className="w-3.5 h-3.5" />
                 </button>
                 <button
+                  type="button"
                   onClick={() => onUpdateScreening && onUpdateScreening(paper.id, 'maybe')}
                   title="Screen: Mark as Uncertain / Review Full Text"
                   className={`px-1.5 py-1 rounded transition-colors ${
@@ -257,6 +276,7 @@ export default function PaperCard({
 
               {/* Favourite Star Toggle */}
               <button
+                type="button"
                 onClick={() => onToggleFavourite && onToggleFavourite(paper.id, !paper.is_favourite)}
                 className={`p-1.5 rounded-lg border transition-colors ${
                   paper.is_favourite 

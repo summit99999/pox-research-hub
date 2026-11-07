@@ -290,9 +290,82 @@ export const api = {
   },
 
   getPaper: async (id) => {
+    if (!id) return null;
+    const cleanedInputDoi = cleanDoi(id);
+
+    // 1. Search all indexed papers (Curated + Seed + Collected)
     const papers = getAllPapers();
-    const found = papers.find(p => p.id === id || p.doi === id || cleanDoi(p.doi) === cleanDoi(id));
+    let found = papers.find(p => 
+      p.id === id || 
+      p.doi === id || 
+      (cleanedInputDoi && cleanDoi(p.doi) === cleanedInputDoi) ||
+      (cleanedInputDoi && p.id === `cr-${cleanedInputDoi}`) ||
+      (cleanedInputDoi && p.id?.replace(/^cr-/, '') === cleanedInputDoi)
+    );
     if (found) return found;
+
+    // 2. Search cached journal feeds
+    try {
+      const journalCache = getStoredArray('prih_journal_feeds_cache_v2', {});
+      for (const jKey of Object.keys(journalCache)) {
+        const jArticles = journalCache[jKey] || [];
+        const match = jArticles.find(a => 
+          a.id === id || 
+          a.doi === id || 
+          (cleanedInputDoi && cleanDoi(a.doi) === cleanedInputDoi) ||
+          (cleanedInputDoi && a.id === `cr-${cleanedInputDoi}`) ||
+          (cleanedInputDoi && a.id?.replace(/^cr-/, '') === cleanedInputDoi)
+        );
+        if (match) {
+          // Decorate with library & screening status
+          const library = getStoredArray(STORAGE_LIBRARY_KEY, []);
+          const lib = library.find(l => l.paper_id === match.id || l.paper_id === match.doi);
+          const screening = getStoredArray(STORAGE_SCREENING_KEY, []);
+          const scr = screening.find(s => s.paper_id === match.id || s.paper_id === match.doi);
+          return {
+            ...match,
+            is_saved: Boolean(lib),
+            is_favourite: Boolean(lib?.is_favourite),
+            reading_status: lib?.reading_status || 'unread',
+            personal_notes: lib?.notes || '',
+            screening_status: scr?.screening_status || 'pending'
+          };
+        }
+      }
+    } catch (e) {
+      console.debug('Journal cache lookup error:', e);
+    }
+
+    // 3. Query backend database API
+    try {
+      const remote = await request(`/papers/${encodeURIComponent(id)}`);
+      if (remote && remote.id) {
+        return remote;
+      }
+    } catch (e) {
+      console.debug('Backend paper lookup error:', e);
+    }
+
+    // 4. Live Crossref fallback if identifier is a DOI
+    if (cleanedInputDoi && cleanedInputDoi.startsWith('10.')) {
+      try {
+        const crRes = await fetch(`https://api.crossref.org/works/${encodeURIComponent(cleanedInputDoi)}`);
+        if (crRes.ok) {
+          const crData = await crRes.json();
+          if (crData.message) {
+            const normalized = normalizeCrossrefRecord(crData.message);
+            if (normalized) {
+              const currentExtra = getStoredArray(STORAGE_PAPERS_KEY, []);
+              setStoredArray(STORAGE_PAPERS_KEY, [normalized, ...currentExtra].slice(0, 800));
+              return normalized;
+            }
+          }
+        }
+      } catch (e) {
+        console.debug('Live Crossref DOI resolution error:', e);
+      }
+    }
+
     return null;
   },
 

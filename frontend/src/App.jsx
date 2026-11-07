@@ -12,6 +12,7 @@ import SettingsView from './views/SettingsView';
 import AISummariesView from './views/AISummariesView';
 import DeveloperPublicationsView from './views/DeveloperPublicationsView';
 import JournalsTrackerView from './views/JournalsTrackerView';
+import ArticleDetailView from './views/ArticleDetailView';
 import PaperDetailModal from './components/PaperDetailModal';
 import CollectorModal from './components/CollectorModal';
 import AuthModal from './components/AuthModal';
@@ -22,6 +23,8 @@ import { ENGINE_SCOPES } from './lib/searchEngine';
 export default function App() {
   const [currentEngine, setCurrentEngine] = useState(ENGINE_SCOPES.POX);
   const [activeView, setActiveView] = useState('dashboard');
+  const [activeArticleId, setActiveArticleId] = useState(null);
+  const [previousView, setPreviousView] = useState('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPaperIds, setSelectedPaperIds] = useState([]);
@@ -102,6 +105,46 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [detailModalPaper, collectorModalOpen, authModalOpen, sidebarOpen, sidebarPinned]);
 
+  // Handle browser Back / Forward history navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const engineParam = params.get('engine');
+        const viewParam = params.get('view') || params.get('tab');
+        const idParam = params.get('id') || params.get('article') || params.get('paper_id');
+        const journalParam = params.get('journal');
+
+        if (engineParam === 'universal' || engineParam === 'pox') {
+          setCurrentEngine(engineParam);
+        }
+
+        const pathMatch = window.location.pathname.match(/^\/articles?\/(.+)$/);
+        if (pathMatch) {
+          setActiveArticleId(decodeURIComponent(pathMatch[1]));
+          setActiveView('article');
+          return;
+        }
+
+        if (viewParam === 'article' && idParam) {
+          setActiveArticleId(idParam);
+          setActiveView('article');
+        } else if (journalParam || viewParam === 'journals') {
+          setActiveView('journals');
+        } else if (viewParam) {
+          setActiveView(viewParam);
+        } else {
+          setActiveView('dashboard');
+        }
+      } catch (err) {
+        console.debug('Popstate navigation error:', err);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   useEffect(() => {
     loadInitialData();
     checkAuthSession();
@@ -111,6 +154,7 @@ export default function App() {
       const params = new URLSearchParams(window.location.search);
       const engineParam = params.get('engine');
       const viewParam = params.get('view') || params.get('tab');
+      const idParam = params.get('id') || params.get('article') || params.get('paper_id');
       const qParam = params.get('q') || params.get('search');
       const catParam = params.get('category');
       const journalParam = params.get('journal');
@@ -119,7 +163,15 @@ export default function App() {
         setCurrentEngine(engineParam);
       }
 
-      if (journalParam) {
+      // 1. Direct article URL (e.g. /articles/{article_id} or ?view=article&id={article_id})
+      const pathMatch = window.location.pathname.match(/^\/articles?\/(.+)$/);
+      if (pathMatch) {
+        setActiveArticleId(decodeURIComponent(pathMatch[1]));
+        setActiveView('article');
+      } else if (viewParam === 'article' && idParam) {
+        setActiveArticleId(idParam);
+        setActiveView('article');
+      } else if (journalParam) {
         setActiveView('journals');
       } else if (qParam) {
         setSearchQuery(qParam);
@@ -135,7 +187,7 @@ export default function App() {
     }
   }, []);
 
-  // Sync browser URL with active engine, view, and search query
+  // Sync browser URL with active engine, view, active article, and search query
   useEffect(() => {
     try {
       const params = new URLSearchParams();
@@ -144,6 +196,9 @@ export default function App() {
       }
       if (activeView && activeView !== 'dashboard') {
         params.set('view', activeView);
+      }
+      if (activeView === 'article' && activeArticleId) {
+        params.set('id', activeArticleId);
       }
       if (activeView === 'search') {
         if (searchQuery) params.set('q', searchQuery);
@@ -157,7 +212,7 @@ export default function App() {
     } catch (e) {
       console.debug('Failed to update URL search params', e);
     }
-  }, [currentEngine, activeView, searchQuery, selectedCategory]);
+  }, [currentEngine, activeView, activeArticleId, searchQuery, selectedCategory]);
 
   const loadInitialData = async () => {
     try {
@@ -205,14 +260,30 @@ export default function App() {
     setSelectedPaperIds([]);
   };
 
-  const handleOpenDetails = (paper) => {
-    setDetailModalPaper(paper);
-    setDetailModalInitialTab('toc');
+  const handleOpenDetails = (paperOrId) => {
+    if (!paperOrId) return;
+    const id = typeof paperOrId === 'string' ? paperOrId : (paperOrId.id || paperOrId.doi);
+    if (!id) return;
+
+    if (activeView !== 'article') {
+      setPreviousView(activeView);
+    }
+    setActiveArticleId(id);
+    setActiveView('article');
+
+    // Push state to browser history for Back/Forward navigation support
+    try {
+      const params = new URLSearchParams(window.location.search);
+      params.set('view', 'article');
+      params.set('id', id);
+      window.history.pushState({ view: 'article', id }, '', `${window.location.pathname}?${params.toString()}`);
+    } catch (e) {
+      console.debug('Failed to push state for article', e);
+    }
   };
 
-  const handleOpenSummary = (paper) => {
-    setDetailModalPaper(paper);
-    setDetailModalInitialTab('summary');
+  const handleOpenSummary = (paperOrId) => {
+    handleOpenDetails(paperOrId);
   };
 
   const handleToggleFavourite = async (paperId, isFav) => {
@@ -347,6 +418,36 @@ export default function App() {
               onToggleSelectPaper={handleToggleSelectPaper}
               onClearSelection={handleClearSelection}
               onOpenReviewWorkspace={() => setActiveView('review')}
+              onToggleFavourite={handleToggleFavourite}
+              onUpdateReadingStatus={handleUpdateReadingStatus}
+              onUpdateScreening={handleUpdateScreening}
+            />
+          )}
+
+          {activeView === 'article' && (
+            <ArticleDetailView
+              articleId={activeArticleId}
+              onBack={() => {
+                if (window.history.length > 1) {
+                  window.history.back();
+                } else {
+                  setActiveView(previousView || 'journals');
+                }
+              }}
+              onNavigateToJournal={(journalId) => {
+                setActiveView('journals');
+                if (journalId) {
+                  try {
+                    const params = new URLSearchParams(window.location.search);
+                    params.set('view', 'journals');
+                    params.set('journal', journalId);
+                    window.history.pushState({ view: 'journals', journal: journalId }, '', `${window.location.pathname}?${params.toString()}`);
+                  } catch (e) {
+                    console.debug('Failed to push state for journal', e);
+                  }
+                }
+              }}
+              onNavigateToSearch={handleNavigateToSearch}
               onToggleFavourite={handleToggleFavourite}
               onUpdateReadingStatus={handleUpdateReadingStatus}
               onUpdateScreening={handleUpdateScreening}
