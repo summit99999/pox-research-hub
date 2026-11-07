@@ -28,13 +28,34 @@ import {
   getDomainBySlug,
   getAllCuratedPolymers 
 } from '../data/polymerDomainsData';
-import ThreeDTiltCard from '../components/ThreeDTiltCard';
-import Polymer3DHero from '../components/Polymer3DHero';
-import { DomainMotifIllustration } from '../components/PolymerScientificIllustrations';
 import PolymerTopicModal from '../components/PolymerTopicModal';
 import PaperCard from '../components/PaperCard';
 import { api } from '../lib/api';
 import { ENGINE_SCOPES } from '../lib/searchEngine';
+
+function getDomainIcon(domainId) {
+  switch (domainId) {
+    case 'domain-1': return <Atom className="w-4 h-4 text-violet-300" />;
+    case 'domain-2': return <Layers className="w-4 h-4 text-sky-300" />;
+    case 'domain-3': return <FlaskConical className="w-4 h-4 text-amber-300" />;
+    case 'domain-4': return <Sparkles className="w-4 h-4 text-emerald-300" />;
+    case 'domain-5': return <BookOpen className="w-4 h-4 text-rose-300" />;
+    case 'domain-6': return <Boxes className="w-4 h-4 text-cyan-300" />;
+    case 'domain-7': return <Award className="w-4 h-4 text-blue-300" />;
+    case 'domain-8': return <Activity className="w-4 h-4 text-purple-300" />;
+    case 'domain-9': return <Compass className="w-4 h-4 text-teal-300" />;
+    case 'domain-10': return <TrendingUp className="w-4 h-4 text-cyan-300" />;
+    case 'domain-11': return <Sparkles className="w-4 h-4 text-emerald-300" />;
+    case 'domain-12': return <Boxes className="w-4 h-4 text-purple-300" />;
+    case 'domain-13': return <FlaskConical className="w-4 h-4 text-orange-300" />;
+    case 'domain-14': return <Eye className="w-4 h-4 text-indigo-300" />;
+    case 'domain-15': return <Activity className="w-4 h-4 text-pink-300" />;
+    case 'domain-16': return <CheckCircle2 className="w-4 h-4 text-rose-300" />;
+    case 'domain-17': return <Compass className="w-4 h-4 text-teal-300" />;
+    case 'domain-18': return <Layers className="w-4 h-4 text-indigo-300" />;
+    default: return <Boxes className="w-4 h-4 text-indigo-300" />;
+  }
+}
 
 export default function PolymerDomainsView({
   initialDomainSlug = null,
@@ -218,8 +239,9 @@ export default function PolymerDomainsView({
           
           <div className="relative z-10 max-w-4xl space-y-4">
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="px-3 py-1 rounded-full bg-white/20 text-white font-mono text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-white/30">
-                Visual Identity: {ident.theme}
+              <span className="px-3 py-1 rounded-full bg-white/20 text-white font-mono text-xs font-bold uppercase tracking-wider backdrop-blur-md border border-white/30 flex items-center gap-1.5">
+                {getDomainIcon(selectedDomain.id)}
+                <span>Specialized Domain</span>
               </span>
               <span className="px-3 py-1 rounded-full bg-slate-950/60 text-slate-200 font-mono text-xs backdrop-blur-md border border-white/10">
                 {selectedDomain.families.length} Curated Polymer Families
@@ -521,9 +543,6 @@ export default function PolymerDomainsView({
           </p>
         </div>
 
-        {/* 3D Macromolecular Simulation Canvas Hero */}
-        <Polymer3DHero height={320} />
-
         {/* Live Platform Taxonomy & Literature Metrics */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto">
           <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center shadow-md">
@@ -616,15 +635,15 @@ export default function PolymerDomainsView({
         </div>
       )}
 
-      {/* The 18 Colourful 3D Domain Cards Grid */}
+      {/* The 18 Colourful 2D Domain Cards Grid */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
             <Boxes className="w-5 h-5 text-indigo-400" />
             <span>Polymer Chemistry Disciplines ({filteredDomains.length} of 18 Domains)</span>
           </h2>
-          <span className="text-xs text-slate-500">
-            Hover to tilt in 3D • Click to explore
+          <span className="text-xs text-slate-400">
+            Click any domain card to explore specialized polymer research
           </span>
         </div>
 
@@ -634,33 +653,36 @@ export default function PolymerDomainsView({
             const count = domainPubCounts[domain.id] || 0;
 
             return (
-              <ThreeDTiltCard
+              <div
                 key={domain.id}
-                glowColor={ident.glowColor || 'indigo'}
-                className="h-full cursor-pointer flex flex-col justify-between group"
                 onClick={() => setSelectedDomain(domain)}
+                className="h-full cursor-pointer flex flex-col justify-between group rounded-3xl bg-slate-900/90 hover:bg-slate-900 border border-slate-800/90 hover:border-slate-700 shadow-md hover:shadow-xl transition-all duration-300 relative overflow-hidden"
               >
+                {/* Subtle gradient accent bar along the top edge */}
+                <div className={`h-1.5 w-full bg-gradient-to-r ${ident.gradient}`} />
+
                 <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                   <div>
-                    {/* Top Identity Pill & Counts */}
+                    {/* Top Badges & 2D Icon Header */}
                     <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className={`text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full border ${ident.badgeBg}`}>
-                        {ident.theme}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center border ${ident.badgeBg} shadow-sm group-hover:scale-105 transition-transform`}>
+                          {getDomainIcon(domain.id)}
+                        </div>
+                        <span className="text-[11px] font-mono font-semibold text-slate-300">
+                          {domain.families.length} Families
+                        </span>
+                      </div>
+
                       {count > 0 ? (
-                        <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+                        <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-bold">
                           {count} indexed papers
                         </span>
                       ) : (
-                        <span className="text-[11px] font-mono text-slate-500">
-                          {domain.families.length} families
+                        <span className="text-[11px] font-mono text-slate-400 bg-slate-800/80 border border-slate-700/60 px-2.5 py-0.5 rounded-full">
+                          Literature available
                         </span>
                       )}
-                    </div>
-
-                    {/* Scientific 3D / Dimensional Illustration */}
-                    <div className="p-2 rounded-2xl bg-slate-950/80 border border-slate-800/80 my-3 overflow-hidden transition-transform duration-300 group-hover:scale-[1.02]">
-                      <DomainMotifIllustration motifType={domain.motifType} className="w-full h-24" />
                     </div>
 
                     {/* Domain Title */}
@@ -680,20 +702,20 @@ export default function PolymerDomainsView({
                       {domain.relatedTopics.slice(0, 4).map(top => (
                         <span
                           key={top}
-                          className="px-2 py-0.5 rounded-md bg-slate-950/90 text-[10px] text-slate-400 font-mono border border-slate-800"
+                          className="px-2 py-0.5 rounded-md bg-slate-950 text-[10px] text-slate-400 font-mono border border-slate-800"
                         >
                           #{top}
                         </span>
                       ))}
                     </div>
 
-                    <div className="flex items-center justify-between text-xs font-bold text-indigo-400 group-hover:text-teal-300 group-hover:translate-x-1 transition-all pt-1">
+                    <div className="flex items-center justify-between text-xs font-bold text-teal-400 group-hover:text-teal-300 group-hover:translate-x-1 transition-all pt-1">
                       <span>Explore Research Domain</span>
                       <ChevronRight className="w-4 h-4" />
                     </div>
                   </div>
                 </div>
-              </ThreeDTiltCard>
+              </div>
             );
           })}
         </div>

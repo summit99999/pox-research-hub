@@ -28,6 +28,8 @@ import {
   ResponsiveContainer, 
   AreaChart, 
   Area, 
+  BarChart,
+  Bar,
   XAxis, 
   YAxis, 
   Tooltip, 
@@ -35,8 +37,6 @@ import {
 } from 'recharts';
 import PaperCard from '../components/PaperCard';
 import EngineSelector from '../components/EngineSelector';
-import ThreeDTiltCard from '../components/ThreeDTiltCard';
-import ThreeDBarChart from '../components/ThreeDBarChart';
 import { api } from '../lib/api';
 import { ENGINE_SCOPES } from '../lib/searchEngine';
 
@@ -72,7 +72,6 @@ export default function DashboardView({
   onToggleFavourite,
   onUpdateReadingStatus,
   onUpdateScreening,
-  onOpenDeveloperView,
   onOpenDomains,
   onNavigateToView
 }) {
@@ -81,7 +80,7 @@ export default function DashboardView({
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [quickQuery, setQuickQuery] = useState('');
-  const [chartMode, setChartMode] = useState('3d'); // '3d' | 'area'
+  const [chartMode, setChartMode] = useState('area'); // 'area' | 'bar'
   const [recentTab, setRecentTab] = useState('all'); // 'all' | '2026' | 'ai'
   const [pdfStats, setPdfStats] = useState({ total_pdfs: 0, total_bytes: 0 });
   const [watchStats, setWatchStats] = useState({ total: 0, to_read: 0, reading: 0, read: 0 });
@@ -304,51 +303,57 @@ export default function DashboardView({
         </div>
       </div>
 
-      {/* Bloomberg-Style Market & Telemetry Live Strip */}
+      {/* Scientific Research Metrics Strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-800/80 flex items-center gap-3 shadow-sm">
-          <div className="w-8 h-8 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shrink-0">
-            <Activity className="w-4 h-4 text-teal-400" />
+        <div 
+          onClick={() => onOpenDomains && onOpenDomains('')}
+          className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-teal-500/40 flex items-center gap-3 shadow-sm cursor-pointer transition-all group"
+        >
+          <div className="w-8 h-8 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <Compass className="w-4 h-4 text-teal-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Cloud Engine</div>
+            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Research Domains</div>
             <div className="text-xs font-bold text-slate-200 truncate flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Sub-Second Latency</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />
+              <span>18 Polymer Disciplines</span>
             </div>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-800/80 flex items-center gap-3 shadow-sm">
-          <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+        <div 
+          onClick={() => onNavigateToView && onNavigateToView('journals')}
+          className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-indigo-500/40 flex items-center gap-3 shadow-sm cursor-pointer transition-all group"
+        >
+          <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <BookOpen className="w-4 h-4 text-indigo-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Journals Live</div>
+            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Monitored Journals</div>
             <div className="text-xs font-bold text-slate-200 truncate">
-              10 Monitored Feeds
+              10 Core Feeds Live
             </div>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-800/80 flex items-center gap-3 shadow-sm">
+        <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center gap-3 shadow-sm">
           <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
             <Calendar className="w-4 h-4 text-purple-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Index Horizon</div>
+            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Publication Horizon</div>
             <div className="text-xs font-bold text-slate-200 truncate">
               1950 – 2026+ ASAP
             </div>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-slate-900/70 border border-slate-800/80 flex items-center gap-3 shadow-sm">
+        <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center gap-3 shadow-sm">
           <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Authenticity</div>
+            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Curated Literature</div>
             <div className="text-xs font-bold text-slate-200 truncate">
               100% Peer-Reviewed
             </div>
@@ -356,11 +361,11 @@ export default function DashboardView({
         </div>
       </div>
 
-      {/* Primary 3D KPI Tilt Cards */}
+      {/* Primary KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {isPOx ? (
           <>
-            <ThreeDTiltCard glowColor="teal" className="p-5 rounded-2xl glass-card">
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 shadow-sm hover:shadow-md transition-all">
               <div className="flex items-center justify-between text-slate-400 mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider">Total Publications</span>
                 <BookOpen className="w-4 h-4 text-teal-400" />
@@ -370,11 +375,11 @@ export default function DashboardView({
               </div>
               <div className="text-[11px] text-teal-400/90 mt-1.5 flex items-center gap-1 font-medium">
                 <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />
-                <span>Indexed in Cloud DB</span>
+                <span>Indexed Literature</span>
               </div>
-            </ThreeDTiltCard>
+            </div>
 
-            <ThreeDTiltCard glowColor="indigo" className="p-5 rounded-2xl glass-card">
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-indigo-500/40 shadow-sm hover:shadow-md transition-all">
               <div className="flex items-center justify-between text-slate-400 mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider">Current Year (2026)</span>
                 <Calendar className="w-4 h-4 text-indigo-400" />
@@ -385,9 +390,9 @@ export default function DashboardView({
               <div className="text-[11px] text-slate-400 mt-1.5 font-medium">
                 Newly published ASAP articles
               </div>
-            </ThreeDTiltCard>
+            </div>
 
-            <ThreeDTiltCard glowColor="teal" className="p-5 rounded-2xl glass-card">
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 shadow-sm hover:shadow-md transition-all">
               <div className="flex items-center justify-between text-slate-400 mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider">POx Chemistry</span>
                 <Layers className="w-4 h-4 text-teal-400" />
@@ -398,9 +403,9 @@ export default function DashboardView({
               <div className="text-[11px] text-slate-400 mt-1.5 font-medium">
                 Poly(2-oxazoline) studies
               </div>
-            </ThreeDTiltCard>
+            </div>
 
-            <ThreeDTiltCard glowColor="purple" className="p-5 rounded-2xl glass-card">
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-purple-500/40 shadow-sm hover:shadow-md transition-all">
               <div className="flex items-center justify-between text-slate-400 mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider">POzi Chemistry</span>
                 <Hexagon className="w-4 h-4 text-purple-400" />
@@ -411,11 +416,11 @@ export default function DashboardView({
               <div className="text-[11px] text-slate-400 mt-1.5 font-medium">
                 Poly(2-oxazine) studies
               </div>
-            </ThreeDTiltCard>
+            </div>
           </>
         ) : (
           <>
-            <ThreeDTiltCard glowColor="indigo" className="p-5 rounded-2xl glass-card">
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-indigo-500/40 shadow-sm hover:shadow-md transition-all">
               <div className="flex items-center justify-between text-slate-400 mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider">Total Polymer Corpus</span>
                 <BookOpen className="w-4 h-4 text-indigo-400" />
@@ -427,9 +432,9 @@ export default function DashboardView({
                 <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
                 <span>Unified Polymer Library</span>
               </div>
-            </ThreeDTiltCard>
+            </div>
 
-            <ThreeDTiltCard glowColor="emerald" className="p-5 rounded-2xl glass-card">
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-emerald-500/40 shadow-sm hover:shadow-md transition-all">
               <div className="flex items-center justify-between text-slate-400 mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider">Historical Coverage</span>
                 <Calendar className="w-4 h-4 text-emerald-400" />
@@ -438,11 +443,11 @@ export default function DashboardView({
                 1950–2026+
               </div>
               <div className="text-[11px] text-slate-400 mt-1.5 font-medium">
-                No artificial minimum year
+                Complete archive depth
               </div>
-            </ThreeDTiltCard>
+            </div>
 
-            <ThreeDTiltCard glowColor="purple" className="p-5 rounded-2xl glass-card">
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-purple-500/40 shadow-sm hover:shadow-md transition-all">
               <div className="flex items-center justify-between text-slate-400 mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider">Polymer Disciplines</span>
                 <Layers className="w-4 h-4 text-purple-400" />
@@ -451,11 +456,11 @@ export default function DashboardView({
                 18 Classes
               </div>
               <div className="text-[11px] text-slate-400 mt-1.5 font-medium">
-                Synthetic, Bio & Functional
+                Synthetic, Bio &amp; Functional
               </div>
-            </ThreeDTiltCard>
+            </div>
 
-            <ThreeDTiltCard glowColor="teal" className="p-5 rounded-2xl glass-card">
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 shadow-sm hover:shadow-md transition-all">
               <div className="flex items-center justify-between text-slate-400 mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider">Active Journals</span>
                 <Globe2 className="w-4 h-4 text-cyan-400" />
@@ -466,7 +471,7 @@ export default function DashboardView({
               <div className="text-[11px] text-slate-400 mt-1.5 font-medium">
                 ACS, Wiley, Elsevier, RSC
               </div>
-            </ThreeDTiltCard>
+            </div>
           </>
         )}
       </div>
@@ -560,19 +565,6 @@ export default function DashboardView({
             <div className="flex items-center bg-slate-800/90 rounded-xl p-1 border border-slate-700/80 text-xs">
               <button
                 type="button"
-                onClick={() => setChartMode('3d')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all ${
-                  chartMode === '3d'
-                    ? 'bg-teal-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-slate-200'
-                }`}
-                title="View 3D Isometric Prism Visualization"
-              >
-                <BarChart3 className="w-3.5 h-3.5" />
-                <span>3D Isometric</span>
-              </button>
-              <button
-                type="button"
                 onClick={() => setChartMode('area')}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all ${
                   chartMode === 'area'
@@ -582,7 +574,20 @@ export default function DashboardView({
                 title="View Smooth Gradient Area Chart"
               >
                 <TrendingUp className="w-3.5 h-3.5" />
-                <span>Area Gradient</span>
+                <span>Area Trend</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setChartMode('bar')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all ${
+                  chartMode === 'bar'
+                    ? 'bg-teal-600 text-white shadow-md'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+                title="View Annual Bar Distribution"
+              >
+                <BarChart3 className="w-3.5 h-3.5" />
+                <span>Bar Distribution</span>
               </button>
             </div>
 
@@ -600,14 +605,21 @@ export default function DashboardView({
 
         {/* Dynamic Chart Container */}
         <div className="pt-4">
-          {chartMode === '3d' ? (
-            <div className="rounded-2xl bg-slate-950/60 border border-slate-800/70 p-4">
-              <ThreeDBarChart
-                data={barChartData}
-                height={260}
-                primaryColor={isPOx ? 'teal' : 'indigo'}
-                unitLabel="Indexed Papers"
-              />
+          {chartMode === 'bar' ? (
+            <div className="h-64 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={trends}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                  <XAxis dataKey="year" stroke="#64748b" textAnchor="end" tick={{ fontSize: 11 }} />
+                  <YAxis stroke="#64748b" tick={{ fontSize: 11 }} />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
+                    itemStyle={{ color: '#e2e8f0' }}
+                  />
+                  <Bar dataKey="pox_count" fill="#14b8a6" radius={[4, 4, 0, 0]} name={isPOx ? 'POx Papers' : 'Synthetic Polymers'} />
+                  <Bar dataKey="pozi_count" fill="#a855f7" radius={[4, 4, 0, 0]} name={isPOx ? 'POzi Papers' : 'Biopolymers'} />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           ) : (
             <div className="h-64 w-full">
@@ -807,35 +819,25 @@ export default function DashboardView({
         )}
       </div>
 
-      {/* Developer & Platform Architecture Footer Showcase */}
-      <div className="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950/40 border border-slate-800/80 p-6 sm:p-7 shadow-2xl">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-teal-500/20 shrink-0">
-              SB
-            </div>
-            <div className="space-y-1">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="text-base font-bold text-slate-100">
-                  Developed & Engineered by Sumit Barik
-                </h3>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-teal-500/20 text-teal-300 border border-teal-500/30">
-                  Platform Developer & Researcher
-                </span>
-              </div>
-              <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
-                Polymer Chemist at <span className="font-semibold text-slate-100">Indian Association for the Cultivation of Science (IACS), Kolkata</span>. Researcher on stimuli-responsive cyclic imino ether architectures for biomedical applications.
-              </p>
-            </div>
+      {/* Developer & Platform Architecture Footer Attribution */}
+      <div className="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950/40 border border-slate-800/80 p-6 sm:p-7 shadow-xl">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-teal-500/20 shrink-0">
+            SB
           </div>
-
-          <button
-            onClick={() => onOpenDeveloperView ? onOpenDeveloperView() : onNavigateToSearch && onNavigateToSearch('Sumit Barik')}
-            className="shrink-0 px-4 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 hover:border-teal-500/50 text-xs font-semibold transition-all shadow-sm flex items-center gap-2 group"
-          >
-            <span>View Developer's Publications</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </button>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h3 className="text-base font-bold text-slate-100">
+                Developed &amp; Engineered by Sumit Barik
+              </h3>
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                Platform Developer &amp; Researcher
+              </span>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
+              Polymer Chemist at <span className="font-semibold text-slate-100">Indian Association for the Cultivation of Science (IACS), Kolkata</span>. Researcher on stimuli-responsive cyclic imino ether architectures for biomedical applications.
+            </p>
+          </div>
         </div>
       </div>
     </div>

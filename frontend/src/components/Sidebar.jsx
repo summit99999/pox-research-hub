@@ -57,8 +57,7 @@ export const INTELLIGENCE_NAV_ITEMS = [
 ];
 
 export const SYSTEM_NAV_ITEMS = [
-  { id: 'developer', label: "Developer's Works", icon: Award, badge: 'IACS' },
-  { id: 'settings', label: 'Settings & Cloud DB', icon: Settings },
+  { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
 export default function Sidebar({ 
@@ -394,65 +393,32 @@ export default function Sidebar({
         </div>
       </nav>
 
-      {/* Developer Card & Theme Controls Footer */}
+      {/* Platform Scope & Theme Controls Footer */}
       <div className="p-3 border-t border-slate-800/80 dark:border-slate-800/80 light:border-slate-200 bg-slate-950/60 dark:bg-slate-950/60 light:bg-slate-50/80 text-[11px] space-y-2 shrink-0">
         {!collapsed ? (
-          <>
-            <div 
-              onClick={() => handleNavClick('developer')}
-              title="View Developer's Publications (Sumit Barik, IACS Kolkata)"
-              className="p-2.5 rounded-xl bg-slate-900/90 dark:bg-slate-900/90 light:bg-white border border-slate-800 dark:border-slate-800 light:border-slate-200 hover:border-teal-500/50 hover:bg-slate-850 flex items-center gap-2.5 shadow-sm cursor-pointer transition-all group"
-            >
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-                SB
-              </div>
-              <div className="min-w-0">
-                <div className="text-[9px] uppercase font-bold text-teal-400 tracking-wider flex items-center justify-between">
-                  <span>Developer</span>
-                  <span className="text-[9px] text-teal-300 font-normal">IACS →</span>
-                </div>
-                <div className="font-semibold text-slate-200 dark:text-slate-200 light:text-slate-800 text-xs truncate group-hover:text-teal-300 transition-colors">
-                  Sumit Barik
-                </div>
-                <div className="text-[10px] text-slate-400 truncate">
-                  Polymer Chemist · IACS Kolkata
-                </div>
-              </div>
-            </div>
-
-            {/* Platform Scope & Theme Toggle Row */}
-            <div className="flex items-center justify-between px-1 pt-1 text-[10px] font-mono text-slate-400">
-              <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Cloud DB 1950–2026+</span>
-              </span>
-
-              {onToggleTheme && (
-                <button
-                  onClick={onToggleTheme}
-                  title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-                  className="p-1 rounded-md bg-slate-800 dark:bg-slate-800 light:bg-slate-200 hover:bg-slate-700 text-slate-300 dark:text-slate-300 light:text-slate-700 transition-colors"
-                >
-                  {theme === 'dark' ? <Sun className="w-3 h-3 text-amber-400" /> : <Moon className="w-3 h-3 text-indigo-500" />}
-                </button>
-              )}
-            </div>
-          </>
-        ) : (
-          <div className="flex flex-col items-center gap-2 py-1">
-            <div 
-              onClick={() => handleNavClick('developer')}
-              title="Sumit Barik (IACS Kolkata)"
-              className="w-8 h-8 rounded-lg bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center font-bold text-xs text-white shadow-sm cursor-pointer hover:scale-110 transition-transform"
-            >
-              SB
-            </div>
+          <div className="flex items-center justify-between px-1 py-1 text-[11px] font-mono text-slate-400">
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Corpus 1950–2026+</span>
+            </span>
 
             {onToggleTheme && (
               <button
                 onClick={onToggleTheme}
                 title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-                className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
+                className="p-1.5 rounded-lg bg-slate-800/90 dark:bg-slate-800/90 light:bg-slate-200 hover:bg-slate-700 text-slate-300 dark:text-slate-300 light:text-slate-700 transition-colors flex items-center gap-1 border border-slate-700/60"
+              >
+                {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-indigo-500" />}
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-2 py-1">
+            {onToggleTheme && (
+              <button
+                onClick={onToggleTheme}
+                title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+                className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors border border-slate-700/60"
               >
                 {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-indigo-500" />}
               </button>

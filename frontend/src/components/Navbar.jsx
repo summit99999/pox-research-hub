@@ -180,21 +180,6 @@ export default function Navbar({
             </button>
           )}
 
-          {/* Developer Attribution Pill */}
-          <div 
-            onClick={() => setActiveView('developer')}
-            title="View Developer's Publications (Sumit Barik, IACS Kolkata)"
-            className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-800/90 border border-slate-700/80 text-xs text-slate-300 cursor-pointer hover:border-teal-500/50 hover:bg-slate-800 transition-all group"
-          >
-            <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center text-[10px] font-bold text-white shadow-sm group-hover:scale-110 transition-transform">
-              SB
-            </div>
-            <div className="text-[11px] leading-tight">
-              <span className="text-slate-400">Dev: </span>
-              <span className="font-semibold text-teal-300 group-hover:underline">Sumit Barik</span>
-            </div>
-          </div>
-
           {/* Ingest Papers Button */}
           <button
             onClick={onOpenCollectorModal}

@@ -10,7 +10,6 @@ import ReviewWorkspaceView from './views/ReviewWorkspaceView';
 import LibraryView from './views/LibraryView';
 import SettingsView from './views/SettingsView';
 import AISummariesView from './views/AISummariesView';
-import DeveloperPublicationsView from './views/DeveloperPublicationsView';
 import JournalsTrackerView from './views/JournalsTrackerView';
 import ArticleDetailView from './views/ArticleDetailView';
 import PolymerDomainsView from './views/PolymerDomainsView';
@@ -441,7 +440,6 @@ export default function App() {
               onToggleFavourite={handleToggleFavourite}
               onUpdateReadingStatus={handleUpdateReadingStatus}
               onUpdateScreening={handleUpdateScreening}
-              onOpenDeveloperView={() => setActiveView('developer')}
               onOpenDomains={handleOpenDomain}
               onNavigateToView={setActiveView}
             />
@@ -557,18 +555,6 @@ export default function App() {
               onUpdateReadingStatus={handleUpdateReadingStatus}
               onUpdateScreening={handleUpdateScreening}
               initialTab="published"
-            />
-          )}
-
-          {activeView === 'developer' && (
-            <DeveloperPublicationsView
-              onOpenDetails={handleOpenDetails}
-              onOpenSummary={handleOpenSummary}
-              selectedPaperIds={selectedPaperIds}
-              onToggleSelectPaper={handleToggleSelectPaper}
-              onToggleFavourite={handleToggleFavourite}
-              onUpdateReadingStatus={handleUpdateReadingStatus}
-              onUpdateScreening={handleUpdateScreening}
             />
           )}
 
