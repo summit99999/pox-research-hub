@@ -26,6 +26,32 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPaperIds, setSelectedPaperIds] = useState([]);
   
+  // Theme state with localStorage persistence (Default: Dark)
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem('prih_theme') || 'dark';
+    } catch {
+      return 'dark';
+    }
+  });
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    try {
+      localStorage.setItem('prih_theme', theme);
+    } catch (e) {
+      console.debug('Failed to save theme in localStorage', e);
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   // Folding Sidebar Navigation
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarPinned, setSidebarPinned] = useState(false);
@@ -40,6 +66,41 @@ export default function App() {
   const [allCategories, setAllCategories] = useState([]);
   const [user, setUser] = useState(null);
   const [health, setHealth] = useState(null);
+
+  // Global Keyboard Shortcuts: '/' focuses search, Ctrl+B toggles sidebar
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Don't intercept if user is typing in an input, textarea, or contentEditable element
+      const tag = document.activeElement?.tagName?.toLowerCase();
+      const isInput = tag === 'input' || tag === 'textarea' || document.activeElement?.isContentEditable;
+
+      if (!isInput && e.key === '/') {
+        e.preventDefault();
+        const searchInput = document.getElementById('global-search-input');
+        if (searchInput) {
+          searchInput.focus();
+          searchInput.select();
+        } else {
+          setActiveView('search');
+        }
+      }
+
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'b' || e.key === 'B')) {
+        e.preventDefault();
+        setSidebarOpen(prev => !prev);
+      }
+
+      if (e.key === 'Escape') {
+        if (detailModalPaper) setDetailModalPaper(null);
+        else if (collectorModalOpen) setCollectorModalOpen(false);
+        else if (authModalOpen) setAuthModalOpen(false);
+        else if (sidebarOpen && !sidebarPinned) setSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [detailModalPaper, collectorModalOpen, authModalOpen, sidebarOpen, sidebarPinned]);
 
   useEffect(() => {
     loadInitialData();
@@ -194,8 +255,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-      {/* Top Navbar with PRIH Branding and Dual Engine Switcher */}
+    <div className="min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-teal-500/30 selection:text-teal-200 transition-colors duration-200">
+      {/* Top Navbar with PRIH Branding, Dual Engine Switcher, & Theme Controller */}
       <Navbar
         activeView={activeView}
         setActiveView={setActiveView}
@@ -211,6 +272,8 @@ export default function App() {
         sidebarOpen={sidebarOpen}
         currentEngine={currentEngine}
         onSelectEngine={setCurrentEngine}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       {/* Main Layout Area */}
@@ -235,6 +298,8 @@ export default function App() {
           currentEngine={currentEngine}
           onSelectEngine={setCurrentEngine}
           onSelectCategory={handleSelectCategory}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
 
         {/* Floating Quick Open Pill */}

@@ -46,6 +46,7 @@ import {
 } from '../lib/polymerClassifier.js';
 import { getPaperDoiUrl } from '../lib/doiHelper.js';
 import PaperDetailModal from '../components/PaperDetailModal';
+import ThreeDTiltCard from '../components/ThreeDTiltCard';
 
 export default function JournalsTrackerView({ 
   onOpenDetails, 
@@ -797,10 +798,11 @@ export default function JournalsTrackerView({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredJournals.map(journal => {
           return (
-            <div
+            <ThreeDTiltCard
               key={journal.id}
+              glowColor={journal.is_multidisciplinary ? 'indigo' : 'teal'}
               onClick={() => handleOpenJournal(journal)}
-              className="p-5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-teal-500/40 hover:bg-slate-850/80 transition-all cursor-pointer group flex flex-col justify-between shadow-md"
+              className="p-5 rounded-3xl glass-card cursor-pointer group flex flex-col justify-between shadow-lg"
             >
               <div className="space-y-2.5">
                 {/* Top Badges */}
@@ -843,7 +845,7 @@ export default function JournalsTrackerView({
                   <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </div>
               </div>
-            </div>
+            </ThreeDTiltCard>
           );
         })}
       </div>

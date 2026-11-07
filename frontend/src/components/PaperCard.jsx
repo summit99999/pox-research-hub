@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Star, 
   ExternalLink, 
@@ -12,7 +12,9 @@ import {
   Clock,
   Calendar,
   Award,
-  Image as ImageIcon
+  Image as ImageIcon,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { getJournalImpactFactor } from '../lib/journalMeta';
 import { getPaperDoiUrl, formatDoiDisplay } from '../lib/doiHelper';
@@ -27,66 +29,90 @@ export default function PaperCard({
   onUpdateReadingStatus, 
   onUpdateScreening 
 }) {
+  const [expandedAbstract, setExpandedAbstract] = useState(false);
   const authorsList = paper.authors?.map(a => a.name).join(', ') || 'Authors not listed';
   const doiUrl = getPaperDoiUrl(paper);
   const displayDoi = formatDoiDisplay(paper.doi);
+  const impactFactor = getJournalImpactFactor(paper.journal);
+
+  const hasLongAbstract = paper.abstract && paper.abstract.length > 220;
 
   return (
-    <div className={`p-4 rounded-xl border transition-all ${
-      isSelected 
-        ? 'bg-teal-950/20 border-teal-500/50 shadow-md shadow-teal-500/10' 
-        : 'bg-slate-900/90 border-slate-800 hover:border-slate-700 hover:shadow-lg'
-    }`}>
-      <div className="flex items-start gap-3">
+    <article 
+      className={`p-4 sm:p-5 rounded-2xl border transition-all duration-200 group relative ${
+        isSelected 
+          ? 'bg-teal-950/20 border-teal-500/60 shadow-lg shadow-teal-500/10 ring-1 ring-teal-500/30' 
+          : 'bg-slate-900/85 hover:bg-slate-850/90 border-slate-800/80 hover:border-slate-700/90 shadow-md hover:shadow-xl hover:-translate-y-0.5'
+      }`}
+    >
+      <div className="flex items-start gap-3 sm:gap-3.5">
         {/* Selection Checkbox */}
-        <input
-          type="checkbox"
-          checked={isSelected || false}
-          onChange={() => onToggleSelect && onToggleSelect(paper.id)}
-          className="mt-1 w-4 h-4 rounded border-slate-700 bg-slate-800 text-teal-600 focus:ring-teal-500 shrink-0 cursor-pointer"
-        />
+        <div className="pt-1">
+          <input
+            type="checkbox"
+            checked={isSelected || false}
+            onChange={() => onToggleSelect && onToggleSelect(paper.id)}
+            className="w-4 h-4 rounded border-slate-700 bg-slate-800 text-teal-600 focus:ring-teal-500/40 focus:ring-offset-0 cursor-pointer transition-colors"
+            title="Select for batch actions / systematic review"
+          />
+        </div>
 
         <div className="flex-1 min-w-0">
           {/* Top Metadata Bar */}
-          <div className="flex flex-wrap items-center gap-2 mb-1 text-xs">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2 text-xs">
+            {/* Publication Date Badge */}
             {(paper.publication_date || paper.publication_year) && (
               <span 
-                className="font-semibold text-teal-400 font-mono bg-teal-950/60 border border-teal-800/60 px-2 py-0.5 rounded inline-flex items-center gap-1"
+                className="font-semibold text-teal-400 font-mono bg-teal-950/60 border border-teal-800/50 px-2 py-0.5 rounded-lg inline-flex items-center gap-1 shadow-sm"
                 title={`Publication Date: ${paper.publication_date || paper.publication_year}`}
               >
                 <Calendar className="w-3 h-3 text-teal-400 shrink-0" />
                 <span>{paper.publication_date || paper.publication_year}</span>
               </span>
             )}
+
+            {/* Journal Name & Impact Factor */}
             {paper.journal && (
-              <div className="flex items-center gap-1.5 shrink-0">
-                <span className="text-slate-300 font-medium truncate max-w-[200px]" title={paper.journal}>
+              <div className="flex items-center gap-1.5 shrink-0 max-w-full">
+                <span 
+                  className="text-slate-300 font-medium truncate max-w-[220px] sm:max-w-xs" 
+                  title={paper.journal}
+                >
                   {paper.journal}
                 </span>
-                {getJournalImpactFactor(paper.journal) && (
+                {impactFactor && (
                   <span 
-                    className="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30"
-                    title={`${paper.journal} Impact Factor: ${getJournalImpactFactor(paper.journal)} (Clarivate JCR)`}
+                    className="inline-flex items-center gap-0.5 text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 shadow-sm"
+                    title={`${paper.journal} Impact Factor: ${impactFactor} (Clarivate JCR)`}
                   >
-                    IF: {getJournalImpactFactor(paper.journal)}
+                    IF {impactFactor}
                   </span>
                 )}
               </div>
             )}
+
+            {/* Citations Count */}
             {paper.citation_count > 0 && (
-              <span className="flex items-center gap-1 text-[11px] text-slate-400 font-mono bg-slate-800/80 px-1.5 py-0.5 rounded border border-slate-700/60">
-                <Quote className="w-2.5 h-2.5" />
+              <span 
+                className="flex items-center gap-1 text-[11px] text-slate-400 font-mono bg-slate-800/80 px-2 py-0.5 rounded-md border border-slate-700/60"
+                title={`${paper.citation_count} cross-platform citations`}
+              >
+                <Quote className="w-2.5 h-2.5 text-slate-400" />
                 <span>{paper.citation_count}</span>
               </span>
             )}
+
+            {/* Open Access Badge */}
             {paper.open_access_url && (
-              <span className="text-[11px] font-medium text-emerald-400 bg-emerald-950/50 border border-emerald-800/50 px-1.5 py-0.5 rounded">
+              <span className="text-[11px] font-medium text-emerald-300 bg-emerald-950/60 border border-emerald-700/50 px-2 py-0.5 rounded-md shadow-sm">
                 Open Access
               </span>
             )}
+
+            {/* AI Summary Indicator */}
             {paper.has_summary && (
-              <span className="flex items-center gap-1 text-[11px] font-medium text-indigo-400 bg-indigo-950/50 border border-indigo-800/50 px-1.5 py-0.5 rounded">
-                <Sparkles className="w-3 h-3" />
+              <span className="flex items-center gap-1 text-[11px] font-medium text-indigo-300 bg-indigo-950/60 border border-indigo-700/50 px-2 py-0.5 rounded-md shadow-sm">
+                <Sparkles className="w-3 h-3 text-indigo-400" />
                 <span>AI Analyzed</span>
               </span>
             )}
@@ -95,69 +121,86 @@ export default function PaperCard({
           {/* Paper Title */}
           <h3 
             onClick={() => onOpenDetails(paper)}
-            className="text-base font-semibold text-slate-100 hover:text-teal-300 transition-colors cursor-pointer leading-snug"
+            className="text-base sm:text-lg font-bold text-slate-100 hover:text-teal-300 transition-colors cursor-pointer leading-snug tracking-tight"
           >
             {paper.title}
           </h3>
 
           {/* Authors */}
-          <p className="text-xs text-slate-400 mt-1 line-clamp-1">
+          <p className="text-xs text-slate-400 mt-1 line-clamp-1 font-sans">
             {authorsList}
           </p>
 
-          {/* Abstract Snippet */}
+          {/* Abstract Snippet with Expand / Collapse */}
           {paper.abstract && (
-            <p className="text-xs text-slate-300 mt-2 line-clamp-2 leading-relaxed">
-              {paper.abstract}
-            </p>
+            <div className="mt-2.5">
+              <p className={`text-xs text-slate-300 leading-relaxed ${expandedAbstract ? '' : 'line-clamp-2'}`}>
+                {paper.abstract}
+              </p>
+              {hasLongAbstract && (
+                <button
+                  type="button"
+                  onClick={() => setExpandedAbstract(prev => !prev)}
+                  className="text-[11px] font-medium text-teal-400 hover:text-teal-300 mt-1 inline-flex items-center gap-0.5 transition-colors"
+                >
+                  <span>{expandedAbstract ? 'Collapse abstract' : 'Read full abstract'}</span>
+                  {expandedAbstract ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                </button>
+              )}
+            </div>
           )}
 
-          {/* Categories / Tags */}
-          <div className="flex flex-wrap items-center gap-1.5 mt-3">
-            {paper.categories?.slice(0, 4).map(cat => (
-              <span 
-                key={cat.id || cat.slug}
-                className="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700"
-              >
-                {cat.category_name}
-              </span>
-            ))}
-            {paper.categories?.length > 4 && (
-              <span className="text-[10px] text-slate-400">
-                +{paper.categories.length - 4} more
-              </span>
-            )}
-          </div>
+          {/* Categories / Topic Tags */}
+          {paper.categories && paper.categories.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5 mt-3">
+              {paper.categories.slice(0, 4).map(cat => (
+                <span 
+                  key={cat.id || cat.slug}
+                  className="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-800/90 text-slate-300 border border-slate-700/70 hover:border-teal-500/40 transition-colors"
+                >
+                  {cat.category_name}
+                </span>
+              ))}
+              {paper.categories.length > 4 && (
+                <span className="text-[10px] text-slate-400 font-medium">
+                  +{paper.categories.length - 4} more
+                </span>
+              )}
+            </div>
+          )}
 
           {/* Bottom Action Footer */}
-          <div className="flex flex-wrap items-center justify-between gap-3 mt-4 pt-3 border-t border-slate-800/80">
-            {/* Quick Actions (DOI, Details, AI Summary) */}
-            <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-3 mt-4 pt-3.5 border-t border-slate-800/80">
+            {/* Quick Actions (DOI, TOC / Graphical Abstract, AI Summary) */}
+            <div className="flex items-center gap-2 flex-wrap">
               {doiUrl && (
                 <a
                   href={doiUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs text-teal-400 hover:text-teal-300 font-mono transition-colors"
+                  className="flex items-center gap-1 text-xs text-teal-400 hover:text-teal-300 font-mono transition-colors px-2 py-1 rounded-lg bg-teal-950/30 border border-teal-800/40 hover:bg-teal-900/40"
                   title="Direct verified publisher DOI link"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   <span>DOI</span>
                 </a>
               )}
+
+              {/* Prominent TOC / Graphical Abstract Button */}
               <button
                 onClick={() => onOpenDetails(paper)}
-                className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-teal-300 font-medium transition-colors ml-2 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-750 border border-slate-700"
+                className="flex items-center gap-1.5 text-xs text-slate-200 hover:text-teal-300 font-semibold transition-all px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-slate-750 border border-slate-700/80 hover:border-teal-500/40 shadow-sm"
                 title="View Table of Contents (TOC) & Journal Graphical Abstract"
               >
                 <ImageIcon className="w-3.5 h-3.5 text-teal-400" />
                 <span>TOC / Graphical Abstract</span>
               </button>
+
               <button
                 onClick={() => onOpenSummary(paper)}
-                className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition-colors ml-1 font-medium"
+                className="flex items-center gap-1 text-xs text-indigo-300 hover:text-indigo-200 transition-colors px-2 py-1 rounded-lg bg-indigo-950/40 border border-indigo-800/40 hover:bg-indigo-900/40 font-medium"
               >
-                <Sparkles className="w-3.5 h-3.5" />
+                <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
                 <span>{paper.has_summary ? 'View Summary' : 'AI Summary'}</span>
               </button>
             </div>
@@ -165,13 +208,13 @@ export default function PaperCard({
             {/* Research Management (Screening, Status, Favourite) */}
             <div className="flex items-center gap-2">
               {/* Systematic Screening decision buttons */}
-              <div className="flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700/80 text-xs">
+              <div className="flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700/80 text-xs shadow-inner">
                 <button
                   onClick={() => onUpdateScreening && onUpdateScreening(paper.id, 'included')}
                   title="Screen: Include in Systematic Review"
-                  className={`px-1.5 py-0.5 rounded transition-colors ${
+                  className={`px-1.5 py-1 rounded transition-colors ${
                     paper.screening_status === 'included' 
-                      ? 'bg-emerald-600 text-white font-medium' 
+                      ? 'bg-emerald-600 text-white font-medium shadow-sm' 
                       : 'text-slate-400 hover:text-emerald-300'
                   }`}
                 >
@@ -180,9 +223,9 @@ export default function PaperCard({
                 <button
                   onClick={() => onUpdateScreening && onUpdateScreening(paper.id, 'excluded')}
                   title="Screen: Exclude from Systematic Review"
-                  className={`px-1.5 py-0.5 rounded transition-colors ${
+                  className={`px-1.5 py-1 rounded transition-colors ${
                     paper.screening_status === 'excluded' 
-                      ? 'bg-rose-600 text-white font-medium' 
+                      ? 'bg-rose-600 text-white font-medium shadow-sm' 
                       : 'text-slate-400 hover:text-rose-300'
                   }`}
                 >
@@ -191,9 +234,9 @@ export default function PaperCard({
                 <button
                   onClick={() => onUpdateScreening && onUpdateScreening(paper.id, 'maybe')}
                   title="Screen: Mark as Uncertain / Review Full Text"
-                  className={`px-1.5 py-0.5 rounded transition-colors ${
+                  className={`px-1.5 py-1 rounded transition-colors ${
                     paper.screening_status === 'maybe' 
-                      ? 'bg-amber-600 text-white font-medium' 
+                      ? 'bg-amber-600 text-white font-medium shadow-sm' 
                       : 'text-slate-400 hover:text-amber-300'
                   }`}
                 >
@@ -205,7 +248,7 @@ export default function PaperCard({
               <select
                 value={paper.reading_status || 'unread'}
                 onChange={(e) => onUpdateReadingStatus && onUpdateReadingStatus(paper.id, e.target.value)}
-                className="bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg px-2 py-1 focus:outline-none focus:border-teal-500 cursor-pointer"
+                className="bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-lg px-2 py-1 focus:outline-none focus:border-teal-500 cursor-pointer shadow-sm"
               >
                 <option value="unread">Unread</option>
                 <option value="in_progress">Reading</option>
@@ -217,7 +260,7 @@ export default function PaperCard({
                 onClick={() => onToggleFavourite && onToggleFavourite(paper.id, !paper.is_favourite)}
                 className={`p-1.5 rounded-lg border transition-colors ${
                   paper.is_favourite 
-                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' 
+                    ? 'bg-amber-500/15 border-amber-500/30 text-amber-400 shadow-sm' 
                     : 'bg-slate-800 border-slate-700 text-slate-500 hover:text-amber-400'
                 }`}
                 title={paper.is_favourite ? 'Remove from favourites' : 'Save to favourites'}
@@ -228,6 +271,6 @@ export default function PaperCard({
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

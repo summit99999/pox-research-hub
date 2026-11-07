@@ -290,7 +290,11 @@ export default function SearchView({
       </div>
 
       {/* Main Search Bar & Boolean Engine */}
-      <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-3">
+      <div className={`p-5 rounded-3xl border shadow-xl space-y-4 transition-all duration-200 ${
+        isPOx 
+          ? 'bg-slate-900/85 border-slate-800/80 hover:border-teal-500/40 shadow-teal-950/10' 
+          : 'bg-slate-900/85 border-slate-800/80 hover:border-indigo-500/40 shadow-indigo-950/10'
+      }`}>
         <BooleanQueryBar
           query={query}
           onChangeQuery={setQuery}
@@ -302,7 +306,7 @@ export default function SearchView({
         />
 
         {/* Filter Controls Bar */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-2 border-t border-slate-800 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-3 border-t border-slate-800 text-xs">
           {/* Year Range (No 2020 limit, supports all years 1950–2026+) */}
           <div>
             <label className="text-slate-400 block font-medium mb-1">Publication Years</label>
