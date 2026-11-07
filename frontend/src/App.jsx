@@ -13,6 +13,7 @@ import AISummariesView from './views/AISummariesView';
 import DeveloperPublicationsView from './views/DeveloperPublicationsView';
 import JournalsTrackerView from './views/JournalsTrackerView';
 import ArticleDetailView from './views/ArticleDetailView';
+import PolymerDomainsView from './views/PolymerDomainsView';
 import PaperDetailModal from './components/PaperDetailModal';
 import CollectorModal from './components/CollectorModal';
 import AuthModal from './components/AuthModal';
@@ -24,6 +25,7 @@ export default function App() {
   const [currentEngine, setCurrentEngine] = useState(ENGINE_SCOPES.POX);
   const [activeView, setActiveView] = useState('dashboard');
   const [activeArticleId, setActiveArticleId] = useState(null);
+  const [activeDomainSlug, setActiveDomainSlug] = useState(null);
   const [previousView, setPreviousView] = useState('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -129,6 +131,10 @@ export default function App() {
         if (viewParam === 'article' && idParam) {
           setActiveArticleId(idParam);
           setActiveView('article');
+        } else if (viewParam === 'domains') {
+          const domainParam = params.get('domain') || params.get('slug');
+          setActiveDomainSlug(domainParam || null);
+          setActiveView('domains');
         } else if (journalParam || viewParam === 'journals') {
           setActiveView('journals');
         } else if (viewParam) {
@@ -173,6 +179,10 @@ export default function App() {
         setActiveView('article');
       } else if (journalParam) {
         setActiveView('journals');
+      } else if (viewParam === 'domains') {
+        const domainParam = params.get('domain') || params.get('slug');
+        if (domainParam) setActiveDomainSlug(domainParam);
+        setActiveView('domains');
       } else if (qParam) {
         setSearchQuery(qParam);
         setActiveView('search');
@@ -199,6 +209,9 @@ export default function App() {
       }
       if (activeView === 'article' && activeArticleId) {
         params.set('id', activeArticleId);
+      }
+      if (activeView === 'domains' && activeDomainSlug) {
+        params.set('domain', activeDomainSlug);
       }
       if (activeView === 'search') {
         if (searchQuery) params.set('q', searchQuery);
@@ -325,6 +338,20 @@ export default function App() {
     setActiveView('search');
   };
 
+  const handleOpenDomain = (slug = null) => {
+    setActiveDomainSlug(slug);
+    setActiveView('domains');
+    try {
+      const params = new URLSearchParams(window.location.search);
+      params.set('view', 'domains');
+      if (slug) params.set('domain', slug);
+      else params.delete('domain');
+      window.history.pushState({ view: 'domains', domain: slug }, '', `${window.location.pathname}?${params.toString()}`);
+    } catch (e) {
+      console.debug('Failed to push state for domains', e);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-teal-500/30 selection:text-teal-200 transition-colors duration-200">
       {/* Top Navbar with PRIH Branding, Dual Engine Switcher, & Theme Controller */}
@@ -403,6 +430,27 @@ export default function App() {
               onUpdateReadingStatus={handleUpdateReadingStatus}
               onUpdateScreening={handleUpdateScreening}
               onOpenDeveloperView={() => setActiveView('developer')}
+              onOpenDomains={handleOpenDomain}
+            />
+          )}
+
+          {activeView === 'domains' && (
+            <PolymerDomainsView
+              key={`domains-${activeDomainSlug || 'all'}`}
+              initialDomainSlug={activeDomainSlug}
+              onNavigateToSearch={(query, targetEngine) => {
+                if (targetEngine) setCurrentEngine(targetEngine);
+                setSearchQuery(query || '');
+                setSelectedCategory('');
+                setActiveView('search');
+              }}
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
+              selectedPaperIds={selectedPaperIds}
+              onToggleSelectPaper={handleToggleSelectPaper}
+              onToggleFavourite={handleToggleFavourite}
+              onUpdateReadingStatus={handleUpdateReadingStatus}
+              onUpdateScreening={handleUpdateScreening}
             />
           )}
 

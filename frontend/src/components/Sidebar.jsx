@@ -37,6 +37,7 @@ import { ENGINE_SCOPES } from '../lib/searchEngine';
 
 export const PRIMARY_NAV_ITEMS = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, shortcut: '⌘D' },
+  { id: 'domains', label: 'Research Domains', icon: Compass, badge: '18 Classes', color: 'purple', shortcut: '⌘R' },
   { id: 'search', label: 'POx Search', icon: Atom, engine: ENGINE_SCOPES.POX, badge: 'POx/POzi', color: 'teal', shortcut: '⌘1' },
   { id: 'universal_search', label: 'Polymer Search', icon: Network, engine: ENGINE_SCOPES.UNIVERSAL, badge: 'Universal', color: 'indigo', shortcut: '⌘2' },
   { id: 'journals', label: 'Journals', icon: Newspaper, isDistinctive: true, badge: 'LIVE', shortcut: '⌘J' },
@@ -208,6 +209,8 @@ export default function Sidebar({
                           ? 'bg-gradient-to-r from-teal-500/25 to-emerald-500/20 text-teal-200 border-l-4 border-teal-400 shadow-md shadow-teal-500/10'
                           : item.color === 'indigo'
                           ? 'bg-gradient-to-r from-indigo-500/25 to-purple-500/20 text-indigo-200 border-l-4 border-indigo-400 shadow-md shadow-indigo-500/10'
+                          : item.color === 'purple'
+                          ? 'bg-gradient-to-r from-purple-500/25 to-pink-500/20 text-purple-200 border-l-4 border-purple-400 shadow-md shadow-purple-500/10'
                           : 'bg-gradient-to-r from-teal-500/20 to-emerald-500/15 text-teal-300 border-l-4 border-teal-400 shadow-md shadow-teal-500/10'
                         : item.isDistinctive
                         ? 'text-teal-400 hover:text-teal-200 hover:bg-teal-500/10 border border-teal-500/20'
@@ -217,7 +220,7 @@ export default function Sidebar({
                     <div className="flex items-center gap-3 truncate">
                       <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover/item:scale-110 ${
                         isActive 
-                          ? item.color === 'indigo' ? 'text-indigo-400' : 'text-teal-400'
+                          ? item.color === 'indigo' ? 'text-indigo-400' : item.color === 'purple' ? 'text-purple-400' : 'text-teal-400'
                           : item.isDistinctive ? 'text-teal-400' : 'text-slate-400'
                       }`} />
                       {!collapsed && <span className="truncate">{item.label}</span>}

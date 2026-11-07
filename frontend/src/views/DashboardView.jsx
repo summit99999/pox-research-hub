@@ -69,7 +69,8 @@ export default function DashboardView({
   onToggleFavourite,
   onUpdateReadingStatus,
   onUpdateScreening,
-  onOpenDeveloperView 
+  onOpenDeveloperView,
+  onOpenDomains
 }) {
   const [analytics, setAnalytics] = useState(DEFAULT_ANALYTICS);
   const [recentPapers, setRecentPapers] = useState([]);
@@ -547,7 +548,7 @@ export default function DashboardView({
 
       {/* Research Categories Grid */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
               <FlaskConical className="w-4 h-4 text-teal-400" />
@@ -559,13 +560,29 @@ export default function DashboardView({
                 : 'Browse literature organized across the 18 core polymer science disciplines'}
             </p>
           </div>
+
+          <button
+            type="button"
+            onClick={() => onOpenDomains ? onOpenDomains() : (onSelectCategory && onSelectCategory(''))}
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600/30 via-indigo-600/30 to-teal-600/30 hover:from-violet-600/50 hover:to-indigo-600/50 border border-violet-500/40 text-violet-200 text-xs font-bold transition-all flex items-center gap-2 shadow-md hover:shadow-violet-500/10 self-start sm:self-auto transform hover:-translate-y-0.5"
+          >
+            <Compass className="w-4 h-4 text-violet-400" />
+            <span>Explore 3D Domains (18 Classes)</span>
+            <ArrowRight className="w-3.5 h-3.5 text-violet-300" />
+          </button>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
           {categories.slice(0, 12).map(cat => (
             <button
               key={cat.id || cat.slug}
-              onClick={() => onSelectCategory && onSelectCategory(cat.slug)}
+              onClick={() => {
+                if (!isPOx && onOpenDomains) {
+                  onOpenDomains(cat.slug);
+                } else if (onSelectCategory) {
+                  onSelectCategory(cat.slug);
+                }
+              }}
               className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800/80 hover:border-teal-500/50 hover:bg-slate-850 text-left transition-all group hover:-translate-y-0.5 shadow-sm"
             >
               <span className="text-xs font-bold text-slate-200 group-hover:text-teal-300 block truncate">
