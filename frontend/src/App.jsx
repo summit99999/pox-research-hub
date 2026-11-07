@@ -11,6 +11,7 @@ import LibraryView from './views/LibraryView';
 import SettingsView from './views/SettingsView';
 import AISummariesView from './views/AISummariesView';
 import DeveloperPublicationsView from './views/DeveloperPublicationsView';
+import JournalsTrackerView from './views/JournalsTrackerView';
 import PaperDetailModal from './components/PaperDetailModal';
 import CollectorModal from './components/CollectorModal';
 import AuthModal from './components/AuthModal';
@@ -51,12 +52,15 @@ export default function App() {
       const viewParam = params.get('view') || params.get('tab');
       const qParam = params.get('q') || params.get('search');
       const catParam = params.get('category');
+      const journalParam = params.get('journal');
 
       if (engineParam === 'universal' || engineParam === 'pox') {
         setCurrentEngine(engineParam);
       }
 
-      if (qParam) {
+      if (journalParam) {
+        setActiveView('journals');
+      } else if (qParam) {
         setSearchQuery(qParam);
         setActiveView('search');
       } else if (catParam) {
@@ -281,6 +285,15 @@ export default function App() {
               onToggleFavourite={handleToggleFavourite}
               onUpdateReadingStatus={handleUpdateReadingStatus}
               onUpdateScreening={handleUpdateScreening}
+            />
+          )}
+
+          {activeView === 'journals' && (
+            <JournalsTrackerView
+              onOpenDetails={handleOpenDetails}
+              onOpenSummary={handleOpenSummary}
+              onToggleFavourite={handleToggleFavourite}
+              initialJournalId={new URLSearchParams(window.location.search).get('journal')}
             />
           )}
 

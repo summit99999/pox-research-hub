@@ -10,7 +10,8 @@ import {
   ShieldCheck, 
   AlertCircle, 
   Menu, 
-  Network
+  Network,
+  BookOpen
 } from 'lucide-react';
 import EngineSelector from './EngineSelector';
 import { ENGINE_SCOPES } from '../lib/searchEngine';
@@ -87,14 +88,27 @@ export default function Navbar({
           </div>
         </div>
 
-        {/* Center: Dual-Engine Switcher Pill */}
+        {/* Center: Dual-Engine Switcher Pill + Journals Tracker Pill */}
         {onSelectEngine && (
-          <div className="hidden md:block shrink-0">
+          <div className="hidden md:flex items-center gap-2 shrink-0">
             <EngineSelector
               currentEngine={currentEngine}
               onSelectEngine={onSelectEngine}
               compact={true}
             />
+            <button
+              type="button"
+              onClick={() => setActiveView('journals')}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all shadow-sm ${
+                activeView === 'journals'
+                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/50 shadow-teal-500/10'
+                  : 'bg-slate-800/90 hover:bg-slate-750 text-slate-300 border border-slate-700 hover:border-slate-600'
+              }`}
+              title="Recent Polymer Publication Tracker across 10 international journals"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-teal-400" />
+              <span>Journals</span>
+            </button>
           </div>
         )}
 

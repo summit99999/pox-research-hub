@@ -401,3 +401,104 @@ CREATE POLICY "Service role has full access to literature_reviews"
     TO service_role
     USING (true)
     WITH CHECK (true);
+
+-- ==============================================================================
+-- 13. JOURNALS: RECENT POLYMER PUBLICATION TRACKER EXTENSIONS
+-- ==============================================================================
+
+-- Alter papers table with ASAP detection & polymer relevance classification fields
+ALTER TABLE public.papers ADD COLUMN IF NOT EXISTS is_asap BOOLEAN DEFAULT FALSE;
+ALTER TABLE public.papers ADD COLUMN IF NOT EXISTS online_publication_date DATE;
+ALTER TABLE public.papers ADD COLUMN IF NOT EXISTS print_publication_date DATE;
+ALTER TABLE public.papers ADD COLUMN IF NOT EXISTS polymer_relevance TEXT DEFAULT 'polymer_related';
+ALTER TABLE public.papers ADD COLUMN IF NOT EXISTS polymer_topics TEXT[] DEFAULT ARRAY[]::TEXT[];
+
+CREATE INDEX IF NOT EXISTS idx_papers_is_asap ON public.papers (is_asap) WHERE is_asap = TRUE;
+CREATE INDEX IF NOT EXISTS idx_papers_online_pub_date ON public.papers (online_publication_date DESC);
+CREATE INDEX IF NOT EXISTS idx_papers_polymer_relevance ON public.papers (polymer_relevance);
+
+-- MONITORED JOURNALS DIRECTORY TABLE
+CREATE TABLE IF NOT EXISTS public.journals (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    canonical_title TEXT UNIQUE NOT NULL,
+    name TEXT NOT NULL,
+    abbr TEXT,
+    short_name TEXT,
+    publisher TEXT NOT NULL,
+    issn_print TEXT,
+    issn_electronic TEXT,
+    impact_factor TEXT,
+    tier TEXT,
+    is_multidisciplinary BOOLEAN DEFAULT FALSE,
+    description TEXT,
+    is_monitored BOOLEAN DEFAULT TRUE,
+    cover_color TEXT DEFAULT 'from-blue-600 to-indigo-800',
+    last_scanned_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_journals_canonical_title ON public.journals (canonical_title);
+CREATE INDEX IF NOT EXISTS idx_journals_issn_electronic ON public.journals (issn_electronic);
+
+-- JOURNAL TRACKER AUTOMATION LOGS TABLE
+CREATE TABLE IF NOT EXISTS public.journal_tracker_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    journal_id UUID REFERENCES public.journals(id) ON DELETE CASCADE,
+    run_timestamp TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL,
+    articles_fetched INT DEFAULT 0,
+    polymer_articles_identified INT DEFAULT 0,
+    asap_articles_found INT DEFAULT 0,
+    status TEXT DEFAULT 'success',
+    error_message TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_journal_tracker_logs_timestamp ON public.journal_tracker_logs (run_timestamp DESC);
+
+-- Enable RLS for Journals and Tracker Logs
+ALTER TABLE public.journals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.journal_tracker_logs ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read access to journals"
+    ON public.journals FOR SELECT
+    TO anon, authenticated
+    USING (true);
+
+CREATE POLICY "Allow authenticated users to manage journals"
+    ON public.journals FOR ALL
+    TO authenticated
+    USING (true)
+    WITH CHECK (true);
+
+CREATE POLICY "Allow service role full access to journals"
+    ON public.journals FOR ALL
+    TO service_role
+    USING (true)
+    WITH CHECK (true);
+
+CREATE POLICY "Allow authenticated users to read tracker logs"
+    ON public.journal_tracker_logs FOR SELECT
+    TO authenticated
+    USING (true);
+
+CREATE POLICY "Allow service role full access to tracker logs"
+    ON public.journal_tracker_logs FOR ALL
+    TO service_role
+    USING (true)
+    WITH CHECK (true);
+
+-- Seed Initial 10 Canonical Journals
+INSERT INTO public.journals (canonical_title, name, abbr, short_name, publisher, issn_print, issn_electronic, impact_factor, tier, is_multidisciplinary, description, cover_color)
+VALUES
+    ('Journal of the American Chemical Society', 'Journal of the American Chemical Society', 'J. Am. Chem. Soc.', 'JACS', 'American Chemical Society (ACS)', '0002-7863', '1520-5126', '15.0', 'Q1 · Flagship Chemistry', TRUE, 'Premier global venue for fundamental discoveries across chemical sciences. Monitored strictly for high-impact macromolecular, supramolecular, and polymer chemistry breakthroughs.', 'from-blue-600 to-indigo-800'),
+    ('Chemical Science', 'Chemical Science', 'Chem. Sci.', 'Chemical Science', 'Royal Society of Chemistry (RSC)', '2041-6520', '2041-6539', '8.4', 'Q1 · Flagship Open Access Chemistry', TRUE, 'RSC''s flagship diamond open access journal publishing findings of exceptional significance across chemical sciences, filtered for innovative polymer and macromolecular studies.', 'from-teal-600 to-cyan-800'),
+    ('Macromolecules', 'Macromolecules', 'Macromolecules', 'Macromolecules', 'American Chemical Society (ACS)', '0024-9297', '1520-5835', '5.5', 'Q1 · ACS Flagship Polymer Science', FALSE, 'The definitive benchmark journal for fundamental macromolecular research: polymer synthesis, living polymerization kinetics, polymer physics, self-assembly, and rheology.', 'from-emerald-600 to-teal-800'),
+    ('Biomacromolecules', 'Biomacromolecules', 'Biomacromolecules', 'Biomacromolecules', 'American Chemical Society (ACS)', '1525-7797', '1526-4602', '6.2', 'Q1 · ACS Flagship Biomaterials & Bio-polymers', FALSE, 'Primary journal for the interface of polymer science and biology: biomaterials, drug and gene delivery, polypeptides, polysaccharides, and stimuli-responsive smart bio-networks.', 'from-emerald-700 to-green-900'),
+    ('Polymer Chemistry', 'Polymer Chemistry', 'Polym. Chem.', 'Polymer Chemistry', 'Royal Society of Chemistry (RSC)', '1759-9954', '1759-9962', '4.6', 'Q1 · Synthetic & Mechanistic Polymer Science', FALSE, 'Leading RSC journal dedicated to innovative synthetic methodologies, living controlled radical polymerizations (ATRP, RAFT, CROP), and macromolecular architecture design.', 'from-purple-600 to-indigo-900'),
+    ('Progress in Polymer Science', 'Progress in Polymer Science', 'Prog. Polym. Sci.', 'Prog. Polym. Sci.', 'Elsevier', '0079-6700', '1873-1619', '27.1', 'Q1 · Premier Macromolecular Review Journal', FALSE, 'Top-ranked review journal in polymer science providing authoritative, critical reviews of state-of-the-art advances in polymer synthesis, physics, and bio-applications.', 'from-amber-600 to-orange-800'),
+    ('ACS Applied Polymer Materials', 'ACS Applied Polymer Materials', 'ACS Appl. Polym. Mater.', 'ACS Appl. Polym. Mater.', 'American Chemical Society (ACS)', '2637-6105', '2637-6105', '4.4', 'Q1 · Applied Polymer Materials & Engineering', FALSE, 'ACS journal focused on engineered polymers, functional coatings, polymer nanocomposites, separation membranes, and polymer electrolytes for energy applications.', 'from-blue-700 to-cyan-900'),
+    ('Angewandte Chemie International Edition', 'Angewandte Chemie International Edition', 'Angew. Chem. Int. Ed.', 'Angewandte Chemie', 'Wiley-VCH', '1433-7851', '1521-3773', '16.6', 'Q1 · Leading Chemistry Worldwide', TRUE, 'One of the world''s premier chemistry journals. Filtered strictly to track landmark discoveries in controlled living polymerizations, dynamic polymer networks, and macromolecular materials.', 'from-sky-600 to-blue-900'),
+    ('Small', 'Small', 'Small', 'Small', 'Wiley-VCH', '1613-6810', '1613-6829', '13.0', 'Q1 · Micro & Nano Macromolecular Systems', TRUE, 'Very high-impact micro- and nano-science journal, tracked specifically for polymeric nanocarriers, block copolymer lithography, polymer brushes, and nanostructured biomaterials.', 'from-red-600 to-rose-900'),
+    ('ACS Applied Materials & Interfaces', 'ACS Applied Materials & Interfaces', 'ACS Appl. Mater. Interfaces', 'ACS Appl. Mater. Interfaces', 'American Chemical Society (ACS)', '1944-8244', '1944-8252', '9.5', 'Q1 · Functional Materials & Interfacial Science', TRUE, 'Leading ACS journal dedicated to functional materials and interfacial systems. Monitored strictly for polymer coatings, antifouling surfaces, hydrogel adhesives, and polymer composites.', 'from-indigo-600 to-slate-900')
+ON CONFLICT (canonical_title) DO NOTHING;
+

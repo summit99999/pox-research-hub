@@ -50,10 +50,11 @@ export const UNIVERSAL_NAV_ITEMS = [
 
 export const SHARED_NAV_ITEMS = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'publications', label: 'All Publications', icon: BookOpen },
-  { id: 'reviews', label: 'POx Review Articles', icon: BookMarked },
+  { id: 'journals', label: 'Journals', icon: BookOpen, badge: 'Live' },
+  { id: 'publications', label: 'All Publications', icon: BookMarked },
+  { id: 'reviews', label: 'POx Review Articles', icon: FileText },
   { id: 'summaries', label: 'AI Summaries', icon: Sparkles },
-  { id: 'review', label: 'Literature Review', icon: FileText },
+  { id: 'review', label: 'Literature Review', icon: Compass },
   { id: 'library', label: 'My Library & Screening', icon: Bookmark },
   { id: 'developer', label: "Developer's Publications", icon: Award },
   { id: 'settings', label: 'Settings & Cloud DB', icon: Settings },
@@ -160,14 +161,21 @@ export default function Sidebar({
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all text-left group ${
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all text-left group ${
                     isActive
                       ? 'bg-teal-500/15 text-teal-300 font-semibold border-l-2 border-teal-400 shadow-sm'
                       : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-teal-400' : 'text-slate-400'}`} />
-                  <span className="truncate">{item.label}</span>
+                  <div className="flex items-center gap-3 truncate">
+                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-teal-400' : 'text-slate-400'}`} />
+                    <span className="truncate">{item.label}</span>
+                  </div>
+                  {item.badge && (
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                      {item.badge}
+                    </span>
+                  )}
                 </button>
               );
             })}
