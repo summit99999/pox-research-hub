@@ -84,10 +84,10 @@ export default function PaperCard({
   return (
     <article 
       onClick={() => onOpenDetails && onOpenDetails(paper)}
-      className={`p-4 sm:p-5 rounded-2xl border transition-all duration-200 group relative cursor-pointer ${
+      className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 group relative cursor-pointer card-glossy shimmer-hover ${
         isSelected 
-          ? 'bg-teal-950/20 border-teal-500/60 shadow-lg shadow-teal-500/10 ring-1 ring-teal-500/30' 
-          : 'bg-slate-900/85 hover:bg-slate-850/90 border-slate-800/80 hover:border-slate-700/90 shadow-md hover:shadow-xl hover:-translate-y-0.5'
+          ? 'card-glossy-teal ring-1 ring-teal-500/40 bg-gradient-to-br from-slate-900 via-slate-900 to-teal-950/40' 
+          : 'border-slate-800/80 hover:border-teal-500/40'
       }`}
     >
       <div className="flex items-start gap-3 sm:gap-3.5">

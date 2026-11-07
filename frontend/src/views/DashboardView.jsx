@@ -211,10 +211,10 @@ export default function DashboardView({
       )}
 
       {/* Hero Welcome Header & Terminal Bar */}
-      <div className={`relative rounded-3xl border p-6 sm:p-8 lg:p-10 overflow-hidden shadow-2xl transition-all duration-300 ${
+      <div className={`relative rounded-3xl border p-6 sm:p-8 lg:p-10 overflow-hidden shadow-2xl transition-all duration-300 card-glossy ${
         isPOx 
-          ? 'bg-gradient-to-br from-slate-900 via-slate-900 to-teal-950/40 border-slate-800/80 shadow-teal-950/20'
-          : 'bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/40 border-slate-800/80 shadow-indigo-950/20'
+          ? 'bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-teal-950/40 border-teal-500/25 shadow-teal-950/20'
+          : 'bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-indigo-950/40 border-indigo-500/25 shadow-indigo-950/20'
       }`}>
         {/* Subtle geometric glowing backdrop orb */}
         <div className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-20 -mr-20 -mt-20 ${
@@ -365,9 +365,9 @@ export default function DashboardView({
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {isPOx ? (
           <>
-            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 shadow-sm hover:shadow-md transition-all">
+            <div className="p-5 rounded-2xl card-glossy card-glossy-teal shimmer-hover">
               <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider">Total Publications</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-teal-300/80">Total Publications</span>
                 <BookOpen className="w-4 h-4 text-teal-400" />
               </div>
               <div className="text-3xl font-extrabold text-slate-100 font-mono tracking-tight">
@@ -379,9 +379,9 @@ export default function DashboardView({
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-indigo-500/40 shadow-sm hover:shadow-md transition-all">
+            <div className="p-5 rounded-2xl card-glossy card-glossy-indigo shimmer-hover">
               <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider">Current Year (2026)</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-300/80">Current Year (2026)</span>
                 <Calendar className="w-4 h-4 text-indigo-400" />
               </div>
               <div className="text-3xl font-extrabold text-indigo-300 font-mono tracking-tight">
@@ -392,9 +392,9 @@ export default function DashboardView({
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 shadow-sm hover:shadow-md transition-all">
+            <div className="p-5 rounded-2xl card-glossy card-glossy-teal shimmer-hover">
               <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider">POx Chemistry</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-teal-300/80">POx Chemistry</span>
                 <Layers className="w-4 h-4 text-teal-400" />
               </div>
               <div className="text-3xl font-extrabold text-slate-100 font-mono tracking-tight">
@@ -405,9 +405,9 @@ export default function DashboardView({
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-purple-500/40 shadow-sm hover:shadow-md transition-all">
+            <div className="p-5 rounded-2xl card-glossy card-glossy-purple shimmer-hover">
               <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider">POzi Chemistry</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-purple-300/80">POzi Chemistry</span>
                 <Hexagon className="w-4 h-4 text-purple-400" />
               </div>
               <div className="text-3xl font-extrabold text-purple-300 font-mono tracking-tight">
@@ -420,9 +420,9 @@ export default function DashboardView({
           </>
         ) : (
           <>
-            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-indigo-500/40 shadow-sm hover:shadow-md transition-all">
+            <div className="p-5 rounded-2xl card-glossy card-glossy-indigo shimmer-hover">
               <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider">Total Polymer Corpus</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-300/80">Total Polymer Corpus</span>
                 <BookOpen className="w-4 h-4 text-indigo-400" />
               </div>
               <div className="text-3xl font-extrabold text-slate-100 font-mono tracking-tight">
@@ -434,9 +434,9 @@ export default function DashboardView({
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-emerald-500/40 shadow-sm hover:shadow-md transition-all">
+            <div className="p-5 rounded-2xl card-glossy card-glossy-emerald shimmer-hover">
               <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider">Historical Coverage</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-300/80">Historical Coverage</span>
                 <Calendar className="w-4 h-4 text-emerald-400" />
               </div>
               <div className="text-3xl font-extrabold text-emerald-300 font-mono tracking-tight">
@@ -447,9 +447,9 @@ export default function DashboardView({
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-purple-500/40 shadow-sm hover:shadow-md transition-all">
+            <div className="p-5 rounded-2xl card-glossy card-glossy-purple shimmer-hover">
               <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider">Polymer Disciplines</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-purple-300/80">Polymer Disciplines</span>
                 <Layers className="w-4 h-4 text-purple-400" />
               </div>
               <div className="text-3xl font-extrabold text-purple-300 font-mono tracking-tight">
@@ -460,9 +460,9 @@ export default function DashboardView({
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/40 shadow-sm hover:shadow-md transition-all">
+            <div className="p-5 rounded-2xl card-glossy card-glossy-cyan shimmer-hover">
               <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider">Active Journals</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-cyan-300/80">Active Journals</span>
                 <Globe2 className="w-4 h-4 text-cyan-400" />
               </div>
               <div className="text-3xl font-extrabold text-cyan-300 font-mono tracking-tight">
@@ -481,11 +481,11 @@ export default function DashboardView({
         {/* PDF Library Card */}
         <div 
           onClick={() => onNavigateToView && onNavigateToView('pdf_library')}
-          className="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/30 border border-slate-800 hover:border-emerald-500/40 shadow-lg hover:shadow-xl transition-all cursor-pointer group flex items-start justify-between gap-4"
+          className="p-5 rounded-2xl card-glossy card-glossy-emerald shimmer-hover cursor-pointer group flex items-start justify-between gap-4"
         >
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+              <div className="p-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 shadow-sm">
                 <FileText className="w-5 h-5" />
               </div>
               <div>
@@ -493,7 +493,7 @@ export default function DashboardView({
                   Personal PDF Library
                 </h3>
                 <p className="text-xs text-slate-400">
-                  Read research PDFs in-app & save full texts
+                  Read research PDFs in-app &amp; save full texts
                 </p>
               </div>
             </div>
@@ -512,11 +512,11 @@ export default function DashboardView({
         {/* Research Watchlist Card */}
         <div 
           onClick={() => onNavigateToView && onNavigateToView('watchlist')}
-          className="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-violet-950/30 border border-slate-800 hover:border-violet-500/40 shadow-lg hover:shadow-xl transition-all cursor-pointer group flex items-start justify-between gap-4"
+          className="p-5 rounded-2xl card-glossy card-glossy-purple shimmer-hover cursor-pointer group flex items-start justify-between gap-4"
         >
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-violet-500/10 border border-violet-500/30 text-violet-400">
+              <div className="p-2 rounded-xl bg-violet-500/15 border border-violet-500/30 text-violet-400 shadow-sm">
                 <BookMarked className="w-5 h-5" />
               </div>
               <div>
@@ -524,7 +524,7 @@ export default function DashboardView({
                   Research Watchlist
                 </h3>
                 <p className="text-xs text-slate-400">
-                  Track reading priority & personal synthesis notes
+                  Track reading priority &amp; personal synthesis notes
                 </p>
               </div>
             </div>
@@ -545,8 +545,8 @@ export default function DashboardView({
         </div>
       </div>
 
-      {/* Research Trends Chart: 3D Isometric Bar Chart vs Smooth Area Gradient Toggle */}
-      <div className="p-6 sm:p-7 rounded-3xl bg-slate-900/90 border border-slate-800/80 shadow-xl space-y-4">
+      {/* Research Trends Chart: Smooth Area Gradient vs Annual Bar Distribution */}
+      <div className="p-6 sm:p-7 rounded-3xl card-glossy shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
@@ -672,7 +672,7 @@ export default function DashboardView({
             className="px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600/30 via-indigo-600/30 to-teal-600/30 hover:from-violet-600/50 hover:to-indigo-600/50 border border-violet-500/40 text-violet-200 text-xs font-bold transition-all flex items-center gap-2 shadow-md hover:shadow-violet-500/10 self-start sm:self-auto transform hover:-translate-y-0.5"
           >
             <Compass className="w-4 h-4 text-violet-400" />
-            <span>Explore 3D Domains (18 Classes)</span>
+            <span>Explore Research Domains (18 Classes)</span>
             <ArrowRight className="w-3.5 h-3.5 text-violet-300" />
           </button>
         </div>
@@ -688,7 +688,7 @@ export default function DashboardView({
                   onSelectCategory(cat.slug);
                 }
               }}
-              className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800/80 hover:border-teal-500/50 hover:bg-slate-850 text-left transition-all group hover:-translate-y-0.5 shadow-sm"
+              className="p-3.5 rounded-2xl card-glossy hover:border-teal-500/50 text-left transition-all group shadow-sm"
             >
               <span className="text-xs font-bold text-slate-200 group-hover:text-teal-300 block truncate">
                 {cat.category_name}
@@ -820,17 +820,17 @@ export default function DashboardView({
       </div>
 
       {/* Developer & Platform Architecture Footer Attribution */}
-      <div className="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950/40 border border-slate-800/80 p-6 sm:p-7 shadow-xl">
+      <div className="rounded-3xl card-glossy border-amber-500/25 p-6 sm:p-7 shadow-2xl bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-amber-950/30">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-teal-500/20 shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-amber-500/30 shrink-0 border border-amber-400/40">
             SB
           </div>
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-base font-bold text-slate-100">
+              <h3 className="text-base font-bold text-amber-100">
                 Developed &amp; Engineered by Sumit Barik
               </h3>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-teal-500/20 text-teal-300 border border-teal-500/30">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
                 Platform Developer &amp; Researcher
               </span>
             </div>

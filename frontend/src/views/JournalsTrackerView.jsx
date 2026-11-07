@@ -357,7 +357,7 @@ export default function JournalsTrackerView({
 
         {/* Quick Stats Pill Row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+          <div className="p-3.5 rounded-xl card-glossy">
             <span className="text-[10px] text-slate-400 uppercase font-semibold block">Confirmed Polymer Articles</span>
             <span className="text-xl font-bold text-slate-100 font-mono mt-0.5 block">{feedData.total}</span>
             <span className="text-[10px] text-emerald-400 flex items-center gap-1">
@@ -366,19 +366,19 @@ export default function JournalsTrackerView({
             </span>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+          <div className="p-3.5 rounded-xl card-glossy">
             <span className="text-[10px] text-slate-400 uppercase font-semibold block">ASAP / Online-First</span>
             <span className="text-xl font-bold text-teal-300 font-mono mt-0.5 block">{feedData.asapCount}</span>
             <span className="text-[10px] text-teal-400">Ahead-of-print publications</span>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+          <div className="p-3.5 rounded-xl card-glossy">
             <span className="text-[10px] text-slate-400 uppercase font-semibold block">Last 30 Days</span>
             <span className="text-xl font-bold text-indigo-300 font-mono mt-0.5 block">{feedData.recent30dCount}</span>
             <span className="text-[10px] text-indigo-400">Newly indexed polymer works</span>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+          <div className="p-3.5 rounded-xl card-glossy">
             <span className="text-[10px] text-slate-400 uppercase font-semibold block">Inclusion Integrity</span>
             <span className="text-xs font-semibold text-emerald-300 mt-1.5 flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
@@ -391,7 +391,7 @@ export default function JournalsTrackerView({
         </div>
 
         {/* Filters and Search Bar */}
-        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3.5 shadow-md">
+        <div className="p-4 rounded-2xl card-glossy space-y-3.5 shadow-md">
           {/* Top row: Keyword Search + Family + Topic */}
           <div className="flex flex-col sm:flex-row gap-2.5">
             <div className="relative flex-1">
@@ -588,7 +588,7 @@ export default function JournalsTrackerView({
                 <div
                   key={articleKey}
                   onClick={() => onOpenDetails && onOpenDetails(article)}
-                  className="p-5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-slate-700 hover:bg-slate-850/60 transition-all space-y-3 relative group cursor-pointer"
+                  className="p-5 rounded-2xl card-glossy shimmer-hover border-slate-800 hover:border-teal-500/40 transition-all space-y-3 relative group cursor-pointer"
                 >
                   {/* Top Badge Row */}
                   <div className="flex flex-wrap items-center justify-between gap-2">
@@ -924,7 +924,7 @@ export default function JournalsTrackerView({
       )}
 
       {/* Directory Search & Summary Bar */}
-      <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="p-4 rounded-2xl card-glossy shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="relative flex-1 w-full">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
@@ -949,7 +949,7 @@ export default function JournalsTrackerView({
             <div
               key={journal.id}
               onClick={() => handleOpenJournal(journal)}
-              className="p-5 rounded-3xl bg-slate-900/85 hover:bg-slate-900 border border-slate-800 hover:border-teal-500/40 cursor-pointer group flex flex-col justify-between shadow-sm hover:shadow-md transition-all"
+              className="p-5 rounded-3xl card-glossy card-glossy-teal shimmer-hover cursor-pointer group flex flex-col justify-between transition-all"
             >
               <div className="space-y-2.5">
                 {/* Top Badges */}

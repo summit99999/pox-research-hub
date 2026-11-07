@@ -164,31 +164,31 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+        <div className="p-4 rounded-2xl card-glossy card-glossy-purple shimmer-hover">
           <span className="text-xs font-medium text-slate-400">Total Watchlisted</span>
           <p className="text-2xl font-black text-white mt-1 font-mono">{stats.total}</p>
           <span className="text-[11px] text-slate-500">Tracked articles</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+        <div className="p-4 rounded-2xl card-glossy card-glossy-amber shimmer-hover">
           <span className="text-xs font-medium text-amber-400">To Read</span>
           <p className="text-2xl font-black text-amber-300 mt-1 font-mono">{stats.to_read}</p>
           <span className="text-[11px] text-slate-500">High priority queue</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+        <div className="p-4 rounded-2xl card-glossy card-glossy-cyan shimmer-hover">
           <span className="text-xs font-medium text-cyan-400">Reading</span>
           <p className="text-2xl font-black text-cyan-300 mt-1 font-mono">{stats.reading}</p>
           <span className="text-[11px] text-slate-500">Currently studying</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+        <div className="p-4 rounded-2xl card-glossy card-glossy-emerald shimmer-hover">
           <span className="text-xs font-medium text-emerald-400">Read / Analyzed</span>
           <p className="text-2xl font-black text-emerald-300 mt-1 font-mono">{stats.read}</p>
           <span className="text-[11px] text-slate-500">Completed readings</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+        <div className="p-4 rounded-2xl card-glossy card-glossy-indigo shimmer-hover">
           <span className="text-xs font-medium text-indigo-400">Full-Text PDFs Ready</span>
           <p className="text-2xl font-black text-indigo-300 mt-1 font-mono">{stats.with_pdf}</p>
           <span className="text-[11px] text-slate-500">Saved in cloud vault</span>
@@ -196,7 +196,7 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
       </div>
 
       {/* Tabs & Search Bar */}
-      <div className="p-3 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-3 shadow-md">
+      <div className="p-3 card-glossy rounded-2xl flex flex-col md:flex-row items-center justify-between gap-3 shadow-md">
         {/* Status Tabs */}
         <div className="flex items-center gap-1.5 p-1 bg-slate-950/80 rounded-xl border border-slate-800/80 w-full md:w-auto">
           {[
@@ -257,7 +257,7 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
             return (
               <div
                 key={item.id || item.article_id}
-                className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800/90 hover:border-slate-750 shadow-md hover:shadow-xl transition-all duration-200 flex flex-col md:flex-row items-start justify-between gap-5 group"
+                className="p-5 rounded-2xl card-glossy card-glossy-purple shimmer-hover transition-all duration-300 flex flex-col md:flex-row items-start justify-between gap-5 group"
               >
                 {/* Main Left Content */}
                 <div className="space-y-2.5 flex-1 min-w-0">

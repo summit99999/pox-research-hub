@@ -52,7 +52,7 @@ export default function Navbar({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-slate-900/95 dark:bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/80 px-4 lg:px-6 py-2.5 transition-colors duration-200 shadow-lg shadow-black/20">
+    <header className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-2xl border-b border-slate-800/80 px-4 lg:px-6 py-2.5 transition-colors duration-200 shadow-xl shadow-black/30">
       <div className="max-w-[1600px] mx-auto flex items-center justify-between gap-4">
         {/* Left: Menu Toggle + Brand & Project Title */}
         <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
@@ -151,18 +151,8 @@ export default function Navbar({
           </div>
         </form>
 
-        {/* Action Controls, DB Status, Theme Toggle & User Auth */}
+        {/* Action Controls, Theme Toggle & User Auth */}
         <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-          {/* Cloud DB Live Status Dot */}
-          <div 
-            className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 border border-slate-700/70 text-[11px] text-slate-300 font-mono shadow-sm"
-            title="Database Status: Supabase Cloud PostgreSQL Active (Sub-second latency)"
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-slate-400">DB:</span>
-            <span className="text-emerald-300 font-semibold">Active</span>
-          </div>
-
           {/* Theme Toggle Button */}
           {onToggleTheme && (
             <button

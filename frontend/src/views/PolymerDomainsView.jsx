@@ -233,7 +233,7 @@ export default function PolymerDomainsView({
         </div>
 
         {/* Large Colourful Header Banner with Visual Identity */}
-        <div className={`relative overflow-hidden rounded-3xl p-6 sm:p-10 border ${ident.borderColor} bg-gradient-to-br ${ident.gradient} shadow-2xl text-white`}>
+        <div className={`relative overflow-hidden rounded-3xl p-6 sm:p-10 border ${ident.borderColor} bg-gradient-to-br ${ident.gradient} shadow-2xl text-white card-glossy`}>
           {/* Ambient Lighting Overlay */}
           <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px] pointer-events-none" />
           
@@ -300,7 +300,7 @@ export default function PolymerDomainsView({
               <div
                 key={fam.name || idx}
                 onClick={() => setSelectedPolymerTopic(fam)}
-                className="group p-5 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 hover:bg-slate-850 cursor-pointer transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 relative overflow-hidden"
+                className="group p-5 rounded-2xl card-glossy shimmer-hover cursor-pointer transition-all duration-300 shadow-md hover:shadow-xl relative overflow-hidden"
               >
                 {/* Accent glow corner */}
                 <div 
@@ -352,7 +352,7 @@ export default function PolymerDomainsView({
         {/* 4-Column Scientific Matrix: Synthesis, Properties, Characterization, Applications */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* 1. Synthesis & Polymerization */}
-          <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+          <div className="p-5 rounded-2xl card-glossy space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-400">
               <Atom className="w-4 h-4" />
               <span>Polymerization Methods</span>
@@ -368,7 +368,7 @@ export default function PolymerDomainsView({
           </div>
 
           {/* 2. Key Physical/Chemical Properties */}
-          <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+          <div className="p-5 rounded-2xl card-glossy space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-400">
               <Sparkles className="w-4 h-4" />
               <span>Key Properties</span>
@@ -384,7 +384,7 @@ export default function PolymerDomainsView({
           </div>
 
           {/* 3. Characterization Techniques */}
-          <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+          <div className="p-5 rounded-2xl card-glossy space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-violet-400">
               <Activity className="w-4 h-4" />
               <span>Characterization</span>
@@ -400,7 +400,7 @@ export default function PolymerDomainsView({
           </div>
 
           {/* 4. Applications */}
-          <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+          <div className="p-5 rounded-2xl card-glossy space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-400">
               <CheckCircle2 className="w-4 h-4" />
               <span>Key Applications</span>
@@ -417,7 +417,7 @@ export default function PolymerDomainsView({
         </div>
 
         {/* Leading Journals Publishing in Domain */}
-        <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="p-5 rounded-2xl card-glossy flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <BookOpen className="w-5 h-5 text-indigo-400 shrink-0" />
             <div>
@@ -545,25 +545,25 @@ export default function PolymerDomainsView({
 
         {/* Live Platform Taxonomy & Literature Metrics */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto">
-          <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center shadow-md">
+          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md">
             <div className="text-2xl sm:text-3xl font-extrabold font-mono text-indigo-400">18</div>
             <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-1">Research Domains</div>
             <div className="text-[11px] text-slate-500">Synthetic, Bio &amp; Functional</div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center shadow-md">
+          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md">
             <div className="text-2xl sm:text-3xl font-extrabold font-mono text-teal-400">{totalCuratedCount}+</div>
             <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-1">Polymer Families</div>
             <div className="text-[11px] text-slate-500">Curated Acronyms &amp; Formulas</div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center shadow-md">
+          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md">
             <div className="text-2xl sm:text-3xl font-extrabold font-mono text-purple-400">80+</div>
             <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-1">Synthesis Methods</div>
             <div className="text-[11px] text-slate-500">Living ROP, ATRP, RAFT, CROP</div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 text-center shadow-md">
+          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md">
             <div className="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-400">100%</div>
             <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-1">Real Data Verified</div>
             <div className="text-[11px] text-slate-500">No Mock Publication Counts</div>
@@ -656,7 +656,7 @@ export default function PolymerDomainsView({
               <div
                 key={domain.id}
                 onClick={() => setSelectedDomain(domain)}
-                className="h-full cursor-pointer flex flex-col justify-between group rounded-3xl bg-slate-900/90 hover:bg-slate-900 border border-slate-800/90 hover:border-slate-700 shadow-md hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+                className="h-full cursor-pointer flex flex-col justify-between group rounded-3xl card-glossy shimmer-hover border-slate-800/80 hover:border-slate-700 shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
               >
                 {/* Subtle gradient accent bar along the top edge */}
                 <div className={`h-1.5 w-full bg-gradient-to-r ${ident.gradient}`} />

@@ -290,10 +290,10 @@ export default function SearchView({
       </div>
 
       {/* Main Search Bar & Boolean Engine */}
-      <div className={`p-5 rounded-3xl border shadow-xl space-y-4 transition-all duration-200 ${
+      <div className={`p-5 rounded-3xl border shadow-xl space-y-4 transition-all duration-300 card-glossy ${
         isPOx 
-          ? 'bg-slate-900/85 border-slate-800/80 hover:border-teal-500/40 shadow-teal-950/10' 
-          : 'bg-slate-900/85 border-slate-800/80 hover:border-indigo-500/40 shadow-indigo-950/10'
+          ? 'card-glossy-teal' 
+          : 'card-glossy-indigo'
       }`}>
         <BooleanQueryBar
           query={query}

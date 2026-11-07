@@ -58,9 +58,21 @@ export default function App() {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  // Folding Sidebar Navigation
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarPinned, setSidebarPinned] = useState(false);
+  // Folding Sidebar Navigation (Open and pinned by default on desktop)
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    try {
+      return typeof window !== 'undefined' ? window.innerWidth >= 1024 : true;
+    } catch {
+      return true;
+    }
+  });
+  const [sidebarPinned, setSidebarPinned] = useState(() => {
+    try {
+      return typeof window !== 'undefined' ? window.innerWidth >= 1024 : true;
+    } catch {
+      return true;
+    }
+  });
   
   // Modals
   const [detailModalPaper, setDetailModalPaper] = useState(null);
@@ -364,7 +376,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 dark:bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-teal-500/30 selection:text-teal-200 transition-colors duration-200">
+    <div className="min-h-screen bg-atmospheric-dark text-slate-100 flex flex-col font-sans selection:bg-amber-500/30 selection:text-amber-200 transition-colors duration-200">
       {/* Top Navbar with PRIH Branding, Dual Engine Switcher, & Theme Controller */}
       <Navbar
         activeView={activeView}
@@ -415,12 +427,12 @@ export default function App() {
         {!sidebarOpen && (
           <button
             onClick={() => setSidebarOpen(true)}
-            className="fixed left-4 bottom-6 z-30 flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-teal-300 border border-slate-700/80 shadow-2xl backdrop-blur-md text-xs font-semibold transition-all group hover:scale-105"
+            className="fixed left-4 bottom-6 z-30 flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-950/80 hover:bg-amber-900/90 text-amber-200 hover:text-amber-100 border border-amber-500/40 shadow-2xl backdrop-blur-md text-xs font-semibold transition-all group hover:scale-105 shadow-amber-950/40"
             title="Open Navigation Menu"
           >
-            <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse group-hover:scale-125 transition-transform" />
-            <Menu className="w-4 h-4 text-teal-400" />
-            <span>Menu & Views</span>
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse group-hover:scale-125 transition-transform" />
+            <Menu className="w-4 h-4 text-amber-400" />
+            <span>Menu &amp; Views</span>
           </button>
         )}
 

@@ -4,10 +4,10 @@
 
 @layer base {
   :root {
-    --bg-primary: #070b14;
-    --bg-secondary: #0d1424;
-    --card-bg: #0f172a;
-    --border-color: #1e293b;
+    --bg-primary: #040711;
+    --bg-secondary: #080e1e;
+    --card-bg: #0b1329;
+    --border-color: #1a2744;
     --text-primary: #f8fafc;
     --text-muted: #94a3b8;
   }
@@ -34,99 +34,288 @@
 }
 
 /* ============================================================================
-   3D & GLASSMORPHISM UTILITY CLASSES
+   ATMOSPHERIC DARK GRADIENT BACKGROUND
    ============================================================================ */
 
-.perspective-1000 {
-  perspective: 1000px;
+.bg-atmospheric-dark {
+  background-color: #040711;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(20, 184, 166, 0.07) 0px, transparent 50%),
+    radial-gradient(at 50% 40%, rgba(139, 92, 246, 0.05) 0px, transparent 60%),
+    radial-gradient(at 80% 90%, rgba(245, 158, 11, 0.04) 0px, transparent 55%),
+    radial-gradient(at 10% 95%, rgba(14, 165, 233, 0.06) 0px, transparent 50%),
+    linear-gradient(180deg, #040711 0%, #060b17 35%, #080f21 70%, #040711 100%);
+  background-attachment: fixed;
 }
 
-.perspective-800 {
-  perspective: 800px;
+html:not(.dark) .bg-atmospheric-dark {
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.04) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(20, 184, 166, 0.04) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(245, 158, 11, 0.03) 0px, transparent 50%),
+    linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  background-attachment: fixed;
 }
 
-.transform-style-3d {
-  transform-style: preserve-3d;
+/* ============================================================================
+   TRANSLUCENT WARM GOLDEN / AMBER SIDEBAR
+   ============================================================================ */
+
+.sidebar-glass-gold {
+  background: linear-gradient(
+    180deg, 
+    rgba(24, 18, 10, 0.82) 0%, 
+    rgba(14, 17, 28, 0.88) 45%, 
+    rgba(24, 17, 9, 0.85) 100%
+  );
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-right: 1px solid rgba(245, 158, 11, 0.22);
+  box-shadow: 
+    4px 0 35px rgba(245, 158, 11, 0.07),
+    inset -1px 0 0 rgba(251, 191, 36, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-.backface-hidden {
-  backface-visibility: hidden;
+html:not(.dark) .sidebar-glass-gold {
+  background: linear-gradient(
+    180deg, 
+    rgba(254, 249, 235, 0.92) 0%, 
+    rgba(255, 255, 255, 0.94) 50%, 
+    rgba(254, 243, 220, 0.92) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(217, 119, 6, 0.25);
+  box-shadow: 
+    4px 0 25px rgba(217, 119, 6, 0.08),
+    inset -1px 0 0 rgba(245, 158, 11, 0.15);
 }
 
-/* Premium Dark Glass Card */
-.glass-card {
-  background: rgba(15, 23, 42, 0.75);
+/* Active Nav Item with Golden / Amber Glow */
+.nav-item-active-gold {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.24) 0%, rgba(217, 119, 6, 0.12) 100%);
+  border-left: 3.5px solid #fbbf24;
+  color: #fef3c7;
+  box-shadow: 
+    0 0 20px rgba(245, 158, 11, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+html:not(.dark) .nav-item-active-gold {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.22) 0%, rgba(251, 191, 36, 0.12) 100%);
+  border-left: 3.5px solid #d97706;
+  color: #92400e;
+  box-shadow: 0 2px 10px rgba(217, 119, 6, 0.15);
+}
+
+/* ============================================================================
+   GLOSSY GRADIENT CARD SURFACES & SHEEN OVERLAYS
+   ============================================================================ */
+
+.card-glossy {
+  position: relative;
+  background: linear-gradient(145deg, rgba(14, 20, 37, 0.88) 0%, rgba(8, 12, 24, 0.94) 100%);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+  box-shadow: 
+    0 12px 30px -10px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
 }
 
-html:not(.dark) .glass-card {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+/* Subtle top reflective sheen */
+.card-glossy::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.01) 60%, transparent 100%);
+  pointer-events: none;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+
+.card-glossy:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 
+    0 20px 40px -12px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+html:not(.dark) .card-glossy {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
   border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08), 0 0 1px 1px rgba(0, 0, 0, 0.04);
+  box-shadow: 
+    0 10px 25px -8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-/* Floating Glass Panel */
-.glass-panel {
-  background: rgba(11, 17, 32, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+html:not(.dark) .card-glossy::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, transparent 100%);
 }
 
-html:not(.dark) .glass-panel {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+html:not(.dark) .card-glossy:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 16px 35px -10px rgba(0, 0, 0, 0.12);
 }
 
-/* Glowing Border Accents */
-.glow-teal {
-  box-shadow: 0 0 25px -5px rgba(20, 184, 166, 0.25);
+/* ============================================================================
+   COORDINATED CARD GLOW VARIANTS
+   ============================================================================ */
+
+.card-glossy-teal {
+  border-color: rgba(20, 184, 166, 0.28);
+}
+.card-glossy-teal:hover {
+  border-color: rgba(45, 212, 191, 0.6);
+  box-shadow: 
+    0 20px 40px -12px rgba(13, 148, 136, 0.25),
+    0 0 25px -4px rgba(20, 184, 166, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
-.glow-indigo {
-  box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.25);
+.card-glossy-indigo {
+  border-color: rgba(99, 102, 241, 0.28);
+}
+.card-glossy-indigo:hover {
+  border-color: rgba(129, 140, 248, 0.6);
+  box-shadow: 
+    0 20px 40px -12px rgba(79, 70, 229, 0.25),
+    0 0 25px -4px rgba(99, 102, 241, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
-.glow-purple {
-  box-shadow: 0 0 25px -5px rgba(168, 85, 247, 0.25);
+.card-glossy-purple {
+  border-color: rgba(168, 85, 247, 0.28);
+}
+.card-glossy-purple:hover {
+  border-color: rgba(192, 132, 252, 0.6);
+  box-shadow: 
+    0 20px 40px -12px rgba(147, 51, 234, 0.25),
+    0 0 25px -4px rgba(168, 85, 247, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
-.glow-emerald {
-  box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25);
+.card-glossy-amber {
+  border-color: rgba(245, 158, 11, 0.28);
+}
+.card-glossy-amber:hover {
+  border-color: rgba(251, 191, 36, 0.6);
+  box-shadow: 
+    0 20px 40px -12px rgba(217, 119, 6, 0.25),
+    0 0 25px -4px rgba(245, 158, 11, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
-/* Animated Gradient Border */
-.gradient-border-teal {
+.card-glossy-emerald {
+  border-color: rgba(16, 185, 129, 0.28);
+}
+.card-glossy-emerald:hover {
+  border-color: rgba(52, 211, 153, 0.6);
+  box-shadow: 
+    0 20px 40px -12px rgba(5, 150, 105, 0.25),
+    0 0 25px -4px rgba(16, 185, 129, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.card-glossy-rose {
+  border-color: rgba(244, 63, 94, 0.28);
+}
+.card-glossy-rose:hover {
+  border-color: rgba(251, 113, 133, 0.6);
+  box-shadow: 
+    0 20px 40px -12px rgba(225, 29, 72, 0.25),
+    0 0 25px -4px rgba(244, 63, 94, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.card-glossy-cyan {
+  border-color: rgba(6, 182, 212, 0.28);
+}
+.card-glossy-cyan:hover {
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow: 
+    0 20px 40px -12px rgba(8, 145, 178, 0.25),
+    0 0 25px -4px rgba(6, 182, 212, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* ============================================================================
+   MOVING SHIMMER / LIGHT SWEEP ANIMATION
+   ============================================================================ */
+
+.shimmer-hover {
   position: relative;
-  background: linear-gradient(60deg, #14b8a6, #06b6d4, #10b981);
-  padding: 1px;
-  border-radius: 1rem;
+  overflow: hidden;
 }
 
-.gradient-border-indigo {
-  position: relative;
-  background: linear-gradient(60deg, #6366f1, #8b5cf6, #3b82f6);
-  padding: 1px;
-  border-radius: 1rem;
+.shimmer-hover::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    60deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.04) 40%, 
+    rgba(255, 255, 255, 0.12) 50%, 
+    rgba(255, 255, 255, 0.04) 60%, 
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
-/* Custom Scrollbars */
+.shimmer-hover:hover::after {
+  opacity: 1;
+  animation: lightSweep 1.2s ease-in-out forwards;
+}
+
+@keyframes lightSweep {
+  0% {
+    left: -60%;
+  }
+  100% {
+    left: 140%;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-hover:hover::after {
+    animation: none;
+    opacity: 0;
+  }
+  .card-glossy:hover {
+    transform: none;
+  }
+}
+
+/* ============================================================================
+   CUSTOM SCROLLBARS
+   ============================================================================ */
+
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #090e1a;
+  background: #040711;
 }
 
 html:not(.dark) ::-webkit-scrollbar-track {

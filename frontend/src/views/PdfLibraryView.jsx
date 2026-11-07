@@ -179,7 +179,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
 
       {/* Metrics Overview Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+        <div className="p-4 rounded-2xl card-glossy card-glossy-indigo shimmer-hover">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-slate-400">Stored PDFs</span>
             <FileText className="w-4 h-4 text-indigo-400" />
@@ -190,7 +190,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
           <span className="text-[11px] text-slate-500">Indexed full-text articles</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+        <div className="p-4 rounded-2xl card-glossy card-glossy-teal shimmer-hover">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-slate-400">Cloud Storage Used</span>
             <HardDrive className="w-4 h-4 text-teal-400" />
@@ -201,7 +201,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
           <span className="text-[11px] text-slate-500">Across encrypted storage buckets</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+        <div className="p-4 rounded-2xl card-glossy card-glossy-purple shimmer-hover">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-slate-400">Active Journals</span>
             <Layers className="w-4 h-4 text-purple-400" />
@@ -212,7 +212,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
           <span className="text-[11px] text-slate-500">Different publisher sources</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+        <div className="p-4 rounded-2xl card-glossy card-glossy-emerald shimmer-hover">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-slate-400">Institutional / Subscribed</span>
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -225,7 +225,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-3 shadow-md">
+      <div className="p-4 rounded-2xl card-glossy flex flex-col md:flex-row items-center justify-between gap-3 shadow-md">
         {/* Search */}
         <div className="relative flex-1 w-full">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -295,7 +295,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
             return (
               <div
                 key={item.id || item.article_id}
-                className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800/90 hover:border-slate-750 shadow-md hover:shadow-xl transition-all duration-200 flex flex-col justify-between space-y-4 group"
+                className="p-5 rounded-2xl card-glossy card-glossy-emerald shimmer-hover transition-all duration-300 flex flex-col justify-between space-y-4 group"
               >
                 <div className="space-y-2.5">
                   {/* Top Badges */}
