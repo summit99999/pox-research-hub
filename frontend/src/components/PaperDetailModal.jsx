@@ -69,18 +69,18 @@ export default function PaperDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
         {/* Modal Top Bar */}
-        <div className="px-4 sm:px-6 py-3.5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/80">
+        <div className="px-4 sm:px-6 py-3.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0 bg-slate-50 dark:bg-slate-950/80">
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             {/* Table of Contents (TOC) & Graphical Abstract Tab */}
             <button
               onClick={() => setActiveTab('toc')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                 activeTab === 'toc'
-                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40 shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-teal-500/15 dark:bg-teal-500/20 text-teal-800 dark:text-teal-300 border border-teal-500/40 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               <ImageIcon className="w-3.5 h-3.5" />
@@ -92,8 +92,8 @@ export default function PaperDetailModal({
               onClick={() => setActiveTab('metadata')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 activeTab === 'metadata'
-                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-teal-500/15 dark:bg-teal-500/20 text-teal-800 dark:text-teal-300 border border-teal-500/40'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
@@ -105,8 +105,8 @@ export default function PaperDetailModal({
               onClick={() => setActiveTab('summary')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 activeTab === 'summary'
-                  ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-indigo-500/15 dark:bg-indigo-500/20 text-indigo-800 dark:text-indigo-300 border border-indigo-500/40'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5" />
@@ -118,8 +118,8 @@ export default function PaperDetailModal({
               onClick={() => setActiveTab('categories')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 activeTab === 'categories'
-                  ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-teal-500/15 dark:bg-teal-500/20 text-teal-800 dark:text-teal-300 border border-teal-500/40'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               <Tag className="w-3.5 h-3.5" />
@@ -129,7 +129,7 @@ export default function PaperDetailModal({
 
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-800 transition-colors shrink-0 ml-2"
+            className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0 ml-2"
             title="Close modal"
           >
             <X className="w-5 h-5" />
@@ -151,7 +151,7 @@ export default function PaperDetailModal({
             <div className="space-y-6">
               {/* Paper Title & DOI */}
               <div>
-                <h2 className="text-xl font-bold text-slate-100 leading-snug">
+                <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 leading-snug">
                   {paper.title}
                 </h2>
                 <div className="flex flex-wrap items-center gap-3 mt-3 text-xs">
@@ -160,7 +160,7 @@ export default function PaperDetailModal({
                       href={doiUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-teal-400 hover:text-teal-300 font-mono font-medium"
+                      className="flex items-center gap-1.5 text-teal-700 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 font-mono font-medium"
                       title="Open full-text paper via publisher DOI resolver"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -172,13 +172,13 @@ export default function PaperDetailModal({
                       href={paper.open_access_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-800 font-medium"
+                      className="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-medium"
                     >
                       Open Access PDF
                     </a>
                   )}
                   {paper.citation_count > 0 && (
-                    <span className="flex items-center gap-1 text-slate-400 bg-slate-800 px-2 py-0.5 rounded border border-slate-700">
+                    <span className="flex items-center gap-1 text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
                       <Quote className="w-3 h-3" />
                       <span>{paper.citation_count} Citations</span>
                     </span>
@@ -187,51 +187,51 @@ export default function PaperDetailModal({
               </div>
 
               {/* Journal, Publisher, Publication Date */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-xl bg-slate-800/40 border border-slate-800 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 text-xs">
                 <div>
-                  <span className="text-slate-400 block mb-0.5">Journal / Venue:</span>
+                  <span className="text-slate-500 dark:text-slate-400 block mb-0.5">Journal / Venue:</span>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-slate-200 font-medium">{paper.journal || 'Not specified'}</span>
+                    <span className="text-slate-900 dark:text-slate-200 font-medium">{paper.journal || 'Not specified'}</span>
                     {ifScore && (
-                      <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/30">
                         IF: {ifScore}
                       </span>
                     )}
                   </div>
                 </div>
                 <div>
-                  <span className="text-slate-400 block mb-0.5">Publication Year:</span>
-                  <span className="text-slate-200 font-medium font-mono">
+                  <span className="text-slate-500 dark:text-slate-400 block mb-0.5">Publication Year:</span>
+                  <span className="text-slate-900 dark:text-slate-200 font-medium font-mono">
                     {paper.publication_date || paper.publication_year || 'Not specified'}
                   </span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block mb-0.5">Publisher:</span>
-                  <span className="text-slate-200 font-medium">{paper.publisher || 'Not specified'}</span>
+                  <span className="text-slate-500 dark:text-slate-400 block mb-0.5">Publisher:</span>
+                  <span className="text-slate-900 dark:text-slate-200 font-medium">{paper.publisher || 'Not specified'}</span>
                 </div>
               </div>
 
               {/* Authors & Affiliations */}
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
                   Authors & Institutional Affiliations
                 </h3>
                 <div className="space-y-2">
                   {paper.authors?.map((a, idx) => (
-                    <div key={idx} className="p-2.5 rounded-lg bg-slate-800/30 border border-slate-800/60 text-xs flex items-start gap-2">
-                      <div className="w-5 h-5 rounded-full bg-slate-700 flex items-center justify-center text-[10px] text-slate-300 font-bold shrink-0 mt-0.5">
+                    <div key={idx} className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-800/60 text-xs flex items-start gap-2">
+                      <div className="w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] text-slate-700 dark:text-slate-300 font-bold shrink-0 mt-0.5">
                         {idx + 1}
                       </div>
                       <div>
-                        <span className="font-semibold text-slate-200">{a.name}</span>
+                        <span className="font-semibold text-slate-900 dark:text-slate-200">{a.name}</span>
                         {a.affiliation && (
-                          <div className="text-slate-400 flex items-center gap-1 mt-0.5 text-[11px]">
+                          <div className="text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5 text-[11px]">
                             <Building2 className="w-3 h-3 text-slate-400 shrink-0" />
                             <span>{a.affiliation}</span>
                           </div>
                         )}
                         {a.orcid && (
-                          <span className="text-[11px] text-teal-400 font-mono mt-0.5 block">
+                          <span className="text-[11px] text-teal-700 dark:text-teal-400 font-mono mt-0.5 block">
                             ORCID: {a.orcid}
                           </span>
                         )}
@@ -246,10 +246,10 @@ export default function PaperDetailModal({
 
               {/* Abstract */}
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
                   Scientific Abstract
                 </h3>
-                <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 text-xs text-slate-200 leading-relaxed whitespace-pre-line">
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-xs text-slate-800 dark:text-slate-200 leading-relaxed whitespace-pre-line font-sans">
                   {paper.abstract || 'No abstract text available in indexed record.'}
                 </div>
               </div>
@@ -265,10 +265,10 @@ export default function PaperDetailModal({
           {activeTab === 'categories' && (
             <div className="space-y-4">
               <div>
-                <h3 className="text-sm font-semibold text-slate-100">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   Manage Scientific Classifications
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   Adjust or augment the automatically detected POx/POzi research categories for this paper.
                 </p>
               </div>
@@ -283,19 +283,19 @@ export default function PaperDetailModal({
                       onClick={() => handleToggleCategory(cat.slug)}
                       className={`flex items-start gap-3 p-3 rounded-xl border text-left text-xs transition-all ${
                         isChecked
-                          ? 'bg-teal-500/10 border-teal-500/50 text-teal-200'
-                          : 'bg-slate-800/40 border-slate-800 text-slate-400 hover:border-slate-700'
+                          ? 'bg-teal-50 dark:bg-teal-500/10 border-teal-500/50 text-teal-900 dark:text-teal-200'
+                          : 'bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700'
                       }`}
                     >
                       <div className={`w-4 h-4 rounded border mt-0.5 flex items-center justify-center shrink-0 ${
-                        isChecked ? 'bg-teal-500 border-teal-500 text-slate-950' : 'border-slate-600 bg-slate-800'
+                        isChecked ? 'bg-teal-500 border-teal-500 text-white dark:text-slate-950' : 'border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800'
                       }`}>
                         {isChecked && <Check className="w-3 h-3 stroke-[3]" />}
                       </div>
                       <div>
                         <div className="font-semibold">{cat.category_name}</div>
                         {cat.description && (
-                          <div className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">
+                          <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
                             {cat.description}
                           </div>
                         )}
@@ -305,13 +305,13 @@ export default function PaperDetailModal({
                 })}
               </div>
 
-              <div className="pt-4 flex items-center justify-between border-t border-slate-800">
-                <span className="text-xs text-slate-400">
+              <div className="pt-4 flex items-center justify-between border-t border-slate-200 dark:border-slate-800">
+                <span className="text-xs text-slate-500 dark:text-slate-400">
                   {selectedCategories.length} categories selected
                 </span>
                 <div className="flex items-center gap-2">
                   {categorySuccess && (
-                    <span className="text-xs text-emerald-400 flex items-center gap-1 font-medium">
+                    <span className="text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-medium">
                       <Check className="w-3.5 h-3.5" /> Saved!
                     </span>
                   )}

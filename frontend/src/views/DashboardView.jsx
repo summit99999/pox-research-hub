@@ -213,8 +213,8 @@ export default function DashboardView({
       {/* Hero Welcome Header & Terminal Bar */}
       <div className={`relative rounded-3xl border p-6 sm:p-8 lg:p-10 overflow-hidden shadow-2xl transition-all duration-300 card-glossy ${
         isPOx 
-          ? 'bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-teal-950/40 border-teal-500/25 shadow-teal-950/20'
-          : 'bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-indigo-950/40 border-indigo-500/25 shadow-indigo-950/20'
+          ? 'bg-gradient-to-br from-teal-50/90 via-white to-teal-50/40 dark:from-slate-900/95 dark:via-slate-900/90 dark:to-teal-950/40 border-teal-500/25 shadow-teal-500/5 dark:shadow-teal-950/20'
+          : 'bg-gradient-to-br from-indigo-50/90 via-white to-indigo-50/40 dark:from-slate-900/95 dark:via-slate-900/90 dark:to-indigo-950/40 border-indigo-500/25 shadow-indigo-500/5 dark:shadow-indigo-950/20'
       }`}>
         {/* Subtle geometric glowing backdrop orb */}
         <div className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-20 -mr-20 -mt-20 ${
@@ -226,32 +226,32 @@ export default function DashboardView({
           <div className="flex flex-wrap items-center gap-2 mb-4">
             <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
               isPOx 
-                ? 'bg-teal-500/10 border border-teal-500/30 text-teal-300 shadow-sm' 
-                : 'bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 shadow-sm'
+                ? 'bg-teal-500/10 border border-teal-500/30 text-teal-800 dark:text-teal-300 shadow-sm' 
+                : 'bg-indigo-500/10 border border-indigo-500/30 text-indigo-800 dark:text-indigo-300 shadow-sm'
             }`}>
-              {isPOx ? <Atom className="w-4 h-4 animate-spin text-teal-400" /> : <Network className="w-4 h-4 text-indigo-400" />}
+              {isPOx ? <Atom className="w-4 h-4 animate-spin text-teal-600 dark:text-teal-400" /> : <Network className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />}
               <span>{isPOx ? 'Engine 1 · Dedicated POx/POzi Scope' : 'Engine 2 · Universal Polymer Scope'}</span>
             </div>
 
             {totalIndexed > 0 && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/80 text-xs text-slate-300 shadow-sm font-mono">
-                <Database className="w-3.5 h-3.5 text-teal-400" />
-                <strong className={isPOx ? 'text-teal-300 font-bold' : 'text-indigo-300 font-bold'}>{totalIndexed}</strong> indexed articles
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700/80 text-xs text-slate-700 dark:text-slate-300 shadow-sm font-mono">
+                <Database className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
+                <strong className={isPOx ? 'text-teal-800 dark:text-teal-300 font-bold' : 'text-indigo-800 dark:text-indigo-300 font-bold'}>{totalIndexed}</strong> indexed articles
               </span>
             )}
 
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/80 text-xs text-slate-300 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Developer: <strong className="text-teal-300 font-semibold">Sumit Barik</strong> (IACS Kolkata)</span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700/80 text-xs text-slate-700 dark:text-slate-300 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
+              <span>Developer: <strong className="text-teal-800 dark:text-teal-300 font-semibold">Sumit Barik</strong> (IACS Kolkata)</span>
             </span>
           </div>
 
           {/* Heading - Strictly "Scientific Research Platform" */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-100 tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-slate-100 tracking-tight leading-tight">
             Scientific Research Platform
           </h1>
 
-          <p className="text-xs sm:text-sm text-slate-400 mt-2.5 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2.5 max-w-2xl leading-relaxed">
             {isPOx 
               ? 'Exclusively dedicated to Poly(2-oxazoline) and Poly(2-oxazine) chemistry: cationic ring-opening polymerization (CROP) kinetics, monomer design, and stimuli-responsive smart materials.' 
               : 'Universal, unbiased literature search covering all polymer families: PE, PP, PS, PLA, PEG, hydrogels, biopolymers, ATRP, RAFT, and conducting polymers from 1950 to 2026+.'}
@@ -260,7 +260,7 @@ export default function DashboardView({
           {/* Hero Quick Search Bar */}
           <form onSubmit={handleQuickSearch} className="mt-6 flex flex-col sm:flex-row gap-2.5 max-w-2xl">
             <div className="relative flex-1">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400" />
               <input
                 type="text"
                 value={quickQuery}
@@ -268,7 +268,7 @@ export default function DashboardView({
                 placeholder={isPOx 
                   ? 'Search monomers, CROP, ROS-responsive, micelles...' 
                   : 'Search any polymer keyword, e.g. RAFT, PLA, hydrogel, polyethylene...'}
-                className="w-full bg-slate-800/90 border border-slate-700/90 rounded-2xl pl-10 pr-4 py-3 text-xs sm:text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all shadow-inner font-mono"
+                className="w-full bg-white dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700/90 rounded-2xl pl-10 pr-4 py-3 text-xs sm:text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all shadow-inner font-mono"
               />
             </div>
             <button
@@ -285,8 +285,8 @@ export default function DashboardView({
 
           {/* Quick Search Suggestions Chips */}
           <div className="flex flex-wrap items-center gap-1.5 mt-4 pt-2">
-            <span className="text-[11px] font-semibold text-slate-400 mr-1 flex items-center gap-1">
-              <Compass className="w-3 h-3 text-teal-400" />
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-400 mr-1 flex items-center gap-1">
+              <Compass className="w-3 h-3 text-teal-600 dark:text-teal-400" />
               <span>Suggested:</span>
             </span>
             {suggestionChips.map((chip) => (
@@ -294,7 +294,7 @@ export default function DashboardView({
                 key={chip}
                 type="button"
                 onClick={() => handleSuggestionClick(chip)}
-                className="text-[11px] px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-teal-300 border border-slate-700/60 hover:border-teal-500/40 transition-all font-mono shadow-sm"
+                className="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300 hover:text-teal-700 dark:hover:text-teal-300 border border-slate-300 dark:border-slate-700/60 hover:border-teal-500/40 transition-all font-mono shadow-sm"
               >
                 {chip}
               </button>
@@ -307,15 +307,15 @@ export default function DashboardView({
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div 
           onClick={() => onOpenDomains && onOpenDomains('')}
-          className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-teal-500/40 flex items-center gap-3 shadow-sm cursor-pointer transition-all group"
+          className="p-3.5 rounded-2xl card-glossy bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-teal-500/40 flex items-center gap-3 shadow-sm cursor-pointer transition-all group"
         >
           <div className="w-8 h-8 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-            <Compass className="w-4 h-4 text-teal-400" />
+            <Compass className="w-4 h-4 text-teal-600 dark:text-teal-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Research Domains</div>
-            <div className="text-xs font-bold text-slate-200 truncate flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />
+            <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Research Domains</div>
+            <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-teal-500 dark:bg-teal-400" />
               <span>18 Polymer Disciplines</span>
             </div>
           </div>
@@ -323,38 +323,38 @@ export default function DashboardView({
 
         <div 
           onClick={() => onNavigateToView && onNavigateToView('journals')}
-          className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-indigo-500/40 flex items-center gap-3 shadow-sm cursor-pointer transition-all group"
+          className="p-3.5 rounded-2xl card-glossy bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/40 flex items-center gap-3 shadow-sm cursor-pointer transition-all group"
         >
           <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-            <BookOpen className="w-4 h-4 text-indigo-400" />
+            <BookOpen className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Monitored Journals</div>
-            <div className="text-xs font-bold text-slate-200 truncate">
+            <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Monitored Journals</div>
+            <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
               10 Core Feeds Live
             </div>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center gap-3 shadow-sm">
+        <div className="p-3.5 rounded-2xl card-glossy bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 flex items-center gap-3 shadow-sm">
           <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
-            <Calendar className="w-4 h-4 text-purple-400" />
+            <Calendar className="w-4 h-4 text-purple-600 dark:text-purple-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Publication Horizon</div>
-            <div className="text-xs font-bold text-slate-200 truncate">
+            <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Publication Horizon</div>
+            <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
               1950 – 2026+ ASAP
             </div>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center gap-3 shadow-sm">
+        <div className="p-3.5 rounded-2xl card-glossy bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 flex items-center gap-3 shadow-sm">
           <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Curated Literature</div>
-            <div className="text-xs font-bold text-slate-200 truncate">
+            <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Curated Literature</div>
+            <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
               100% Peer-Reviewed
             </div>
           </div>
@@ -366,54 +366,54 @@ export default function DashboardView({
         {isPOx ? (
           <>
             <div className="p-5 rounded-2xl card-glossy card-glossy-teal shimmer-hover">
-              <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-teal-300/80">Total Publications</span>
-                <BookOpen className="w-4 h-4 text-teal-400" />
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-teal-800 dark:text-teal-300/80">Total Publications</span>
+                <BookOpen className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               </div>
-              <div className="text-3xl font-extrabold text-slate-100 font-mono tracking-tight">
-                {loading ? <span className="inline-block w-16 h-8 bg-slate-800 rounded animate-pulse" /> : (analytics?.total_papers || 487)}
+              <div className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 font-mono tracking-tight">
+                {loading ? <span className="inline-block w-16 h-8 bg-slate-200 dark:bg-slate-800 rounded animate-pulse" /> : (analytics?.total_papers || 487)}
               </div>
-              <div className="text-[11px] text-teal-400/90 mt-1.5 flex items-center gap-1 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />
+              <div className="text-[11px] text-teal-700 dark:text-teal-400/90 mt-1.5 flex items-center gap-1 font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-teal-500 dark:bg-teal-400" />
                 <span>Indexed Literature</span>
               </div>
             </div>
 
             <div className="p-5 rounded-2xl card-glossy card-glossy-indigo shimmer-hover">
-              <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-indigo-300/80">Current Year (2026)</span>
-                <Calendar className="w-4 h-4 text-indigo-400" />
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-800 dark:text-indigo-300/80">Current Year (2026)</span>
+                <Calendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <div className="text-3xl font-extrabold text-indigo-300 font-mono tracking-tight">
-                {loading ? <span className="inline-block w-16 h-8 bg-slate-800 rounded animate-pulse" /> : (analytics?.papers_current_year || 408)}
+              <div className="text-3xl font-extrabold text-indigo-800 dark:text-indigo-300 font-mono tracking-tight">
+                {loading ? <span className="inline-block w-16 h-8 bg-slate-200 dark:bg-slate-800 rounded animate-pulse" /> : (analytics?.papers_current_year || 408)}
               </div>
-              <div className="text-[11px] text-slate-400 mt-1.5 font-medium">
+              <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-1.5 font-medium">
                 Newly published ASAP articles
               </div>
             </div>
 
             <div className="p-5 rounded-2xl card-glossy card-glossy-teal shimmer-hover">
-              <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-teal-300/80">POx Chemistry</span>
-                <Layers className="w-4 h-4 text-teal-400" />
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-teal-800 dark:text-teal-300/80">POx Chemistry</span>
+                <Layers className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               </div>
-              <div className="text-3xl font-extrabold text-slate-100 font-mono tracking-tight">
-                {loading ? <span className="inline-block w-16 h-8 bg-slate-800 rounded animate-pulse" /> : (analytics?.pox_papers_count || 449)}
+              <div className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 font-mono tracking-tight">
+                {loading ? <span className="inline-block w-16 h-8 bg-slate-200 dark:bg-slate-800 rounded animate-pulse" /> : (analytics?.pox_papers_count || 449)}
               </div>
-              <div className="text-[11px] text-slate-400 mt-1.5 font-medium">
+              <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-1.5 font-medium">
                 Poly(2-oxazoline) studies
               </div>
             </div>
 
             <div className="p-5 rounded-2xl card-glossy card-glossy-purple shimmer-hover">
-              <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-purple-300/80">POzi Chemistry</span>
-                <Hexagon className="w-4 h-4 text-purple-400" />
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-purple-800 dark:text-purple-300/80">POzi Chemistry</span>
+                <Hexagon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               </div>
-              <div className="text-3xl font-extrabold text-purple-300 font-mono tracking-tight">
-                {loading ? <span className="inline-block w-16 h-8 bg-slate-800 rounded animate-pulse" /> : (analytics?.pozi_papers_count || 38)}
+              <div className="text-3xl font-extrabold text-purple-800 dark:text-purple-300 font-mono tracking-tight">
+                {loading ? <span className="inline-block w-16 h-8 bg-slate-200 dark:bg-slate-800 rounded animate-pulse" /> : (analytics?.pozi_papers_count || 38)}
               </div>
-              <div className="text-[11px] text-slate-400 mt-1.5 font-medium">
+              <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-1.5 font-medium">
                 Poly(2-oxazine) studies
               </div>
             </div>
@@ -421,54 +421,54 @@ export default function DashboardView({
         ) : (
           <>
             <div className="p-5 rounded-2xl card-glossy card-glossy-indigo shimmer-hover">
-              <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-indigo-300/80">Total Polymer Corpus</span>
-                <BookOpen className="w-4 h-4 text-indigo-400" />
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-800 dark:text-indigo-300/80">Total Polymer Corpus</span>
+                <BookOpen className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <div className="text-3xl font-extrabold text-slate-100 font-mono tracking-tight">
-                {loading ? <span className="inline-block w-16 h-8 bg-slate-800 rounded animate-pulse" /> : (analytics?.total_papers || 499)}
+              <div className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 font-mono tracking-tight">
+                {loading ? <span className="inline-block w-16 h-8 bg-slate-200 dark:bg-slate-800 rounded animate-pulse" /> : (analytics?.total_papers || 499)}
               </div>
-              <div className="text-[11px] text-indigo-400/90 mt-1.5 flex items-center gap-1 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+              <div className="text-[11px] text-indigo-700 dark:text-indigo-400/90 mt-1.5 flex items-center gap-1 font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-indigo-400" />
                 <span>Unified Polymer Library</span>
               </div>
             </div>
 
             <div className="p-5 rounded-2xl card-glossy card-glossy-emerald shimmer-hover">
-              <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-300/80">Historical Coverage</span>
-                <Calendar className="w-4 h-4 text-emerald-400" />
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300/80">Historical Coverage</span>
+                <Calendar className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               </div>
-              <div className="text-3xl font-extrabold text-emerald-300 font-mono tracking-tight">
+              <div className="text-3xl font-extrabold text-emerald-800 dark:text-emerald-300 font-mono tracking-tight">
                 1950–2026+
               </div>
-              <div className="text-[11px] text-slate-400 mt-1.5 font-medium">
+              <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-1.5 font-medium">
                 Complete archive depth
               </div>
             </div>
 
             <div className="p-5 rounded-2xl card-glossy card-glossy-purple shimmer-hover">
-              <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-purple-300/80">Polymer Disciplines</span>
-                <Layers className="w-4 h-4 text-purple-400" />
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-purple-800 dark:text-purple-300/80">Polymer Disciplines</span>
+                <Layers className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               </div>
-              <div className="text-3xl font-extrabold text-purple-300 font-mono tracking-tight">
+              <div className="text-3xl font-extrabold text-purple-800 dark:text-purple-300 font-mono tracking-tight">
                 18 Classes
               </div>
-              <div className="text-[11px] text-slate-400 mt-1.5 font-medium">
+              <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-1.5 font-medium">
                 Synthetic, Bio &amp; Functional
               </div>
             </div>
 
             <div className="p-5 rounded-2xl card-glossy card-glossy-cyan shimmer-hover">
-              <div className="flex items-center justify-between text-slate-400 mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-cyan-300/80">Active Journals</span>
-                <Globe2 className="w-4 h-4 text-cyan-400" />
+              <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-cyan-800 dark:text-cyan-300/80">Active Journals</span>
+                <Globe2 className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
               </div>
-              <div className="text-3xl font-extrabold text-cyan-300 font-mono tracking-tight">
+              <div className="text-3xl font-extrabold text-cyan-800 dark:text-cyan-300 font-mono tracking-tight">
                 {analytics?.active_journals || 276}
               </div>
-              <div className="text-[11px] text-slate-400 mt-1.5 font-medium">
+              <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-1.5 font-medium">
                 ACS, Wiley, Elsevier, RSC
               </div>
             </div>
@@ -485,26 +485,26 @@ export default function DashboardView({
         >
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 shadow-sm">
+              <div className="p-2 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shadow-sm">
                 <FileText className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-white group-hover:text-emerald-300 transition-colors">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">
                   Personal PDF Library
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-600 dark:text-slate-400">
                   Read research PDFs in-app &amp; save full texts
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3 pt-1 text-xs text-slate-300">
-              <span className="font-mono text-emerald-400 font-bold text-sm">
+            <div className="flex items-center gap-3 pt-1 text-xs text-slate-700 dark:text-slate-300">
+              <span className="font-mono text-emerald-700 dark:text-emerald-400 font-bold text-sm">
                 {pdfStats.total_pdfs}
               </span>
               <span>documents stored in secure cloud vault</span>
             </div>
           </div>
-          <span className="p-2 rounded-xl bg-slate-800 text-slate-400 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all shrink-0">
+          <span className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 group-hover:translate-x-1 transition-all shrink-0">
             <ArrowRight className="w-4 h-4" />
           </span>
         </div>
@@ -516,30 +516,30 @@ export default function DashboardView({
         >
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-violet-500/15 border border-violet-500/30 text-violet-400 shadow-sm">
+              <div className="p-2 rounded-xl bg-violet-500/15 border border-violet-500/30 text-violet-600 dark:text-violet-400 shadow-sm">
                 <BookMarked className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-white group-hover:text-violet-300 transition-colors">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-300 transition-colors">
                   Research Watchlist
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-600 dark:text-slate-400">
                   Track reading priority &amp; personal synthesis notes
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2.5 pt-1 text-xs text-slate-300">
-              <span className="font-mono text-violet-400 font-bold text-sm">
+            <div className="flex items-center gap-2.5 pt-1 text-xs text-slate-700 dark:text-slate-300">
+              <span className="font-mono text-violet-700 dark:text-violet-400 font-bold text-sm">
                 {watchStats.total}
               </span>
               <span>queued</span>
-              <span className="text-slate-600">•</span>
-              <span className="text-amber-400 font-medium">{watchStats.to_read} to read</span>
-              <span className="text-slate-600">•</span>
-              <span className="text-cyan-400 font-medium">{watchStats.reading} reading</span>
+              <span className="text-slate-400 dark:text-slate-600">•</span>
+              <span className="text-amber-700 dark:text-amber-400 font-medium">{watchStats.to_read} to read</span>
+              <span className="text-slate-400 dark:text-slate-600">•</span>
+              <span className="text-cyan-700 dark:text-cyan-400 font-medium">{watchStats.reading} reading</span>
             </div>
           </div>
-          <span className="p-2 rounded-xl bg-slate-800 text-slate-400 group-hover:text-violet-400 group-hover:translate-x-1 transition-all shrink-0">
+          <span className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 group-hover:text-violet-600 dark:group-hover:text-violet-400 group-hover:translate-x-1 transition-all shrink-0">
             <ArrowRight className="w-4 h-4" />
           </span>
         </div>
@@ -549,11 +549,11 @@ export default function DashboardView({
       <div className="p-6 sm:p-7 rounded-3xl card-glossy shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-teal-400" />
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               <span>Publication Growth & Trajectory ({isPOx ? 'POx vs POzi 2020–2026+' : 'Macromolecular Trajectory'})</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
               {isPOx 
                 ? 'Annual growth of Poly(2-oxazoline) vs Poly(2-oxazine) research output' 
                 : 'Annual output across major macromolecular disciplines and synthesis methodologies'}
@@ -561,15 +561,15 @@ export default function DashboardView({
           </div>
 
           <div className="flex items-center gap-3">
-            {/* View Toggle (3D Isometric vs Area Chart) */}
-            <div className="flex items-center bg-slate-800/90 rounded-xl p-1 border border-slate-700/80 text-xs">
+            {/* View Toggle */}
+            <div className="flex items-center bg-slate-100 dark:bg-slate-800/90 rounded-xl p-1 border border-slate-300 dark:border-slate-700/80 text-xs">
               <button
                 type="button"
                 onClick={() => setChartMode('area')}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all ${
                   chartMode === 'area'
                     ? 'bg-teal-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
                 title="View Smooth Gradient Area Chart"
               >
@@ -582,7 +582,7 @@ export default function DashboardView({
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all ${
                   chartMode === 'bar'
                     ? 'bg-teal-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
                 title="View Annual Bar Distribution"
               >
@@ -593,11 +593,11 @@ export default function DashboardView({
 
             {/* Legend */}
             <div className="hidden lg:flex items-center gap-3 text-xs">
-              <span className="flex items-center gap-1.5 text-teal-400 font-medium">
-                <span className="w-2.5 h-2.5 rounded-full bg-teal-400" /> {isPOx ? 'POx' : 'Synthetic Polymers'}
+              <span className="flex items-center gap-1.5 text-teal-700 dark:text-teal-400 font-medium">
+                <span className="w-2.5 h-2.5 rounded-full bg-teal-500 dark:bg-teal-400" /> {isPOx ? 'POx' : 'Synthetic Polymers'}
               </span>
-              <span className="flex items-center gap-1.5 text-purple-400 font-medium">
-                <span className="w-2.5 h-2.5 rounded-full bg-purple-400" /> {isPOx ? 'POzi' : 'Biopolymers & Advanced'}
+              <span className="flex items-center gap-1.5 text-purple-700 dark:text-purple-400 font-medium">
+                <span className="w-2.5 h-2.5 rounded-full bg-purple-500 dark:bg-purple-400" /> {isPOx ? 'POzi' : 'Biopolymers & Advanced'}
               </span>
             </div>
           </div>
@@ -655,11 +655,11 @@ export default function DashboardView({
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
-              <FlaskConical className="w-4 h-4 text-teal-400" />
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <FlaskConical className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               <span>{isPOx ? 'POx/POzi Specialized Categories' : 'Universal Polymer Research Domains'}</span>
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-600 dark:text-slate-400">
               {isPOx 
                 ? 'Browse literature organized across the 17 core oxazoline & oxazine domains' 
                 : 'Browse literature organized across the 18 core polymer science disciplines'}
@@ -669,11 +669,11 @@ export default function DashboardView({
           <button
             type="button"
             onClick={() => onOpenDomains ? onOpenDomains() : (onSelectCategory && onSelectCategory(''))}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600/30 via-indigo-600/30 to-teal-600/30 hover:from-violet-600/50 hover:to-indigo-600/50 border border-violet-500/40 text-violet-200 text-xs font-bold transition-all flex items-center gap-2 shadow-md hover:shadow-violet-500/10 self-start sm:self-auto transform hover:-translate-y-0.5"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600/30 via-indigo-600/30 to-teal-600/30 hover:from-violet-600/50 hover:to-indigo-600/50 border border-violet-500/40 text-violet-900 dark:text-violet-200 text-xs font-bold transition-all flex items-center gap-2 shadow-md hover:shadow-violet-500/10 self-start sm:self-auto transform hover:-translate-y-0.5"
           >
-            <Compass className="w-4 h-4 text-violet-400" />
+            <Compass className="w-4 h-4 text-violet-600 dark:text-violet-400" />
             <span>Explore Research Domains (18 Classes)</span>
-            <ArrowRight className="w-3.5 h-3.5 text-violet-300" />
+            <ArrowRight className="w-3.5 h-3.5 text-violet-700 dark:text-violet-300" />
           </button>
         </div>
 
@@ -690,10 +690,10 @@ export default function DashboardView({
               }}
               className="p-3.5 rounded-2xl card-glossy hover:border-teal-500/50 text-left transition-all group shadow-sm"
             >
-              <span className="text-xs font-bold text-slate-200 group-hover:text-teal-300 block truncate">
+              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-teal-600 dark:group-hover:text-teal-300 block truncate">
                 {cat.category_name}
               </span>
-              <span className="text-[10px] text-slate-400 mt-1 block line-clamp-1">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 block line-clamp-1">
                 {cat.description || 'Polymer research domain'}
               </span>
             </button>
@@ -705,28 +705,28 @@ export default function DashboardView({
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-teal-400" />
+            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               <span>Recent Literature Updates ({isPOx ? 'POx Scope' : 'Universal Polymer Scope'})</span>
-              <span className="text-[10px] font-semibold font-mono text-teal-300 bg-teal-500/10 border border-teal-500/25 px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-semibold font-mono text-teal-800 dark:text-teal-300 bg-teal-500/15 dark:bg-teal-500/10 border border-teal-500/30 px-2 py-0.5 rounded-full">
                 Date (Newest First)
               </span>
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-600 dark:text-slate-400">
               Chronologically ordered by publication date with the most recent articles appearing first
             </p>
           </div>
 
           <div className="flex items-center gap-2.5 flex-wrap">
             {/* Filter Tabs */}
-            <div className="flex items-center bg-slate-800/90 rounded-xl p-1 border border-slate-700/80 text-xs">
+            <div className="flex items-center bg-slate-100 dark:bg-slate-800/90 rounded-xl p-1 border border-slate-300 dark:border-slate-700/80 text-xs">
               <button
                 type="button"
                 onClick={() => setRecentTab('all')}
                 className={`px-3 py-1 rounded-lg font-medium transition-all ${
                   recentTab === 'all'
                     ? 'bg-teal-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 All Recent
@@ -737,7 +737,7 @@ export default function DashboardView({
                 className={`px-3 py-1 rounded-lg font-medium transition-all ${
                   recentTab === '2026'
                     ? 'bg-teal-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 2026 ASAP
@@ -748,7 +748,7 @@ export default function DashboardView({
                 className={`px-3 py-1 rounded-lg font-medium transition-all ${
                   recentTab === 'ai'
                     ? 'bg-teal-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 AI Analyzed
@@ -757,15 +757,15 @@ export default function DashboardView({
 
             <button
               onClick={onOpenCollectorModal}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs text-slate-300 transition-colors shadow-sm"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-300 transition-colors shadow-sm"
               title="Collect new papers from OpenAlex & Crossref"
             >
-              <RefreshCw className="w-3.5 h-3.5 text-teal-400" />
+              <RefreshCw className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
               <span>Ingest More Papers</span>
             </button>
             <button
               onClick={() => onNavigateToSearch && onNavigateToSearch('')}
-              className="flex items-center gap-1 text-xs text-teal-400 hover:text-teal-300 font-semibold"
+              className="flex items-center gap-1 text-xs text-teal-700 hover:text-teal-800 dark:text-teal-400 dark:hover:text-teal-300 font-semibold"
             >
               <span>View All</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -776,13 +776,13 @@ export default function DashboardView({
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[1, 2, 3, 4].map(n => (
-              <div key={n} className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800/80 animate-pulse space-y-3">
-                <div className="h-4 bg-slate-800 rounded w-3/4"></div>
-                <div className="h-3 bg-slate-800/60 rounded w-1/3"></div>
-                <div className="h-12 bg-slate-800/30 rounded w-full"></div>
+              <div key={n} className="p-5 rounded-2xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 animate-pulse space-y-3">
+                <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+                <div className="h-3 bg-slate-200 dark:bg-slate-800/60 rounded w-1/3"></div>
+                <div className="h-12 bg-slate-200 dark:bg-slate-800/30 rounded w-full"></div>
                 <div className="flex gap-2 pt-2">
-                  <div className="h-5 bg-slate-800/50 rounded-full w-20"></div>
-                  <div className="h-5 bg-slate-800/50 rounded-full w-24"></div>
+                  <div className="h-5 bg-slate-200 dark:bg-slate-800/50 rounded-full w-20"></div>
+                  <div className="h-5 bg-slate-200 dark:bg-slate-800/50 rounded-full w-24"></div>
                 </div>
               </div>
             ))}
@@ -804,8 +804,8 @@ export default function DashboardView({
             ))}
           </div>
         ) : (
-          <div className="p-8 rounded-2xl bg-slate-900/60 border border-slate-800 text-center space-y-3">
-            <p className="text-xs text-slate-400">
+          <div className="p-8 rounded-2xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-center space-y-3">
+            <p className="text-xs text-slate-600 dark:text-slate-400">
               No publications matching the selected tab.
             </p>
             <button
@@ -820,22 +820,22 @@ export default function DashboardView({
       </div>
 
       {/* Developer & Platform Architecture Footer Attribution */}
-      <div className="rounded-3xl card-glossy border-amber-500/25 p-6 sm:p-7 shadow-2xl bg-gradient-to-r from-slate-900/95 via-slate-900/90 to-amber-950/30">
+      <div className="rounded-3xl card-glossy border-amber-500/25 p-6 sm:p-7 shadow-xl bg-gradient-to-r from-amber-50/80 via-white to-amber-50/40 dark:from-slate-900/95 dark:via-slate-900/90 dark:to-amber-950/30">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-amber-500/30 shrink-0 border border-amber-400/40">
             SB
           </div>
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-base font-bold text-amber-100">
+              <h3 className="text-base font-bold text-amber-950 dark:text-amber-100">
                 Developed &amp; Engineered by Sumit Barik
               </h3>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/20 text-amber-900 dark:text-amber-300 border border-amber-500/30">
                 Platform Developer &amp; Researcher
               </span>
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
-              Polymer Chemist at <span className="font-semibold text-slate-100">Indian Association for the Cultivation of Science (IACS), Kolkata</span>. Researcher on stimuli-responsive cyclic imino ether architectures for biomedical applications.
+            <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed max-w-3xl">
+              Polymer Chemist at <span className="font-semibold text-slate-900 dark:text-slate-100">Indian Association for the Cultivation of Science (IACS), Kolkata</span>. Researcher on stimuli-responsive cyclic imino ether architectures for biomedical applications.
             </p>
           </div>
         </div>

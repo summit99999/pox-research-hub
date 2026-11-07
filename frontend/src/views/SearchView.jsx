@@ -250,11 +250,11 @@ export default function SearchView({
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
+            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
               {isPOx ? (
-                <Atom className="w-5 h-5 text-teal-400" />
+                <Atom className="w-5 h-5 text-teal-600 dark:text-teal-400" />
               ) : (
-                <Network className="w-5 h-5 text-indigo-400" />
+                <Network className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               )}
               <span>
                 {isPOx ? 'POx & POzi Dedicated Literature Search' : 'Universal Polymer Science Search Engine'}
@@ -262,13 +262,13 @@ export default function SearchView({
             </h1>
             <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold ${
               isPOx 
-                ? 'bg-teal-500/20 text-teal-300 border border-teal-500/30' 
-                : 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+                ? 'bg-teal-500/10 dark:bg-teal-500/20 text-teal-800 dark:text-teal-300 border border-teal-500/30' 
+                : 'bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-800 dark:text-indigo-300 border border-indigo-500/30'
             }`}>
               {isPOx ? 'Engine 1 · Dedicated POx/POzi' : 'Engine 2 · Complete Polymer Field'}
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1 max-w-3xl">
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-3xl">
             {isPOx 
               ? 'Exclusively scoped to Poly(2-oxazoline), Poly(2-oxazine), CROP kinetics, and stimuli-responsive biomaterials.' 
               : 'Unbiased scientific search covering all polymer families: PE, PP, PS, PLA, PEG, hydrogels, biopolymers, ATRP, RAFT, and conducting polymers.'}
@@ -290,7 +290,7 @@ export default function SearchView({
       </div>
 
       {/* Main Search Bar & Boolean Engine */}
-      <div className={`p-5 rounded-3xl border shadow-xl space-y-4 transition-all duration-300 card-glossy ${
+      <div className={`p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-md dark:shadow-xl space-y-4 transition-all duration-300 card-glossy ${
         isPOx 
           ? 'card-glossy-teal' 
           : 'card-glossy-indigo'
@@ -306,10 +306,10 @@ export default function SearchView({
         />
 
         {/* Filter Controls Bar */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-3 border-t border-slate-800 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-3 border-t border-slate-200 dark:border-slate-800 text-xs">
           {/* Year Range (No 2020 limit, supports all years 1950–2026+) */}
           <div>
-            <label className="text-slate-400 block font-medium mb-1">Publication Years</label>
+            <label className="text-slate-600 dark:text-slate-400 block font-medium mb-1">Publication Years</label>
             <YearRangeSelector
               yearFrom={yearFrom}
               yearTo={yearTo}
@@ -322,7 +322,7 @@ export default function SearchView({
 
           {/* Journal Selection (Include/Exclude/Multi) */}
           <div>
-            <label className="text-slate-400 block font-medium mb-1">Scientific Journals</label>
+            <label className="text-slate-600 dark:text-slate-400 block font-medium mb-1">Scientific Journals</label>
             <JournalSelector
               selectedJournals={selectedJournals}
               excludedJournals={excludedJournals}
@@ -334,13 +334,13 @@ export default function SearchView({
 
           {/* Category Filter (POx vs Universal) */}
           <div>
-            <label className="text-slate-400 block font-medium mb-1">
+            <label className="text-slate-600 dark:text-slate-400 block font-medium mb-1">
               {isPOx ? 'POx Research Domain' : 'Polymer Science Category'}
             </label>
             <select
               value={categorySlug}
               onChange={(e) => { setCategorySlug(e.target.value); setPage(1); }}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-2 text-slate-200 focus:outline-none focus:border-teal-500 font-medium"
+              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-2 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-teal-500 font-medium"
             >
               <option value="">All Categories ({categories.length})</option>
               {categories.map(c => (
@@ -351,7 +351,7 @@ export default function SearchView({
 
           {/* Article Type */}
           <div>
-            <label className="text-slate-400 block font-medium mb-1">Publication Type</label>
+            <label className="text-slate-600 dark:text-slate-400 block font-medium mb-1">Publication Type</label>
             <select
               value={isReview === null ? '' : isReview ? 'review' : 'research'}
               onChange={(e) => {
@@ -359,7 +359,7 @@ export default function SearchView({
                 setIsReview(val === 'review' ? true : val === 'research' ? false : null);
                 setPage(1);
               }}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-2 text-slate-200 focus:outline-none focus:border-teal-500 font-medium"
+              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-2.5 py-2 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-teal-500 font-medium"
             >
               <option value="">All Articles</option>
               <option value="review">Reviews & Progress Reports</option>
@@ -372,7 +372,7 @@ export default function SearchView({
             <button
               type="button"
               onClick={handleResetFilters}
-              className="flex-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition-colors font-medium text-center"
+              className="flex-1 px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl border border-slate-300 dark:border-slate-700 transition-colors font-medium text-center"
             >
               Reset
             </button>
@@ -386,55 +386,55 @@ export default function SearchView({
               }}
               className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-semibold transition-all ${
                 liveQuery
-                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-sm'
-                  : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200'
+                  ? 'bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border-emerald-500/40 shadow-sm'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
               title="Query OpenAlex, Crossref, and Europe PMC in real-time"
             >
-              <Globe2 className={`w-3.5 h-3.5 ${liveQuery ? 'text-emerald-400 animate-pulse' : 'text-slate-400'}`} />
+              <Globe2 className={`w-3.5 h-3.5 ${liveQuery ? 'text-emerald-600 dark:text-emerald-400 animate-pulse' : 'text-slate-500 dark:text-slate-400'}`} />
               <span>{liveQuery ? 'Live APIs: ON' : 'Live APIs'}</span>
             </button>
           </div>
         </div>
 
         {/* Auxiliary Controls: Saved Searches, History, Reset */}
-        <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 text-[11px] text-slate-400">
+        <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-800/80 text-[11px] text-slate-600 dark:text-slate-400">
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setShowSavedModal(true)}
-              className="flex items-center gap-1 hover:text-teal-300 transition-colors"
+              className="flex items-center gap-1 hover:text-teal-600 dark:hover:text-teal-300 transition-colors"
             >
-              <Bookmark className="w-3.5 h-3.5 text-teal-400" />
+              <Bookmark className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
               <span>Saved Searches ({savedSearches.length})</span>
             </button>
 
             <button
               type="button"
               onClick={() => setShowHistoryModal(true)}
-              className="flex items-center gap-1 hover:text-teal-300 transition-colors"
+              className="flex items-center gap-1 hover:text-indigo-600 dark:hover:text-teal-300 transition-colors"
             >
-              <History className="w-3.5 h-3.5 text-indigo-400" />
+              <History className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
               <span>History ({searchHistory.length})</span>
             </button>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="font-mono text-slate-400">
-              Active Scope: <strong className={isPOx ? 'text-teal-400' : 'text-indigo-400'}>{isPOx ? 'POx/POzi Dedicated' : 'Universal Polymer'}</strong>
+            <span className="font-mono text-slate-500 dark:text-slate-400">
+              Active Scope: <strong className={isPOx ? 'text-teal-700 dark:text-teal-400' : 'text-indigo-700 dark:text-indigo-400'}>{isPOx ? 'POx/POzi Dedicated' : 'Universal Polymer'}</strong>
             </span>
           </div>
         </div>
       </div>
 
       {/* Results Header & Batch Operations Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-xs shadow-md">
-        <div className="text-slate-300 font-medium flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-3.5 rounded-2xl bg-white/90 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-xs shadow-sm dark:shadow-md">
+        <div className="text-slate-700 dark:text-slate-300 font-medium flex items-center gap-2">
           <span>
-            Found <strong className={isPOx ? 'text-teal-400' : 'text-indigo-400'}>{totalCount}</strong> publications matching criteria
+            Found <strong className={isPOx ? 'text-teal-700 dark:text-teal-400' : 'text-indigo-700 dark:text-indigo-400'}>{totalCount}</strong> publications matching criteria
           </span>
           {selectedPaperIds.length > 0 && (
-            <span className="px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30 font-semibold">
+            <span className="px-2 py-0.5 rounded-full bg-teal-500/15 text-teal-800 dark:text-teal-300 border border-teal-500/30 font-semibold">
               {selectedPaperIds.length} selected
             </span>
           )}
@@ -452,7 +452,7 @@ export default function SearchView({
               </button>
               <button
                 onClick={onClearSelection}
-                className="px-2 py-1.5 rounded-lg text-slate-400 hover:text-slate-200"
+                className="px-2 py-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
               >
                 Clear
               </button>
@@ -462,7 +462,7 @@ export default function SearchView({
           <button
             onClick={handleExportCSV}
             disabled={exporting || papers.length === 0}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-medium transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-medium transition-colors disabled:opacity-50"
             title="Export results as CSV spreadsheet"
           >
             <Download className="w-3.5 h-3.5" />
@@ -472,7 +472,7 @@ export default function SearchView({
           <button
             onClick={handleExportBibTeX}
             disabled={exporting || papers.length === 0}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-medium transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-medium transition-colors disabled:opacity-50"
             title="Export results as BibTeX bibliography"
           >
             <Download className="w-3.5 h-3.5" />
@@ -513,13 +513,13 @@ export default function SearchView({
           ))}
         </div>
       ) : (
-        <div className="p-12 rounded-2xl bg-slate-900/60 border border-slate-800 text-center space-y-4">
-          <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
-            <Search className="w-6 h-6" />
+        <div className="p-12 rounded-2xl bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-center space-y-4 shadow-sm">
+          <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
+            <Search className="w-6 h-6 text-slate-500 dark:text-slate-400" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-200">No Publications Found</h3>
-            <p className="text-xs text-slate-400 mt-1 max-w-md mx-auto">
+            <h3 className="text-base font-bold text-slate-900 dark:text-slate-200">No Publications Found</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-md mx-auto">
               No articles matched your active search query in the {isPOx ? 'POx/POzi Dedicated Engine' : 'Universal Polymer Engine'}.
             </p>
           </div>
@@ -536,7 +536,7 @@ export default function SearchView({
             </button>
             <button
               onClick={handleResetFilters}
-              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-medium border border-slate-700"
+              className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-medium border border-slate-300 dark:border-slate-700"
             >
               Reset Filters
             </button>
@@ -546,24 +546,24 @@ export default function SearchView({
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-900 border border-slate-800 text-xs">
+        <div className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs shadow-sm">
           <button
             onClick={() => setPage(p => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 disabled:opacity-40 transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 disabled:opacity-40 transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             <span>Previous</span>
           </button>
 
-          <span className="font-mono text-slate-400">
-            Page <strong className="text-slate-200">{page}</strong> of <strong className="text-slate-200">{totalPages}</strong>
+          <span className="font-mono text-slate-500 dark:text-slate-400">
+            Page <strong className="text-slate-900 dark:text-slate-200">{page}</strong> of <strong className="text-slate-900 dark:text-slate-200">{totalPages}</strong>
           </span>
 
           <button
             onClick={() => setPage(p => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 disabled:opacity-40 transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 disabled:opacity-40 transition-colors"
           >
             <span>Next</span>
             <ChevronRight className="w-4 h-4" />
@@ -573,19 +573,19 @@ export default function SearchView({
 
       {/* Saved Searches Modal */}
       {showSavedModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-700 rounded-2xl p-5 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
-              <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-                <Bookmark className="w-4 h-4 text-teal-400" />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2.5">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <Bookmark className="w-4 h-4 text-teal-600 dark:text-teal-400" />
                 <span>Saved Search Queries</span>
               </h3>
-              <button onClick={() => setShowSavedModal(false)} className="text-slate-400 hover:text-slate-200">✕</button>
+              <button onClick={() => setShowSavedModal(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">✕</button>
             </div>
 
             {/* Save Current Form */}
             <form onSubmit={handleSaveCurrentSearch} className="space-y-2">
-              <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+              <label className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                 Save Current Query & Filters
               </label>
               <div className="flex gap-2">
@@ -594,7 +594,7 @@ export default function SearchView({
                   value={savedSearchName}
                   onChange={(e) => setSavedSearchName(e.target.value)}
                   placeholder="Search name (e.g. Living CROP Kinetics)..."
-                  className="flex-1 px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-slate-100 focus:border-teal-500 focus:outline-none"
+                  className="flex-1 px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:border-teal-500 focus:outline-none"
                 />
                 <button
                   type="submit"
@@ -606,21 +606,21 @@ export default function SearchView({
             </form>
 
             {/* List of Saved Searches */}
-            <div className="space-y-2 pt-2 border-t border-slate-800 max-h-60 overflow-y-auto pr-1">
+            <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800 max-h-60 overflow-y-auto pr-1">
               {savedSearches.length === 0 ? (
                 <p className="text-xs text-slate-500 text-center py-4">No saved searches yet.</p>
               ) : (
                 savedSearches.map(s => (
                   <div
                     key={s.id}
-                    className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-teal-500/40 flex items-center justify-between gap-2 text-xs"
+                    className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 hover:border-teal-500/40 flex items-center justify-between gap-2 text-xs"
                   >
                     <div className="min-w-0 flex-1 cursor-pointer" onClick={() => handleRestoreSavedSearch(s)}>
-                      <div className="font-semibold text-slate-200 truncate flex items-center gap-1.5">
-                        <span className={`w-2 h-2 rounded-full ${s.engine === 'universal' ? 'bg-indigo-400' : 'bg-teal-400'}`} />
+                      <div className="font-semibold text-slate-800 dark:text-slate-200 truncate flex items-center gap-1.5">
+                        <span className={`w-2 h-2 rounded-full ${s.engine === 'universal' ? 'bg-indigo-500' : 'bg-teal-500'}`} />
                         <span>{s.name}</span>
                       </div>
-                      <div className="text-[10px] text-slate-400 font-mono truncate mt-0.5">
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono truncate mt-0.5">
                         {s.query || 'All literature'} · {s.yearFrom}–{s.yearTo}
                       </div>
                     </div>
@@ -629,7 +629,7 @@ export default function SearchView({
                         await api.deleteSavedSearch(s.id);
                         loadSavedSearches();
                       }}
-                      className="text-slate-500 hover:text-rose-400 p-1"
+                      className="text-slate-400 hover:text-rose-500 p-1"
                       title="Delete saved search"
                     >
                       ✕
@@ -644,14 +644,14 @@ export default function SearchView({
 
       {/* History Modal */}
       {showHistoryModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-700 rounded-2xl p-5 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
-              <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-                <History className="w-4 h-4 text-indigo-400" />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2.5">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <History className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 <span>Search Query History</span>
               </h3>
-              <button onClick={() => setShowHistoryModal(false)} className="text-slate-400 hover:text-slate-200">✕</button>
+              <button onClick={() => setShowHistoryModal(false)} className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">✕</button>
             </div>
 
             <div className="space-y-1.5 max-h-72 overflow-y-auto pr-1">
@@ -662,15 +662,15 @@ export default function SearchView({
                   <button
                     key={h.id}
                     onClick={() => handleRestoreHistory(h)}
-                    className="w-full text-left p-2.5 rounded-xl bg-slate-950/60 hover:bg-slate-800 border border-slate-800 text-xs transition-colors flex items-center justify-between"
+                    className="w-full text-left p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-xs transition-colors flex items-center justify-between"
                   >
                     <div className="min-w-0 flex-1 mr-2">
-                      <div className="font-mono text-slate-200 truncate">{h.query}</div>
+                      <div className="font-mono text-slate-800 dark:text-slate-200 truncate">{h.query}</div>
                       <div className="text-[10px] text-slate-500">
                         {h.engine === 'universal' ? 'Universal Engine' : 'POx Engine'} · {new Date(h.timestamp).toLocaleTimeString()}
                       </div>
                     </div>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 bg-slate-800 rounded text-slate-400 shrink-0">
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 bg-slate-200 dark:bg-slate-800 rounded text-slate-700 dark:text-slate-400 shrink-0">
                       {h.totalResults} results
                     </span>
                   </button>

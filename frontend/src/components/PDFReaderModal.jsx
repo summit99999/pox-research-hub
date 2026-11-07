@@ -137,29 +137,29 @@ export default function PDFReaderModal({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-2 sm:p-4 transition-all duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-2 sm:p-4 transition-all duration-200"
       role="dialog"
       aria-modal="true"
     >
       <div 
         ref={containerRef}
-        className={`flex flex-col bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden transition-all duration-200 ${
+        className={`flex flex-col bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden transition-all duration-200 ${
           isFullscreen ? 'w-full h-full rounded-none border-none' : 'w-full max-w-7xl h-[92vh]'
         }`}
       >
         {/* Top Control Bar */}
-        <header className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-slate-900/95 border-b border-slate-800 text-slate-200 z-10">
+        <header className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-white/95 dark:bg-slate-900/95 border-b border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 z-10">
           {/* Article Info */}
           <div className="flex items-center gap-3 min-w-0 max-w-md lg:max-w-lg">
-            <div className="p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 shrink-0">
+            <div className="p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-600 dark:text-indigo-400 shrink-0">
               <FileText className="w-5 h-5" />
             </div>
             <div className="min-w-0">
-              <h2 className="text-sm font-semibold text-white truncate" title={title}>
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-white truncate" title={title}>
                 {title}
               </h2>
-              <div className="flex items-center gap-2 text-xs text-slate-400 truncate">
-                <span className="text-cyan-400 font-medium truncate">{journal}</span>
+              <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 truncate">
+                <span className="text-cyan-700 dark:text-cyan-400 font-medium truncate">{journal}</span>
                 <span>•</span>
                 <span>{year}</span>
                 {authors && (
@@ -173,19 +173,19 @@ export default function PDFReaderModal({
           </div>
 
           {/* Reader Controls Toolbar */}
-          <div className="flex items-center gap-1 sm:gap-2 bg-slate-950/60 p-1 rounded-xl border border-slate-800">
+          <div className="flex items-center gap-1 sm:gap-2 bg-slate-100 dark:bg-slate-950/60 p-1 rounded-xl border border-slate-200 dark:border-slate-800">
             {/* Page Navigation */}
-            <div className="flex items-center gap-1 border-r border-slate-800 pr-1.5 mr-1">
+            <div className="flex items-center gap-1 border-r border-slate-200 dark:border-slate-800 pr-1.5 mr-1">
               <button
                 type="button"
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage <= 1}
-                className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-transparent transition-colors"
+                className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-transparent transition-colors"
                 title="Previous Page (←)"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <div className="flex items-center gap-1 px-1 text-xs text-slate-300">
+              <div className="flex items-center gap-1 px-1 text-xs text-slate-700 dark:text-slate-300">
                 <input
                   type="number"
                   min="1"
@@ -194,14 +194,14 @@ export default function PDFReaderModal({
                     const val = parseInt(e.target.value, 10);
                     if (!isNaN(val) && val > 0) setCurrentPage(val);
                   }}
-                  className="w-10 px-1 py-0.5 text-center bg-slate-800 border border-slate-700 rounded text-white text-xs focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+                  className="w-10 px-1 py-0.5 text-center bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded text-slate-900 dark:text-white text-xs focus:ring-1 focus:ring-indigo-500 focus:outline-none"
                 />
-                <span className="text-slate-500">Page</span>
+                <span className="text-slate-400 dark:text-slate-500">Page</span>
               </div>
               <button
                 type="button"
                 onClick={() => setCurrentPage(p => p + 1)}
-                className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
                 title="Next Page (→)"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -209,19 +209,19 @@ export default function PDFReaderModal({
             </div>
 
             {/* Zoom Controls */}
-            <div className="flex items-center gap-1 border-r border-slate-800 pr-1.5 mr-1">
+            <div className="flex items-center gap-1 border-r border-slate-200 dark:border-slate-800 pr-1.5 mr-1">
               <button
                 type="button"
                 onClick={() => {
                   setZoomLevel(z => Math.max(50, z - 15));
                   setFitMode('custom');
                 }}
-                className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
                 title="Zoom Out (-)"
               >
                 <ZoomOut className="w-4 h-4" />
               </button>
-              <span className="px-1 text-xs text-slate-300 min-w-[42px] text-center font-mono">
+              <span className="px-1 text-xs text-slate-700 dark:text-slate-300 min-w-[42px] text-center font-mono">
                 {zoomLevel}%
               </span>
               <button
@@ -230,7 +230,7 @@ export default function PDFReaderModal({
                   setZoomLevel(z => Math.min(250, z + 15));
                   setFitMode('custom');
                 }}
-                className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                className="p-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
                 title="Zoom In (+)"
               >
                 <ZoomIn className="w-4 h-4" />
@@ -246,7 +246,7 @@ export default function PDFReaderModal({
                   setZoomLevel(100);
                 }}
                 className={`px-2 py-1 text-xs font-medium rounded-lg transition-colors ${
-                  fitMode === 'width' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                  fitMode === 'width' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800'
                 }`}
                 title="Fit to Page Width"
               >
@@ -259,7 +259,7 @@ export default function PDFReaderModal({
                   setZoomLevel(100);
                 }}
                 className={`px-2 py-1 text-xs font-medium rounded-lg transition-colors ${
-                  fitMode === 'page' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                  fitMode === 'page' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800'
                 }`}
                 title="Fit Entire Page"
               >
@@ -273,7 +273,7 @@ export default function PDFReaderModal({
             <button
               type="button"
               onClick={toggleFullscreen}
-              className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors"
               title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Reading Mode'}
             >
               {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -281,7 +281,7 @@ export default function PDFReaderModal({
             <button
               type="button"
               onClick={handleOpenExternal}
-              className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors"
               title="Open in Browser New Tab"
             >
               <ExternalLink className="w-4 h-4" />
@@ -289,7 +289,7 @@ export default function PDFReaderModal({
             <button
               type="button"
               onClick={handleDownload}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600/90 hover:bg-emerald-600 text-white font-medium text-xs shadow-sm transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs shadow-sm transition-all"
               title="Download PDF to Computer"
             >
               <Download className="w-4 h-4" />
@@ -298,7 +298,7 @@ export default function PDFReaderModal({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-lg bg-slate-800 hover:bg-rose-500/20 hover:text-rose-400 text-slate-400 transition-colors ml-1"
+              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-500/20 hover:text-rose-600 dark:hover:text-rose-400 text-slate-500 dark:text-slate-400 transition-colors ml-1"
               title="Close Reader (Esc)"
             >
               <X className="w-4 h-4" />

@@ -578,27 +578,27 @@ export default function ArticleDetailView({
       </div>
 
       {/* Main Metadata Banner Card */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4">
+      <div className="p-6 sm:p-8 rounded-3xl bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-sm dark:shadow-xl space-y-4 card-glossy">
         {/* Badges Bar */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
           {paper.is_asap && (
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 shadow-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/40 flex items-center gap-1 shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
               <span>ASAP / Online-First</span>
             </span>
           )}
 
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-800 text-slate-200 border border-slate-700">
+          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
             {articleType}
           </span>
 
           {paper.journal && (
             <div className="flex items-center gap-1.5">
-              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-800 text-teal-300 border border-slate-700">
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-teal-50 dark:bg-slate-800 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-slate-700">
                 {paper.journal}
               </span>
               {impactFactor && (
-                <span className="px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold text-[10px]">
+                <span className="px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-500/30 font-bold text-[10px]">
                   IF {impactFactor}
                 </span>
               )}
@@ -606,14 +606,14 @@ export default function ArticleDetailView({
           )}
 
           {paper.publisher && (
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono text-slate-400 bg-slate-800/80 border border-slate-700/60 flex items-center gap-1">
-              <Building2 className="w-3 h-3 text-slate-400" />
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 flex items-center gap-1">
+              <Building2 className="w-3 h-3 text-slate-500 dark:text-slate-400" />
               <span>{paper.publisher}</span>
             </span>
           )}
 
           {paper.citation_count > 0 && (
-            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 font-mono text-[11px] border border-slate-700">
+            <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono text-[11px] border border-slate-200 dark:border-slate-700">
               <Quote className="w-3 h-3 text-slate-400" />
               <span>{paper.citation_count} citations</span>
             </span>
@@ -621,58 +621,58 @@ export default function ArticleDetailView({
         </div>
 
         {/* Article Full Title */}
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-100 tracking-tight leading-snug">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight leading-snug">
           {paper.title}
         </h1>
 
         {/* Authors with Affiliations */}
         <div className="space-y-1.5 pt-1">
-          <div className="text-xs sm:text-sm text-slate-300 font-medium flex flex-wrap gap-x-3 gap-y-1">
+          <div className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium flex flex-wrap gap-x-3 gap-y-1">
             {authorsList.map((auth, idx) => (
-              <span key={idx} className="hover:text-teal-300 transition-colors">
+              <span key={idx} className="hover:text-teal-600 dark:hover:text-teal-300 transition-colors">
                 {auth.name || auth.author || 'Author'}
                 {idx < authorsList.length - 1 ? ',' : ''}
               </span>
             ))}
           </div>
           {authorsList.some(a => a.affiliation) && (
-            <p className="text-[11px] text-slate-400 italic line-clamp-2">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 italic line-clamp-2">
               {authorsList.map(a => a.affiliation).filter(Boolean).filter((v, i, arr) => arr.indexOf(v) === i).join(' · ')}
             </p>
           )}
         </div>
 
         {/* Publication Dates and DOI Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-slate-800/80 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-slate-200 dark:border-slate-800/80 text-xs">
           <div className="space-y-0.5">
-            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Online Publication</span>
-            <span className="font-mono text-slate-200 font-medium flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-teal-400" />
+            <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Online Publication</span>
+            <span className="font-mono text-slate-800 dark:text-slate-200 font-medium flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
               <span>{onlineDate}</span>
             </span>
           </div>
 
           <div className="space-y-0.5">
-            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Print / Issue</span>
-            <span className="font-mono text-slate-300 block truncate">
+            <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Print / Issue</span>
+            <span className="font-mono text-slate-700 dark:text-slate-300 block truncate">
               {printDate !== 'Unavailable' ? printDate : issueDate}
             </span>
           </div>
 
           <div className="space-y-0.5">
-            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Verified DOI</span>
+            <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Verified DOI</span>
             <div className="flex items-center gap-1.5">
-              <span className="font-mono text-teal-300 truncate text-[11px]">
+              <span className="font-mono text-teal-700 dark:text-teal-300 truncate text-[11px]">
                 {displayDoi || 'Unavailable'}
               </span>
               {displayDoi && (
                 <button
                   type="button"
                   onClick={handleCopyDoi}
-                  className="p-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
+                  className="p-1 rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors border border-slate-200 dark:border-slate-700"
                   title="Copy DOI string"
                 >
-                  {copiedDoi ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  {copiedDoi ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
                 </button>
               )}
             </div>
@@ -683,17 +683,17 @@ export default function ArticleDetailView({
       {/* ========================================================================= */}
       {/* PERSONAL ARTICLE PDF LIBRARY CARD */}
       {/* ========================================================================= */}
-      <section className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+      <section className="p-6 rounded-3xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-md dark:shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400">
+            <div className="p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-600 dark:text-indigo-400">
               <FileText className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
                 <span>Personal Article PDF Library</span>
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 In-app scientific PDF reader, local downloads, and encrypted cloud storage
               </p>
             </div>
@@ -701,18 +701,18 @@ export default function ArticleDetailView({
 
           <div className="flex items-center gap-2">
             {hasPdf ? (
-              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 flex items-center gap-1.5 shadow-sm">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/40 flex items-center gap-1.5 shadow-sm">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 <span>PDF Available in Library</span>
               </span>
             ) : paper.open_access_url ? (
-              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-50 dark:bg-cyan-500/15 text-cyan-800 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-500/40 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
                 <span>Open Access Publisher PDF</span>
               </span>
             ) : (
-              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/40 flex items-center gap-1.5">
-                <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 dark:bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-500/40 flex items-center gap-1.5">
+                <AlertCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                 <span>Institutional Access Required</span>
               </span>
             )}
@@ -721,18 +721,18 @@ export default function ArticleDetailView({
 
         {/* State 3: PDF already stored in user's library */}
         {hasPdf ? (
-          <div className="p-5 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1.5 min-w-0">
               <div className="flex items-center gap-2 text-xs">
-                <span className="font-semibold text-slate-100 truncate max-w-sm sm:max-w-md">
+                <span className="font-semibold text-slate-900 dark:text-slate-100 truncate max-w-sm sm:max-w-md">
                   {pdfRecord?.original_filename || 'article.pdf'}
                 </span>
-                <span className="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-300 font-mono">
+                <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-[10px] text-slate-700 dark:text-slate-300 font-mono">
                   {pdfRecord?.file_size ? `${(pdfRecord.file_size / (1024 * 1024)).toFixed(2)} MB` : 'Full Article'}
                 </span>
               </div>
-              <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
-                <span className="flex items-center gap-1 text-emerald-400">
+              <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+                <span className="flex items-center gap-1 text-emerald-700 dark:text-emerald-400">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   <span>{pdfRecord?.source_type === 'institutional_access' ? 'Institutional Subscription' : pdfRecord?.source_type === 'open_access' ? 'Open Access Document' : 'User Cloud Vault'}</span>
                 </span>
@@ -754,7 +754,7 @@ export default function ArticleDetailView({
               <button
                 type="button"
                 onClick={handleDownloadPdf}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-colors"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition-colors"
                 title="Download PDF directly to your computer"
               >
                 <Download className="w-4 h-4" />
@@ -767,7 +767,7 @@ export default function ArticleDetailView({
                   setIsReplacingPdf(true);
                   setIsUploadOpen(true);
                 }}
-                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+                className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-700 transition-colors"
                 title="Replace with updated PDF file"
               >
                 <RefreshCw className="w-4 h-4" />
@@ -776,7 +776,7 @@ export default function ArticleDetailView({
               <button
                 type="button"
                 onClick={() => setShowRemoveConfirm(true)}
-                className="p-2 rounded-xl bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-slate-700 transition-colors"
+                className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-500/20 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 border border-slate-300 dark:border-slate-700 transition-colors"
                 title="Remove PDF from library"
               >
                 <Trash2 className="w-4 h-4" />
@@ -785,12 +785,12 @@ export default function ArticleDetailView({
           </div>
         ) : paper.open_access_url ? (
           /* State 1: Publisher PDF accessible via Open Access or direct link */
-          <div className="p-5 rounded-2xl bg-cyan-950/20 border border-cyan-500/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="p-5 rounded-2xl bg-cyan-50 dark:bg-cyan-950/20 border border-cyan-200 dark:border-cyan-500/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1">
-              <h4 className="text-xs font-bold text-cyan-300 uppercase tracking-wider">
+              <h4 className="text-xs font-bold text-cyan-800 dark:text-cyan-300 uppercase tracking-wider">
                 Full-Text Open Access PDF Ready
               </h4>
-              <p className="text-xs text-slate-300 max-w-xl">
+              <p className="text-xs text-slate-600 dark:text-slate-300 max-w-xl">
                 This article is released under Open Access licensing. You can read the official publisher copy or upload it to your private cloud storage for permanent offline archiving.
               </p>
             </div>
@@ -812,22 +812,22 @@ export default function ArticleDetailView({
                   setIsReplacingPdf(false);
                   setIsUploadOpen(true);
                 }}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-colors"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition-colors"
               >
-                <Upload className="w-4 h-4 text-indigo-400" />
+                <Upload className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 <span>Save to Cloud Library</span>
               </button>
             </div>
           </div>
         ) : (
           /* State 2: Publisher PDF not accessible directly (paywalled / institutional) */
-          <div className="p-5 rounded-2xl bg-slate-950/60 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1">
-              <h4 className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
+              <h4 className="text-xs font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                <AlertCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                 <span>Institutional Subscription or Preprint Upload</span>
               </h4>
-              <p className="text-xs text-slate-400 max-w-xl">
+              <p className="text-xs text-slate-600 dark:text-slate-400 max-w-xl">
                 This publication requires institutional journal authentication or campus proxy. If you have retrieved the authorized PDF through your university library or author preprint, upload it below to read and store it inside your personal hub.
               </p>
             </div>
@@ -850,17 +850,17 @@ export default function ArticleDetailView({
       {/* ========================================================================= */}
       {/* RESEARCH WATCHLIST & READING NOTES CARD */}
       {/* ========================================================================= */}
-      <section className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+      <section className="p-6 rounded-3xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-md dark:shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-violet-500/10 border border-violet-500/30 text-violet-400">
+            <div className="p-2.5 rounded-2xl bg-violet-500/10 border border-violet-500/30 text-violet-600 dark:text-violet-400">
               <BookMarked className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
                 Research Watchlist & Personal Notes
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Track reading milestones, synthesis notes, and research priority
               </p>
             </div>
@@ -873,7 +873,7 @@ export default function ArticleDetailView({
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border ${
                 isWatchlisted
                   ? 'bg-violet-600 text-white border-violet-500 shadow-sm'
-                  : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border-slate-700'
+                  : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700'
               }`}
             >
               <BookMarked className="w-3.5 h-3.5" />
@@ -886,11 +886,11 @@ export default function ArticleDetailView({
           <div className="space-y-4 pt-1">
             {/* Reading Status Selector Buttons */}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold text-slate-400 mr-2">Reading Status:</span>
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 mr-2">Reading Status:</span>
               {[
-                { id: 'to_read', label: 'To Read', color: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
-                { id: 'reading', label: 'Currently Reading', color: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' },
-                { id: 'read', label: 'Completed / Read', color: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' }
+                { id: 'to_read', label: 'To Read', color: 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-500/30' },
+                { id: 'reading', label: 'Currently Reading', color: 'bg-cyan-500/20 text-cyan-800 dark:text-cyan-300 border-cyan-500/30' },
+                { id: 'read', label: 'Completed / Read', color: 'bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border-emerald-500/30' }
               ].map(st => (
                 <button
                   key={st.id}
@@ -899,7 +899,7 @@ export default function ArticleDetailView({
                   className={`px-3 py-1 rounded-xl text-xs font-medium border transition-all ${
                     readingStatus === st.id
                       ? `${st.color} font-semibold shadow-sm`
-                      : 'bg-slate-950/60 text-slate-400 border-slate-800 hover:text-slate-200'
+                      : 'bg-slate-100 dark:bg-slate-950/60 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:text-slate-900 dark:hover:text-slate-200'
                   }`}
                 >
                   {st.label}
@@ -908,17 +908,17 @@ export default function ArticleDetailView({
             </div>
 
             {/* Personal Research Note */}
-            <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-2">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                  <Edit3 className="w-3.5 h-3.5 text-violet-400" />
+                <span className="text-xs font-semibold text-slate-800 dark:text-slate-300 flex items-center gap-1.5">
+                  <Edit3 className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
                   <span>Personal Research Notes</span>
                 </span>
                 {!isEditingNote && (
                   <button
                     type="button"
                     onClick={() => setIsEditingNote(true)}
-                    className="text-xs text-indigo-400 hover:text-indigo-300 font-medium"
+                    className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium"
                   >
                     {personalNote ? 'Edit Note' : 'Add Note'}
                   </button>
@@ -932,7 +932,7 @@ export default function ArticleDetailView({
                     value={noteInput}
                     onChange={(e) => setNoteInput(e.target.value)}
                     placeholder="Record key synthesis conditions, LCST cloud point, functional monomer tags, or hypothesis..."
-                    className="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 resize-none font-sans"
+                    className="w-full p-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-indigo-500 resize-none font-sans"
                   />
                   <div className="flex items-center justify-end gap-2">
                     <button
@@ -941,7 +941,7 @@ export default function ArticleDetailView({
                         setNoteInput(personalNote);
                         setIsEditingNote(false);
                       }}
-                      className="px-3 py-1 rounded-lg text-xs text-slate-400 hover:text-slate-200"
+                      className="px-3 py-1 rounded-lg text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                     >
                       Cancel
                     </button>
@@ -955,27 +955,27 @@ export default function ArticleDetailView({
                   </div>
                 </div>
               ) : (
-                <p className="text-xs text-slate-300 italic">
+                <p className="text-xs text-slate-700 dark:text-slate-300 italic">
                   {personalNote || 'No personal research notes recorded yet. Click "Add Note" to write observations.'}
                 </p>
               )}
             </div>
           </div>
         ) : (
-          <div className="py-2 text-xs text-slate-400">
-            Keep track of this paper in your active queue by clicking <strong className="text-slate-200">"Add to Watchlist"</strong> above.
+          <div className="py-2 text-xs text-slate-500 dark:text-slate-400">
+            Keep track of this paper in your active queue by clicking <strong className="text-slate-800 dark:text-slate-200">"Add to Watchlist"</strong> above.
           </div>
         )}
       </section>
 
       {/* Tabs Navigation (Overview & Abstract, TOC / Graphical Abstract, AI Summary) */}
-      <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+      <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
         <button
           onClick={() => setActiveTab('overview')}
           className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
             activeTab === 'overview'
               ? 'bg-teal-600 text-white shadow-md'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-850'
           }`}
         >
           <FileText className="w-3.5 h-3.5" />
@@ -987,7 +987,7 @@ export default function ArticleDetailView({
           className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
             activeTab === 'toc'
               ? 'bg-teal-600 text-white shadow-md'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-850'
           }`}
         >
           <ImageIcon className="w-3.5 h-3.5" />
@@ -999,7 +999,7 @@ export default function ArticleDetailView({
           className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
             activeTab === 'summary'
               ? 'bg-indigo-600 text-white shadow-md'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-850'
           }`}
         >
           <Sparkles className="w-3.5 h-3.5" />
@@ -1011,24 +1011,24 @@ export default function ArticleDetailView({
       {activeTab === 'overview' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Abstract Section */}
-          <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-3">
-            <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-teal-400" />
+          <div className="p-6 rounded-3xl bg-white/90 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-md space-y-3">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               <span>Abstract</span>
             </h3>
-            <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
+            <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-sans">
               {paper.abstract || 'No abstract text available for this publication record.'}
             </p>
           </div>
 
           {/* Polymer Taxonomy & Evidence Classification Card */}
-          <div className="p-6 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+          <div className="p-6 rounded-3xl bg-white/90 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-md space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Polymer Science Classification & Inclusion Evidence</span>
               </h3>
-              <span className="text-[10px] font-mono text-emerald-300 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full font-semibold">
+              <span className="text-[10px] font-mono text-emerald-800 dark:text-emerald-300 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full font-semibold">
                 Confidence: {(paper.polymer_confidence || 'High').toUpperCase()}
               </span>
             </div>
@@ -1036,21 +1036,21 @@ export default function ArticleDetailView({
             {/* Relevance Rationale & Evidence Quote */}
             <div className="space-y-3 text-xs">
               <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
+                <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 block mb-1">
                   Why this paper was selected
                 </span>
-                <p className="text-slate-200 leading-relaxed bg-slate-950/70 p-3.5 rounded-xl border border-slate-800/80">
+                <p className="text-slate-800 dark:text-slate-200 leading-relaxed bg-slate-50 dark:bg-slate-950/70 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800/80">
                   {paper.relevance_reason || 'Investigates macromolecular structure, synthesis kinetics, or polymeric material applications.'}
                 </p>
               </div>
 
               {paper.evidence_phrase && (
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">
+                  <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 block mb-1">
                     Verbatim Text Evidence
                   </span>
-                  <div className="p-3 rounded-xl bg-slate-950 border border-teal-500/30 text-teal-200 italic flex items-start gap-2.5 font-sans">
-                    <Quote className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" />
+                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-teal-500/30 text-teal-800 dark:text-teal-200 italic flex items-start gap-2.5 font-sans">
+                    <Quote className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
                     <span>"{paper.evidence_phrase}"</span>
                   </div>
                 </div>
@@ -1059,30 +1059,30 @@ export default function ArticleDetailView({
 
             {/* Identified Taxonomy Dimensions Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 text-xs">
-              <div className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Polymer Family</span>
-                <span className="font-semibold text-teal-300 mt-1 block">
+              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold block">Polymer Family</span>
+                <span className="font-semibold text-teal-700 dark:text-teal-300 mt-1 block">
                   {paper.polymer_family || 'Macromolecular Platform'}
                 </span>
               </div>
 
-              <div className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Polymerization Method</span>
-                <span className="font-semibold text-indigo-300 mt-1 block">
+              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold block">Polymerization Method</span>
+                <span className="font-semibold text-indigo-700 dark:text-indigo-300 mt-1 block">
                   {paper.polymerization_method || 'Unavailable'}
                 </span>
               </div>
 
-              <div className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Application Domain</span>
-                <span className="font-semibold text-purple-300 mt-1 block">
+              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold block">Application Domain</span>
+                <span className="font-semibold text-purple-700 dark:text-purple-300 mt-1 block">
                   {paper.polymer_application || 'Polymer Science Research'}
                 </span>
               </div>
 
-              <div className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-semibold block">Property / Mechanism</span>
-                <span className="font-semibold text-emerald-300 mt-1 block">
+              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold block">Property / Mechanism</span>
+                <span className="font-semibold text-emerald-700 dark:text-emerald-300 mt-1 block">
                   {paper.polymer_property || 'Material Characterization'}
                 </span>
               </div>
@@ -1091,12 +1091,12 @@ export default function ArticleDetailView({
             {/* Topic Tags */}
             {paper.polymer_topics && paper.polymer_topics.length > 0 && (
               <div className="pt-2">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1.5">
+                <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 block mb-1.5">
                   Taxonomy Topic Tags
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {paper.polymer_topics.map((t, i) => (
-                    <span key={i} className="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                    <span key={i} className="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                       #{t}
                     </span>
                   ))}
@@ -1105,21 +1105,21 @@ export default function ArticleDetailView({
             )}
 
             {/* Data Source Provenance */}
-            <div className="pt-2 border-t border-slate-800 text-[11px] text-slate-400 font-mono flex items-center justify-between">
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 font-mono flex items-center justify-between">
               <span>Source Provenance: {(paper.provenance || ['Crossref / OpenAlex']).join(' · ')}</span>
               <span>Collected: {paper.collected_at ? new Date(paper.collected_at).toLocaleDateString() : 'Active Index'}</span>
             </div>
           </div>
 
           {/* Citation Generator Bar */}
-          <div className="p-5 rounded-3xl bg-slate-900 border border-slate-800 space-y-3">
+          <div className="p-5 rounded-3xl bg-white/90 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-md space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
-                <Quote className="w-3.5 h-3.5 text-teal-400" />
+              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                <Quote className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
                 <span>Export Citation</span>
               </span>
 
-              <div className="flex items-center bg-slate-800 rounded-lg p-0.5 text-xs font-mono">
+              <div className="flex items-center bg-slate-100 dark:bg-slate-800 rounded-lg p-0.5 text-xs font-mono">
                 {['apa', 'bibtex', 'ris'].map(fmt => (
                   <button
                     key={fmt}
@@ -1127,7 +1127,7 @@ export default function ArticleDetailView({
                     className={`px-2.5 py-0.5 rounded uppercase text-[10px] font-semibold transition-colors ${
                       citationFormat === fmt 
                         ? 'bg-teal-600 text-white shadow-sm' 
-                        : 'text-slate-400 hover:text-slate-200'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                     }`}
                   >
                     {fmt}
@@ -1137,16 +1137,16 @@ export default function ArticleDetailView({
             </div>
 
             <div className="flex items-center gap-2">
-              <div className="flex-1 p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-[11px] font-mono text-slate-300 truncate">
+              <div className="flex-1 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[11px] font-mono text-slate-700 dark:text-slate-300 truncate">
                 {citationFormat === 'apa' 
                   ? `${(paper.authors || []).map(a => a.name).join(', ') || 'Author'} (${paper.publication_year || 2026}). ${paper.title}. ${paper.journal}.`
                   : `@article{${paper.id || 'citeKey'}, title={${paper.title}}, year={${paper.publication_year}}...}`}
               </div>
               <button
                 onClick={handleCopyCitation}
-                className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-colors flex items-center gap-1.5 shrink-0"
+                className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition-colors flex items-center gap-1.5 shrink-0"
               >
-                {copiedCitation ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedCitation ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                 <span>{copiedCitation ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
@@ -1192,25 +1192,25 @@ export default function ArticleDetailView({
       {/* Remove PDF Confirmation Dialog */}
       {showRemoveConfirm && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
           role="dialog"
           aria-modal="true"
         >
-          <div className="w-full max-w-md bg-slate-900 border border-slate-750 rounded-2xl p-6 shadow-2xl space-y-4">
-            <div className="flex items-center gap-3 text-rose-400">
+          <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-750 rounded-2xl p-6 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3 text-rose-500">
               <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20">
                 <Trash2 className="w-5 h-5" />
               </div>
-              <h3 className="text-base font-semibold text-white">Remove PDF from Library?</h3>
+              <h3 className="text-base font-semibold text-slate-900 dark:text-white">Remove PDF from Library?</h3>
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Are you sure you want to remove <strong className="text-white font-mono">{pdfRecord?.original_filename || 'this PDF'}</strong> from your personal cloud storage? The metadata and research notes will be preserved.
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Are you sure you want to remove <strong className="text-slate-900 dark:text-white font-mono">{pdfRecord?.original_filename || 'this PDF'}</strong> from your personal cloud storage? The metadata and research notes will be preserved.
             </p>
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 type="button"
                 onClick={() => setShowRemoveConfirm(false)}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               >
                 Cancel
               </button>

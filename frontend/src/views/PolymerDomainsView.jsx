@@ -209,23 +209,23 @@ export default function PolymerDomainsView({
       <div className="space-y-8 animate-fadeIn pb-16">
         {/* Breadcrumb Navigation */}
         <div className="flex items-center justify-between gap-4">
-          <nav className="flex items-center gap-2 text-xs text-slate-400">
+          <nav className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
             <button
               onClick={() => setSelectedDomain(null)}
-              className="flex items-center gap-1.5 hover:text-teal-300 transition-colors font-medium"
+              className="flex items-center gap-1.5 text-teal-700 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 transition-colors font-semibold"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Universal Polymer Research Domains</span>
             </button>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
-            <span className="text-slate-200 font-semibold truncate">
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-600" />
+            <span className="text-slate-900 dark:text-slate-200 font-semibold truncate">
               {selectedDomain.title}
             </span>
           </nav>
 
           <button
             onClick={() => setSelectedDomain(null)}
-            className="px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-all flex items-center gap-1.5 shadow-sm"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-all flex items-center gap-1.5 shadow-sm"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to All Domains</span>
@@ -285,11 +285,11 @@ export default function PolymerDomainsView({
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                <FlaskConical className="w-5 h-5 text-teal-400" />
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <FlaskConical className="w-5 h-5 text-teal-600 dark:text-teal-400" />
                 <span>Polymer Families &amp; Authentic Molecular Repeat Units</span>
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 Click any polymer acronym (e.g. {selectedDomain.families.map(f => f.acronym.split('/')[0].trim()).join(', ')}) to inspect chemical formulas, thermal transitions, synthesis routes, and literature.
               </p>
             </div>
@@ -309,38 +309,38 @@ export default function PolymerDomainsView({
                 />
 
                 <div className="flex items-start justify-between gap-3 mb-2.5">
-                  <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-teal-500/10 text-teal-300 border border-teal-500/30 group-hover:bg-teal-500/20 transition-colors">
+                  <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-teal-500/10 text-teal-800 dark:text-teal-300 border border-teal-500/30 group-hover:bg-teal-500/20 transition-colors">
                     {fam.acronym}
                   </span>
-                  <span className="text-[11px] text-slate-500 font-mono">
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
                     {fam.repeatUnitMass ? `${fam.repeatUnitMass} g/mol` : 'Polymer'}
                   </span>
                 </div>
 
-                <h3 className="text-base font-bold text-slate-100 group-hover:text-teal-300 transition-colors">
+                <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-300 transition-colors">
                   {fam.name}
                 </h3>
 
-                <div className="mt-2.5 p-2 rounded-xl bg-slate-950/80 border border-slate-800/80 font-mono text-xs text-indigo-300 truncate">
+                <div className="mt-2.5 p-2 rounded-xl bg-slate-100 dark:bg-slate-950/80 border border-slate-300 dark:border-slate-800/80 font-mono text-xs text-indigo-700 dark:text-indigo-300 truncate">
                   {fam.formula || '[-R-]n'}
                 </div>
 
-                <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] text-slate-400">
+                <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] text-slate-600 dark:text-slate-400">
                   <div>
                     <span className="text-slate-500 block">Glass Transition:</span>
-                    <span className="font-semibold text-slate-200">{fam.tg || 'Amorphous'}</span>
+                    <span className="font-semibold text-slate-900 dark:text-slate-200">{fam.tg || 'Amorphous'}</span>
                   </div>
                   <div>
                     <span className="text-slate-500 block">Melting / Phase:</span>
-                    <span className="font-semibold text-slate-200">{fam.tm || fam.cloudPoint || 'Variable'}</span>
+                    <span className="font-semibold text-slate-900 dark:text-slate-200">{fam.tm || fam.cloudPoint || 'Variable'}</span>
                   </div>
                 </div>
 
-                <p className="mt-3 text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                <p className="mt-3 text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
                   {fam.properties || fam.synthesis}
                 </p>
 
-                <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-teal-400 font-semibold group-hover:translate-x-1 transition-transform">
+                <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-teal-700 dark:text-teal-400 font-semibold group-hover:translate-x-1 transition-transform">
                   <span>Explore Topic Details</span>
                   <ChevronRight className="w-4 h-4" />
                 </div>
@@ -353,14 +353,14 @@ export default function PolymerDomainsView({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* 1. Synthesis & Polymerization */}
           <div className="p-5 rounded-2xl card-glossy space-y-3">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-400">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400">
               <Atom className="w-4 h-4" />
               <span>Polymerization Methods</span>
             </div>
-            <ul className="space-y-2 text-xs text-slate-300">
+            <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
               {selectedDomain.synthesisMethods.map((meth, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400 mt-1.5 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 shrink-0" />
                   <span>{meth}</span>
                 </li>
               ))}
@@ -369,14 +369,14 @@ export default function PolymerDomainsView({
 
           {/* 2. Key Physical/Chemical Properties */}
           <div className="p-5 rounded-2xl card-glossy space-y-3">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-400">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
               <Sparkles className="w-4 h-4" />
               <span>Key Properties</span>
             </div>
-            <ul className="space-y-2 text-xs text-slate-300">
+            <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
               {selectedDomain.keyProperties.map((prop, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-1.5 shrink-0" />
                   <span>{prop}</span>
                 </li>
               ))}
@@ -385,14 +385,14 @@ export default function PolymerDomainsView({
 
           {/* 3. Characterization Techniques */}
           <div className="p-5 rounded-2xl card-glossy space-y-3">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-violet-400">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400">
               <Activity className="w-4 h-4" />
               <span>Characterization</span>
             </div>
-            <ul className="space-y-2 text-xs text-slate-300">
+            <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
               {selectedDomain.characterization.map((char, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-violet-400 mt-1.5 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-violet-500 mt-1.5 shrink-0" />
                   <span>{char}</span>
                 </li>
               ))}
@@ -401,14 +401,14 @@ export default function PolymerDomainsView({
 
           {/* 4. Applications */}
           <div className="p-5 rounded-2xl card-glossy space-y-3">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-400">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
               <CheckCircle2 className="w-4 h-4" />
               <span>Key Applications</span>
             </div>
-            <ul className="space-y-2 text-xs text-slate-300">
+            <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
               {selectedDomain.applications.map((app, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
                   <span>{app}</span>
                 </li>
               ))}
@@ -419,12 +419,12 @@ export default function PolymerDomainsView({
         {/* Leading Journals Publishing in Domain */}
         <div className="p-5 rounded-2xl card-glossy flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <BookOpen className="w-5 h-5 text-indigo-400 shrink-0" />
+            <BookOpen className="w-5 h-5 text-indigo-600 dark:text-indigo-400 shrink-0" />
             <div>
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                 Primary Scientific Journals
               </div>
-              <div className="text-sm font-semibold text-slate-200 mt-0.5">
+              <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 mt-0.5">
                 Key literature sources reporting {selectedDomain.title} discoveries
               </div>
             </div>
@@ -434,7 +434,7 @@ export default function PolymerDomainsView({
             {selectedDomain.relatedJournals.map(jnl => (
               <span
                 key={jnl}
-                className="px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 text-xs font-medium text-slate-300"
+                className="px-3 py-1 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300"
               >
                 {jnl}
               </span>
@@ -446,23 +446,23 @@ export default function PolymerDomainsView({
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-teal-400" />
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-teal-600 dark:text-teal-400" />
                 <span>Recent Literature in {selectedDomain.title}</span>
                 {domainPapers.length > 0 && (
-                  <span className="text-xs font-mono font-bold text-teal-300 bg-teal-500/10 border border-teal-500/25 px-2.5 py-0.5 rounded-full">
+                  <span className="text-xs font-mono font-bold text-teal-800 dark:text-teal-300 bg-teal-500/15 dark:bg-teal-500/10 border border-teal-500/30 px-2.5 py-0.5 rounded-full">
                     {domainPapers.length} Articles
                   </span>
                 )}
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 Actual verified scientific publications indexed in the platform repository
               </p>
             </div>
 
             <button
               onClick={() => handleLaunchSearch(selectedDomain.searchQuery, selectedDomain)}
-              className="px-4 py-2 rounded-xl bg-slate-900 border border-teal-500/40 text-teal-300 hover:bg-teal-500/10 font-bold text-xs flex items-center gap-2 transition-all self-start sm:self-auto"
+              className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-teal-500/40 text-teal-800 dark:text-teal-300 hover:bg-teal-500/10 font-bold text-xs flex items-center gap-2 transition-all self-start sm:self-auto"
             >
               <span>View All Literature Results</span>
               <ExternalLink className="w-3.5 h-3.5" />
@@ -529,43 +529,43 @@ export default function PolymerDomainsView({
       {/* Hero Section with Interactive 3D Macromolecule */}
       <div className="space-y-6">
         <div className="text-center max-w-4xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-violet-500/10 via-indigo-500/10 to-teal-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-bold uppercase tracking-wider shadow-sm">
-            <Compass className="w-3.5 h-3.5 text-indigo-400" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-violet-500/10 via-indigo-500/10 to-teal-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 text-xs font-bold uppercase tracking-wider shadow-sm">
+            <Compass className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
             <span>Interactive Scientific Discovery Map</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             Universal Polymer Research Domains
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-medium">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
             Explore the science of polymers — from molecular architecture and controlled polymerization to advanced materials and biomedical applications.
           </p>
         </div>
 
         {/* Live Platform Taxonomy & Literature Metrics */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto">
-          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md">
-            <div className="text-2xl sm:text-3xl font-extrabold font-mono text-indigo-400">18</div>
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-1">Research Domains</div>
+          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md border-slate-200/80 dark:border-slate-800/80">
+            <div className="text-2xl sm:text-3xl font-extrabold font-mono text-indigo-600 dark:text-indigo-400">18</div>
+            <div className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mt-1">Research Domains</div>
             <div className="text-[11px] text-slate-500">Synthetic, Bio &amp; Functional</div>
           </div>
 
-          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md">
-            <div className="text-2xl sm:text-3xl font-extrabold font-mono text-teal-400">{totalCuratedCount}+</div>
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-1">Polymer Families</div>
+          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md border-slate-200/80 dark:border-slate-800/80">
+            <div className="text-2xl sm:text-3xl font-extrabold font-mono text-teal-600 dark:text-teal-400">{totalCuratedCount}+</div>
+            <div className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mt-1">Polymer Families</div>
             <div className="text-[11px] text-slate-500">Curated Acronyms &amp; Formulas</div>
           </div>
 
-          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md">
-            <div className="text-2xl sm:text-3xl font-extrabold font-mono text-purple-400">80+</div>
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-1">Synthesis Methods</div>
+          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md border-slate-200/80 dark:border-slate-800/80">
+            <div className="text-2xl sm:text-3xl font-extrabold font-mono text-purple-600 dark:text-purple-400">80+</div>
+            <div className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mt-1">Synthesis Methods</div>
             <div className="text-[11px] text-slate-500">Living ROP, ATRP, RAFT, CROP</div>
           </div>
 
-          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md">
-            <div className="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-400">100%</div>
-            <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-1">Real Data Verified</div>
+          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md border-slate-200/80 dark:border-slate-800/80">
+            <div className="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-600 dark:text-emerald-400">100%</div>
+            <div className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mt-1">Real Data Verified</div>
             <div className="text-[11px] text-slate-500">No Mock Publication Counts</div>
           </div>
         </div>
@@ -574,18 +574,18 @@ export default function PolymerDomainsView({
       {/* Large Interactive Polymer Domain Search Bar */}
       <div className="relative max-w-3xl mx-auto">
         <div className="relative flex items-center">
-          <Search className="absolute left-4 w-5 h-5 text-indigo-400 pointer-events-none" />
+          <Search className="absolute left-4 w-5 h-5 text-indigo-500 dark:text-indigo-400 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search polymer domains, acronyms (PLA, PEG, PMMA, POx, PNIPAM), or polymerization methods (ATRP, CROP)..."
-            className="w-full pl-12 pr-12 py-3.5 sm:py-4 rounded-2xl bg-slate-900/95 border border-slate-700/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/25 text-slate-100 placeholder-slate-500 text-sm shadow-xl transition-all"
+            className="w-full pl-12 pr-12 py-3.5 sm:py-4 rounded-2xl bg-white dark:bg-slate-900/95 border border-slate-300 dark:border-slate-700/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/25 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-sm shadow-md dark:shadow-xl transition-all"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-4 text-xs text-slate-400 hover:text-white"
+              className="absolute right-4 text-xs text-slate-400 hover:text-slate-900 dark:hover:text-white"
             >
               Clear
             </button>
@@ -601,8 +601,8 @@ export default function PolymerDomainsView({
             onClick={() => setActiveCategory(cat.id)}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               activeCategory === cat.id
-                ? 'bg-gradient-to-r from-teal-500 via-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-500/20'
-                : 'bg-slate-900/90 text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-slate-800'
+                ? 'bg-gradient-to-r from-teal-600 via-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-500/20'
+                : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-900/90 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 border border-slate-200 dark:border-slate-800'
             }`}
           >
             {cat.label}
@@ -612,10 +612,10 @@ export default function PolymerDomainsView({
 
       {/* Recently Explored & Trending Domains Bar */}
       {recentlyExplored.length > 0 && !searchQuery && (
-        <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2 text-slate-400">
-            <TrendingUp className="w-4 h-4 text-teal-400" />
-            <span className="font-semibold text-slate-300">Recently Explored &amp; Trending:</span>
+        <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs shadow-sm">
+          <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+            <TrendingUp className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+            <span className="font-semibold text-slate-800 dark:text-slate-300">Recently Explored &amp; Trending:</span>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {recentlyExplored.map(slug => {
@@ -625,7 +625,7 @@ export default function PolymerDomainsView({
                 <button
                   key={slug}
                   onClick={() => setSelectedDomain(dom)}
-                  className="px-3 py-1 rounded-lg bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-teal-300 font-medium transition-colors"
+                  className="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-950 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-300 font-medium transition-colors"
                 >
                   {dom.title}
                 </button>
@@ -638,11 +638,11 @@ export default function PolymerDomainsView({
       {/* The 18 Colourful 2D Domain Cards Grid */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-            <Boxes className="w-5 h-5 text-indigo-400" />
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Boxes className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
             <span>Polymer Chemistry Disciplines ({filteredDomains.length} of 18 Domains)</span>
           </h2>
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-slate-500 dark:text-slate-400">
             Click any domain card to explore specialized polymer research
           </span>
         </div>
@@ -656,7 +656,7 @@ export default function PolymerDomainsView({
               <div
                 key={domain.id}
                 onClick={() => setSelectedDomain(domain)}
-                className="h-full cursor-pointer flex flex-col justify-between group rounded-3xl card-glossy shimmer-hover border-slate-800/80 hover:border-slate-700 shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+                className="h-full cursor-pointer flex flex-col justify-between group rounded-3xl card-glossy shimmer-hover border-slate-200/80 dark:border-slate-800/80 hover:border-teal-500/40 dark:hover:border-slate-700 shadow-md hover:shadow-xl transition-all duration-300 relative overflow-hidden"
               >
                 {/* Subtle gradient accent bar along the top edge */}
                 <div className={`h-1.5 w-full bg-gradient-to-r ${ident.gradient}`} />
@@ -669,47 +669,47 @@ export default function PolymerDomainsView({
                         <div className={`w-8 h-8 rounded-xl flex items-center justify-center border ${ident.badgeBg} shadow-sm group-hover:scale-105 transition-transform`}>
                           {getDomainIcon(domain.id)}
                         </div>
-                        <span className="text-[11px] font-mono font-semibold text-slate-300">
+                        <span className="text-[11px] font-mono font-semibold text-slate-700 dark:text-slate-300">
                           {domain.families.length} Families
                         </span>
                       </div>
 
                       {count > 0 ? (
-                        <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-bold">
+                        <span className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-bold">
                           {count} indexed papers
                         </span>
                       ) : (
-                        <span className="text-[11px] font-mono text-slate-400 bg-slate-800/80 border border-slate-700/60 px-2.5 py-0.5 rounded-full">
+                        <span className="text-[11px] font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 px-2.5 py-0.5 rounded-full">
                           Literature available
                         </span>
                       )}
                     </div>
 
                     {/* Domain Title */}
-                    <h3 className="text-lg font-bold text-white group-hover:text-teal-300 transition-colors">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-300 transition-colors">
                       {domain.title}
                     </h3>
 
                     {/* Short Description */}
-                    <p className="text-xs text-slate-400 leading-relaxed mt-2 line-clamp-3">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mt-2 line-clamp-3">
                       {domain.shortDescription}
                     </p>
                   </div>
 
                   {/* Topic Tags & Action Button */}
-                  <div className="pt-4 border-t border-slate-800/80 space-y-3">
+                  <div className="pt-4 border-t border-slate-200/80 dark:border-slate-800/80 space-y-3">
                     <div className="flex flex-wrap gap-1.5">
                       {domain.relatedTopics.slice(0, 4).map(top => (
                         <span
                           key={top}
-                          className="px-2 py-0.5 rounded-md bg-slate-950 text-[10px] text-slate-400 font-mono border border-slate-800"
+                          className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-950 text-[10px] text-slate-600 dark:text-slate-400 font-mono border border-slate-200 dark:border-slate-800"
                         >
                           #{top}
                         </span>
                       ))}
                     </div>
 
-                    <div className="flex items-center justify-between text-xs font-bold text-teal-400 group-hover:text-teal-300 group-hover:translate-x-1 transition-all pt-1">
+                    <div className="flex items-center justify-between text-xs font-bold text-teal-600 dark:text-teal-400 group-hover:text-teal-700 dark:group-hover:text-teal-300 group-hover:translate-x-1 transition-all pt-1">
                       <span>Explore Research Domain</span>
                       <ChevronRight className="w-4 h-4" />
                     </div>

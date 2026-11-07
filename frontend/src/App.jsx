@@ -32,30 +32,73 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPaperIds, setSelectedPaperIds] = useState([]);
   
-  // Theme state with localStorage persistence (Default: Dark)
-  const [theme, setTheme] = useState(() => {
+  // Theme state with localStorage persistence (Supports 'dark', 'light', 'system' - Default: 'dark')
+  const [themePreference, setThemePreference] = useState(() => {
     try {
+      if (typeof window !== 'undefined') {
+        const p = new URLSearchParams(window.location.search);
+        const t = p.get('theme');
+        if (t === 'light' || t === 'dark' || t === 'system') return t;
+      }
       return localStorage.getItem('prih_theme') || 'dark';
     } catch {
       return 'dark';
     }
   });
 
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+  const [effectiveTheme, setEffectiveTheme] = useState(() => {
     try {
-      localStorage.setItem('prih_theme', theme);
+      if (typeof window !== 'undefined') {
+        const p = new URLSearchParams(window.location.search);
+        const t = p.get('theme');
+        if (t === 'light' || t === 'dark') return t;
+      }
+      const stored = localStorage.getItem('prih_theme') || 'dark';
+      if (stored === 'system') {
+        return (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      }
+      return stored;
+    } catch {
+      return 'dark';
+    }
+  });
+
+  useEffect(() => {
+    const updateEffectiveTheme = () => {
+      let active = themePreference;
+      if (themePreference === 'system') {
+        active = (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+      }
+      setEffectiveTheme(active);
+
+      if (active === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+      }
+    };
+
+    updateEffectiveTheme();
+
+    try {
+      localStorage.setItem('prih_theme', themePreference);
+      localStorage.setItem('prih_theme_mode', themePreference);
     } catch (e) {
       console.debug('Failed to save theme in localStorage', e);
     }
-  }, [theme]);
+
+    if (themePreference === 'system' && typeof window !== 'undefined' && window.matchMedia) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = () => updateEffectiveTheme();
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    }
+  }, [themePreference]);
 
   const toggleTheme = () => {
-    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+    setThemePreference(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
   // Folding Sidebar Navigation (Open and pinned by default on desktop)
@@ -190,6 +233,13 @@ export default function App() {
 
       if (engineParam === 'universal' || engineParam === 'pox') {
         setCurrentEngine(engineParam);
+      }
+
+      const sidebarParam = params.get('sidebar');
+      if (sidebarParam === 'collapsed') {
+        setSidebarOpen(false);
+      } else if (sidebarParam === 'expanded') {
+        setSidebarOpen(true);
       }
 
       // 1. Direct article URL (e.g. /articles/{article_id} or ?view=article&id={article_id})
@@ -376,7 +426,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-atmospheric-dark text-slate-100 flex flex-col font-sans selection:bg-amber-500/30 selection:text-amber-200 transition-colors duration-200">
+    <div className="min-h-screen bg-atmospheric-dark text-slate-900 dark:text-slate-100 flex flex-col font-sans selection:bg-amber-500/30 selection:text-amber-900 dark:selection:text-amber-200 transition-colors duration-200">
       {/* Top Navbar with PRIH Branding, Dual Engine Switcher, & Theme Controller */}
       <Navbar
         activeView={activeView}
@@ -393,7 +443,9 @@ export default function App() {
         sidebarOpen={sidebarOpen}
         currentEngine={currentEngine}
         onSelectEngine={setCurrentEngine}
-        theme={theme}
+        theme={effectiveTheme}
+        themePreference={themePreference}
+        onSelectTheme={setThemePreference}
         onToggleTheme={toggleTheme}
       />
 
@@ -419,7 +471,9 @@ export default function App() {
           currentEngine={currentEngine}
           onSelectEngine={setCurrentEngine}
           onSelectCategory={handleSelectCategory}
-          theme={theme}
+          theme={effectiveTheme}
+          themePreference={themePreference}
+          onSelectTheme={setThemePreference}
           onToggleTheme={toggleTheme}
         />
 
@@ -427,11 +481,11 @@ export default function App() {
         {!sidebarOpen && (
           <button
             onClick={() => setSidebarOpen(true)}
-            className="fixed left-4 bottom-6 z-30 flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-950/80 hover:bg-amber-900/90 text-amber-200 hover:text-amber-100 border border-amber-500/40 shadow-2xl backdrop-blur-md text-xs font-semibold transition-all group hover:scale-105 shadow-amber-950/40"
+            className="fixed left-4 bottom-6 z-30 flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500/20 dark:bg-amber-950/80 hover:bg-amber-500/30 dark:hover:bg-amber-900/90 text-amber-950 dark:text-amber-200 hover:text-amber-900 dark:hover:text-amber-100 border border-amber-500/40 shadow-2xl backdrop-blur-md text-xs font-semibold transition-all group hover:scale-105 shadow-amber-950/10 dark:shadow-amber-950/40"
             title="Open Navigation Menu"
           >
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse group-hover:scale-125 transition-transform" />
-            <Menu className="w-4 h-4 text-amber-400" />
+            <span className="w-2 h-2 rounded-full bg-amber-500 dark:bg-amber-400 animate-pulse group-hover:scale-125 transition-transform" />
+            <Menu className="w-4 h-4 text-amber-700 dark:text-amber-400" />
             <span>Menu &amp; Views</span>
           </button>
         )}
@@ -754,6 +808,9 @@ export default function App() {
             <SettingsView
               health={health}
               onRefreshHealth={loadInitialData}
+              theme={themePreference}
+              effectiveTheme={effectiveTheme}
+              onSelectTheme={setThemePreference}
             />
           )}
         </main>

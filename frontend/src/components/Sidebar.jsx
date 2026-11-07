@@ -116,26 +116,26 @@ export default function Sidebar({
       `}
     >
       {/* Header with Warm Golden / Honey Ambient Branding & Collapse Controls */}
-      <div className="p-3.5 border-b border-amber-500/20 flex items-center justify-between shrink-0 bg-gradient-to-r from-amber-950/40 via-amber-900/20 to-slate-950/40">
+      <div className="p-3.5 border-b border-amber-300/40 dark:border-amber-500/20 flex items-center justify-between shrink-0 bg-gradient-to-r from-amber-200/60 via-amber-100/40 to-amber-200/50 dark:from-amber-950/40 dark:via-amber-900/20 dark:to-slate-950/40">
         <div 
           onClick={() => handleNavClick('dashboard')} 
           className="flex items-center gap-2.5 cursor-pointer group select-none min-w-0"
         >
-          <div className="w-8 h-8 rounded-xl flex items-center justify-center text-amber-100 bg-gradient-to-tr from-amber-600 via-amber-500 to-yellow-400 shadow-md shadow-amber-500/30 shrink-0 transition-transform group-hover:scale-105 border border-amber-300/40">
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center text-amber-950 dark:text-amber-100 bg-gradient-to-tr from-amber-400 via-amber-300 to-yellow-200 dark:from-amber-600 dark:via-amber-500 dark:to-yellow-400 shadow-md shadow-amber-500/30 shrink-0 transition-transform group-hover:scale-105 border border-amber-400/50 dark:border-amber-300/40">
             {isPOx ? <Atom className="w-4 h-4" /> : <Network className="w-4 h-4" />}
           </div>
 
           {!collapsed && (
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <h2 className="text-xs font-bold text-amber-100 dark:text-amber-100 light:text-amber-950 tracking-tight truncate">
+                <h2 className="text-xs font-bold text-amber-950 dark:text-amber-100 tracking-tight truncate">
                   PRIH Platform
                 </h2>
-                <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/25 text-amber-300 border border-amber-500/40 shadow-[0_0_10px_rgba(245,158,11,0.2)]">
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/25 text-amber-900 dark:text-amber-300 border border-amber-500/40 shadow-[0_0_10px_rgba(245,158,11,0.2)]">
                   2.0
                 </span>
               </div>
-              <p className="text-[10px] text-amber-300/80 font-medium truncate">
+              <p className="text-[10px] text-amber-900/80 dark:text-amber-300/80 font-medium truncate">
                 {isPOx ? 'POx Research Suite' : 'Universal Polymer'}
               </p>
             </div>
@@ -147,7 +147,7 @@ export default function Sidebar({
           <button
             onClick={() => setCollapsed(!collapsed)}
             title={collapsed ? "Expand Sidebar (⌘B)" : "Collapse Sidebar"}
-            className="p-1.5 rounded-lg text-amber-200/70 hover:text-amber-100 hover:bg-amber-500/15 border border-transparent hover:border-amber-500/30 transition-colors hidden lg:inline-flex"
+            className="p-1.5 rounded-lg text-amber-900/70 dark:text-amber-200/70 hover:text-amber-950 dark:hover:text-amber-100 hover:bg-amber-400/20 dark:hover:bg-amber-500/15 border border-transparent hover:border-amber-400/30 dark:hover:border-amber-500/30 transition-colors hidden lg:inline-flex"
           >
             {collapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
           </button>
@@ -158,8 +158,8 @@ export default function Sidebar({
               title={isPinned ? "Unpin sidebar" : "Pin sidebar open"}
               className={`p-1.5 rounded-lg border transition-colors hidden lg:inline-flex ${
                 isPinned 
-                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]' 
-                  : 'bg-slate-900/60 hover:bg-amber-500/10 text-amber-200/60 border-amber-500/20'
+                  ? 'bg-amber-500/20 text-amber-900 dark:text-amber-300 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]' 
+                  : 'bg-white/60 dark:bg-slate-900/60 hover:bg-amber-500/10 text-amber-900/60 dark:text-amber-200/60 border-amber-400/30 dark:border-amber-500/20'
               }`}
             >
               {isPinned ? <PinOff className="w-3.5 h-3.5" /> : <Pin className="w-3.5 h-3.5" />}
@@ -168,7 +168,7 @@ export default function Sidebar({
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg bg-amber-950/60 hover:bg-amber-900/80 text-amber-200/80 hover:text-amber-100 border border-amber-500/30 transition-colors lg:hidden"
+            className="p-1.5 rounded-lg bg-amber-200/80 dark:bg-amber-950/60 hover:bg-amber-300/80 dark:hover:bg-amber-900/80 text-amber-950 dark:text-amber-200/80 hover:text-amber-950 dark:hover:text-amber-100 border border-amber-400/40 dark:border-amber-500/30 transition-colors lg:hidden"
             title="Close sidebar"
           >
             <X className="w-4 h-4" />
@@ -181,9 +181,9 @@ export default function Sidebar({
         {/* GROUP 1: CORE ENGINES & DISCOVERY */}
         <div className="space-y-1">
           {!collapsed && (
-            <h3 className="px-3 text-[10px] font-bold uppercase tracking-wider text-amber-200/60 flex items-center justify-between">
+            <h3 className="px-3 text-[10px] font-bold uppercase tracking-wider text-amber-900/80 dark:text-amber-200/60 flex items-center justify-between">
               <span>Scientific Engines</span>
-              <span className="text-[9px] font-mono text-amber-400 font-semibold">Live</span>
+              <span className="text-[9px] font-mono text-amber-700 dark:text-amber-400 font-semibold">Live</span>
             </h3>
           )}
 
@@ -201,14 +201,14 @@ export default function Sidebar({
                     className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-left relative ${
                       isActive
                         ? 'nav-item-active-gold'
-                        : 'text-slate-300 dark:text-slate-300 light:text-slate-700 hover:text-amber-100 hover:bg-amber-500/10 hover:border-amber-500/20 border border-transparent'
+                        : 'text-slate-800 dark:text-slate-300 hover:text-amber-950 dark:hover:text-amber-100 hover:bg-amber-400/15 dark:hover:bg-amber-500/10 hover:border-amber-400/30 dark:hover:border-amber-500/20 border border-transparent'
                     }`}
                   >
                     <div className="flex items-center gap-3 truncate">
                       <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover/item:scale-110 ${
                         isActive 
-                          ? 'text-amber-300 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]' 
-                          : 'text-amber-200/70 group-hover/item:text-amber-300'
+                          ? 'text-amber-800 dark:text-amber-300 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]' 
+                          : 'text-amber-700/80 dark:text-amber-200/70 group-hover/item:text-amber-900 dark:group-hover/item:text-amber-300'
                       }`} />
                       {!collapsed && <span className="truncate">{item.label}</span>}
                     </div>
@@ -216,10 +216,10 @@ export default function Sidebar({
                     {!collapsed && item.badge && (
                       <span className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase tracking-wider ${
                         isActive
-                          ? 'bg-amber-400/25 text-amber-200 border border-amber-400/40 shadow-[0_0_8px_rgba(245,158,11,0.25)]'
+                          ? 'bg-amber-400/25 text-amber-900 dark:text-amber-200 border border-amber-400/40 shadow-[0_0_8px_rgba(245,158,11,0.25)]'
                           : item.badge === 'LIVE'
-                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse'
-                          : 'bg-amber-950/40 text-amber-300/80 border border-amber-500/25'
+                          ? 'bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-500/40 animate-pulse'
+                          : 'bg-amber-100 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300/80 border border-amber-300/50 dark:border-amber-500/25'
                       }`}>
                         {item.badge}
                       </span>
@@ -228,8 +228,8 @@ export default function Sidebar({
 
                   {/* Tooltip in collapsed mode */}
                   {collapsed && hoveredItem === item.id && (
-                    <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 z-50 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-amber-500/30 text-xs font-semibold text-amber-100 shadow-2xl whitespace-nowrap pointer-events-none font-sans">
-                      {item.label} {item.shortcut && <span className="text-[10px] text-amber-300/60 ml-1">({item.shortcut})</span>}
+                    <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 z-50 px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-amber-400/40 dark:border-amber-500/30 text-xs font-semibold text-amber-950 dark:text-amber-100 shadow-2xl whitespace-nowrap pointer-events-none font-sans">
+                      {item.label} {item.shortcut && <span className="text-[10px] text-amber-700 dark:text-amber-300/60 ml-1">({item.shortcut})</span>}
                     </div>
                   )}
                 </div>
@@ -239,9 +239,9 @@ export default function Sidebar({
         </div>
 
         {/* GROUP 2: RESEARCH WORKSPACE & AI */}
-        <div className="space-y-1 pt-1 border-t border-amber-500/15">
+        <div className="space-y-1 pt-1 border-t border-amber-300/30 dark:border-amber-500/15">
           {!collapsed && (
-            <h3 className="px-3 text-[10px] font-bold uppercase tracking-wider text-amber-200/60">
+            <h3 className="px-3 text-[10px] font-bold uppercase tracking-wider text-amber-900/80 dark:text-amber-200/60">
               Workspace &amp; AI
             </h3>
           )}
@@ -260,14 +260,14 @@ export default function Sidebar({
                     className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all text-left ${
                       isActive
                         ? 'nav-item-active-gold'
-                        : 'text-slate-300 dark:text-slate-300 light:text-slate-700 hover:text-amber-100 hover:bg-amber-500/10 border border-transparent'
+                        : 'text-slate-800 dark:text-slate-300 hover:text-amber-950 dark:hover:text-amber-100 hover:bg-amber-400/15 dark:hover:bg-amber-500/10 border border-transparent'
                     }`}
                   >
                     <div className="flex items-center gap-3 truncate">
                       <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover/item:scale-110 ${
                         isActive 
-                          ? 'text-amber-300 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]' 
-                          : 'text-amber-200/70 group-hover/item:text-amber-300'
+                          ? 'text-amber-800 dark:text-amber-300 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]' 
+                          : 'text-amber-700/80 dark:text-amber-200/70 group-hover/item:text-amber-900 dark:group-hover/item:text-amber-300'
                       }`} />
                       {!collapsed && <span className="truncate">{item.label}</span>}
                     </div>
@@ -275,8 +275,8 @@ export default function Sidebar({
                     {!collapsed && item.badge && (
                       <span className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase ${
                         isActive 
-                          ? 'bg-amber-400/25 text-amber-200 border border-amber-400/40' 
-                          : 'bg-amber-950/40 text-amber-300/80 border border-amber-500/25'
+                          ? 'bg-amber-400/25 text-amber-900 dark:text-amber-200 border border-amber-400/40' 
+                          : 'bg-amber-100 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300/80 border border-amber-300/50 dark:border-amber-500/25'
                       }`}>
                         {item.badge}
                       </span>
@@ -284,7 +284,7 @@ export default function Sidebar({
                   </button>
 
                   {collapsed && hoveredItem === item.id && (
-                    <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 z-50 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-amber-500/30 text-xs font-semibold text-amber-100 shadow-2xl whitespace-nowrap pointer-events-none">
+                    <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 z-50 px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-amber-400/40 dark:border-amber-500/30 text-xs font-semibold text-amber-950 dark:text-amber-100 shadow-2xl whitespace-nowrap pointer-events-none">
                       {item.label}
                     </div>
                   )}
@@ -295,9 +295,9 @@ export default function Sidebar({
         </div>
 
         {/* GROUP 3: ANALYTICS & INTELLIGENCE */}
-        <div className="space-y-1 pt-1 border-t border-amber-500/15">
+        <div className="space-y-1 pt-1 border-t border-amber-300/30 dark:border-amber-500/15">
           {!collapsed && (
-            <h3 className="px-3 text-[10px] font-bold uppercase tracking-wider text-amber-200/60">
+            <h3 className="px-3 text-[10px] font-bold uppercase tracking-wider text-amber-900/80 dark:text-amber-200/60">
               Analytics &amp; Trends
             </h3>
           )}
@@ -316,19 +316,19 @@ export default function Sidebar({
                     className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all text-left ${
                       isActive
                         ? 'nav-item-active-gold'
-                        : 'text-slate-300 dark:text-slate-300 light:text-slate-700 hover:text-amber-100 hover:bg-amber-500/10 border border-transparent'
+                        : 'text-slate-800 dark:text-slate-300 hover:text-amber-950 dark:hover:text-amber-100 hover:bg-amber-400/15 dark:hover:bg-amber-500/10 border border-transparent'
                     }`}
                   >
                     <div className="flex items-center gap-3 truncate">
                       <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover/item:scale-110 ${
-                        isActive ? 'text-amber-300 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]' : 'text-amber-200/70 group-hover/item:text-amber-300'
+                        isActive ? 'text-amber-800 dark:text-amber-300 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]' : 'text-amber-700/80 dark:text-amber-200/70 group-hover/item:text-amber-900 dark:group-hover/item:text-amber-300'
                       }`} />
                       {!collapsed && <span className="truncate">{item.label}</span>}
                     </div>
                   </button>
 
                   {collapsed && hoveredItem === item.id && (
-                    <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 z-50 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-amber-500/30 text-xs font-semibold text-amber-100 shadow-2xl whitespace-nowrap pointer-events-none">
+                    <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 z-50 px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-amber-400/40 dark:border-amber-500/30 text-xs font-semibold text-amber-950 dark:text-amber-100 shadow-2xl whitespace-nowrap pointer-events-none">
                       {item.label}
                     </div>
                   )}
@@ -339,9 +339,9 @@ export default function Sidebar({
         </div>
 
         {/* GROUP 4: PLATFORM & SYSTEM */}
-        <div className="space-y-1 pt-1 border-t border-amber-500/15">
+        <div className="space-y-1 pt-1 border-t border-amber-300/30 dark:border-amber-500/15">
           {!collapsed && (
-            <h3 className="px-3 text-[10px] font-bold uppercase tracking-wider text-amber-200/60">
+            <h3 className="px-3 text-[10px] font-bold uppercase tracking-wider text-amber-900/80 dark:text-amber-200/60">
               Platform &amp; System
             </h3>
           )}
@@ -360,19 +360,19 @@ export default function Sidebar({
                     className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all text-left ${
                       isActive
                         ? 'nav-item-active-gold'
-                        : 'text-slate-300 dark:text-slate-300 light:text-slate-700 hover:text-amber-100 hover:bg-amber-500/10 border border-transparent'
+                        : 'text-slate-800 dark:text-slate-300 hover:text-amber-950 dark:hover:text-amber-100 hover:bg-amber-400/15 dark:hover:bg-amber-500/10 border border-transparent'
                     }`}
                   >
                     <div className="flex items-center gap-3 truncate">
                       <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover/item:scale-110 ${
-                        isActive ? 'text-amber-300 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]' : 'text-amber-200/70 group-hover/item:text-amber-300'
+                        isActive ? 'text-amber-800 dark:text-amber-300 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]' : 'text-amber-700/80 dark:text-amber-200/70 group-hover/item:text-amber-900 dark:group-hover/item:text-amber-300'
                       }`} />
                       {!collapsed && <span className="truncate">{item.label}</span>}
                     </div>
                   </button>
 
                   {collapsed && hoveredItem === item.id && (
-                    <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 z-50 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-amber-500/30 text-xs font-semibold text-amber-100 shadow-2xl whitespace-nowrap pointer-events-none">
+                    <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 z-50 px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-amber-400/40 dark:border-amber-500/30 text-xs font-semibold text-amber-950 dark:text-amber-100 shadow-2xl whitespace-nowrap pointer-events-none">
                       {item.label}
                     </div>
                   )}
@@ -384,11 +384,11 @@ export default function Sidebar({
       </nav>
 
       {/* Platform Scope & Theme Controls Footer with Warm Golden Glow */}
-      <div className="p-3 border-t border-amber-500/20 bg-gradient-to-r from-amber-950/40 via-amber-900/20 to-slate-950/40 text-[11px] space-y-2 shrink-0">
+      <div className="p-3 border-t border-amber-300/40 dark:border-amber-500/20 bg-gradient-to-r from-amber-200/50 via-amber-100/30 to-amber-200/40 dark:from-amber-950/40 dark:via-amber-900/20 dark:to-slate-950/40 text-[11px] space-y-2 shrink-0">
         {!collapsed ? (
-          <div className="flex items-center justify-between px-1 py-1 text-[11px] font-mono text-amber-200/70">
+          <div className="flex items-center justify-between px-1 py-1 text-[11px] font-mono text-amber-950/80 dark:text-amber-200/70">
             <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 animate-pulse" />
               <span>Corpus 1950–2026+</span>
             </span>
 
@@ -396,9 +396,9 @@ export default function Sidebar({
               <button
                 onClick={onToggleTheme}
                 title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-                className="p-1.5 rounded-lg bg-amber-950/50 hover:bg-amber-900/70 text-amber-200 hover:text-amber-100 transition-colors flex items-center gap-1 border border-amber-500/30 shadow-sm"
+                className="p-1.5 rounded-lg bg-amber-200/80 hover:bg-amber-300/80 dark:bg-amber-950/50 dark:hover:bg-amber-900/70 text-amber-950 dark:text-amber-200 transition-colors flex items-center gap-1 border border-amber-400/40 dark:border-amber-500/30 shadow-sm"
               >
-                {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-amber-300" />}
+                {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-indigo-700 dark:text-amber-300" />}
               </button>
             )}
           </div>
@@ -408,9 +408,9 @@ export default function Sidebar({
               <button
                 onClick={onToggleTheme}
                 title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-                className="p-1.5 rounded-lg bg-amber-950/50 hover:bg-amber-900/70 text-amber-200 transition-colors border border-amber-500/30"
+                className="p-1.5 rounded-lg bg-amber-200/80 hover:bg-amber-300/80 dark:bg-amber-950/50 dark:hover:bg-amber-900/70 text-amber-950 dark:text-amber-200 transition-colors border border-amber-400/40 dark:border-amber-500/30 shadow-sm"
               >
-                {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-amber-300" />}
+                {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-indigo-700 dark:text-amber-300" />}
               </button>
             )}
           </div>

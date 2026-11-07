@@ -134,13 +134,13 @@ export default function AnalyticsView({
       {/* Header with Engine Switcher */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-teal-400" />
+          <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-teal-600 dark:text-teal-400" />
             <span>
               {isPOx ? 'POx & POzi Research Trend Analytics' : 'Universal Polymer Science Bibliometric Analytics'}
             </span>
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
             {isPOx 
               ? 'Quantitative growth indicators for Poly(2-oxazoline) vs Poly(2-oxazine), living CROP kinetics, and stimuli mechanisms.' 
               : 'Global macromolecular trends across synthetic polymers, biopolymers, controlled radical (ATRP/RAFT), and sustainable materials.'}
@@ -155,7 +155,7 @@ export default function AnalyticsView({
           />
           <button
             onClick={loadAnalytics}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-medium transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-medium transition-colors cursor-pointer shadow-sm"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Refresh</span>
@@ -164,9 +164,9 @@ export default function AnalyticsView({
       </div>
 
       {/* 1. Annual Publication Trajectory */}
-      <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md space-y-4">
-        <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-          <BarChart2 className="w-4 h-4 text-teal-400" />
+      <div className="p-6 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-sm dark:shadow-md space-y-4 card-glossy">
+        <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <BarChart2 className="w-4 h-4 text-teal-600 dark:text-teal-400" />
           <span>
             {isPOx ? 'Annual Publication Growth: Poly(2-oxazoline) vs Poly(2-oxazine)' : 'Annual Publication Growth Across Polymer Disciplines'}
           </span>
@@ -174,7 +174,7 @@ export default function AnalyticsView({
         <div className="h-72 w-full pt-2">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={trends}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" className="dark:opacity-30 opacity-70" />
               <XAxis dataKey="year" stroke="#64748b" tick={{ fontSize: 11 }} />
               <YAxis stroke="#64748b" tick={{ fontSize: 11 }} />
               <Tooltip 
@@ -182,22 +182,22 @@ export default function AnalyticsView({
                 itemStyle={{ color: '#e2e8f0' }}
               />
               <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
-              <Bar dataKey="pox_count" fill="#14b8a6" radius={[4, 4, 0, 0]} name={isPOx ? "POx Publications" : "Synthetic Polymers"} />
-              <Bar dataKey="pozi_count" fill="#a855f7" radius={[4, 4, 0, 0]} name={isPOx ? "POzi Publications" : "Biopolymers & Advanced"} />
+              <Bar dataKey="pox_count" fill="#0d9488" radius={[4, 4, 0, 0]} name={isPOx ? "POx Publications" : "Synthetic Polymers"} />
+              <Bar dataKey="pozi_count" fill="#9333ea" radius={[4, 4, 0, 0]} name={isPOx ? "POzi Publications" : "Biopolymers & Advanced"} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
       {/* 2. Stimuli-Responsive or Polymerization Innovation Breakdown */}
-      <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md space-y-4">
-        <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-          <Flame className="w-4 h-4 text-amber-400" />
+      <div className="p-6 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-sm dark:shadow-md space-y-4 card-glossy">
+        <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <Flame className="w-4 h-4 text-amber-500 dark:text-amber-400" />
           <span>
             {isPOx ? 'Stimuli-Responsive Polymer Chemistry Innovations' : 'Controlled & Advanced Polymerization Methodologies'}
           </span>
         </h2>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-slate-600 dark:text-slate-400">
           {isPOx 
             ? 'Distribution of smart polymer mechanisms in indexed publications' 
             : 'Distribution of controlled living radical, ring-opening, and smart polymer systems'}
@@ -205,22 +205,22 @@ export default function AnalyticsView({
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
           {(isPOx ? [
-            { label: 'Thermoresponsive / LCST', count: stimuli.thermoresponsive, color: 'text-amber-400', bg: 'bg-amber-950/40 border-amber-800/40' },
-            { label: 'ROS-Responsive (Thioethers)', count: stimuli.ros_responsive, color: 'text-rose-400', bg: 'bg-rose-950/40 border-rose-800/40' },
-            { label: 'Photoresponsive / UV-Vis', count: stimuli.photoresponsive, color: 'text-cyan-400', bg: 'bg-cyan-950/40 border-cyan-800/40' },
-            { label: 'pH-Responsive Systems', count: stimuli.ph_responsive, color: 'text-emerald-400', bg: 'bg-emerald-950/40 border-emerald-800/40' }
+            { label: 'Thermoresponsive / LCST', count: stimuli.thermoresponsive, color: 'text-amber-700 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/40' },
+            { label: 'ROS-Responsive (Thioethers)', count: stimuli.ros_responsive, color: 'text-rose-700 dark:text-rose-400', bg: 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/40' },
+            { label: 'Photoresponsive / UV-Vis', count: stimuli.photoresponsive, color: 'text-cyan-700 dark:text-cyan-400', bg: 'bg-cyan-50 dark:bg-cyan-950/40 border-cyan-200 dark:border-cyan-800/40' },
+            { label: 'pH-Responsive Systems', count: stimuli.ph_responsive, color: 'text-emerald-700 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/40' }
           ] : [
-            { label: 'Controlled Radical (ATRP / RAFT)', count: 184, color: 'text-indigo-400', bg: 'bg-indigo-950/40 border-indigo-800/40' },
-            { label: 'Ring-Opening (ROP / CROP)', count: 212, color: 'text-teal-400', bg: 'bg-teal-950/40 border-teal-800/40' },
-            { label: 'Hydrogels & 3D Biofabrication', count: 156, color: 'text-cyan-400', bg: 'bg-cyan-950/40 border-cyan-800/40' },
-            { label: 'Sustainable & Circular Polymers', count: 98, color: 'text-emerald-400', bg: 'bg-emerald-950/40 border-emerald-800/40' }
+            { label: 'Controlled Radical (ATRP / RAFT)', count: 184, color: 'text-indigo-700 dark:text-indigo-400', bg: 'bg-indigo-50 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800/40' },
+            { label: 'Ring-Opening (ROP / CROP)', count: 212, color: 'text-teal-700 dark:text-teal-400', bg: 'bg-teal-50 dark:bg-teal-950/40 border-teal-200 dark:border-teal-800/40' },
+            { label: 'Hydrogels & 3D Biofabrication', count: 156, color: 'text-cyan-700 dark:text-cyan-400', bg: 'bg-cyan-50 dark:bg-cyan-950/40 border-cyan-200 dark:border-cyan-800/40' },
+            { label: 'Sustainable & Circular Polymers', count: 98, color: 'text-emerald-700 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/40' }
           ]).map((item, idx) => (
-            <div key={idx} className={`p-4 rounded-xl border ${item.bg}`}>
-              <div className="text-xs font-semibold text-slate-300">{item.label}</div>
+            <div key={idx} className={`p-4 rounded-xl border shadow-sm ${item.bg}`}>
+              <div className="text-xs font-semibold text-slate-800 dark:text-slate-300">{item.label}</div>
               <div className={`text-2xl font-bold font-mono mt-1 ${item.color}`}>
                 {item.count}
               </div>
-              <div className="text-[10px] text-slate-400 mt-1">indexed studies</div>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">indexed studies</div>
             </div>
           ))}
         </div>
@@ -229,13 +229,13 @@ export default function AnalyticsView({
       {/* 3. Top Journals & Authors */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Journals */}
-        <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md space-y-4">
+        <div className="p-6 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-sm dark:shadow-md space-y-4 card-glossy">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-teal-400" />
+            <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               <span>Top Publishing Journals</span>
             </h2>
-            <span className="text-[11px] text-slate-400">Click to inspect papers</span>
+            <span className="text-[11px] text-slate-500 dark:text-slate-400">Click to inspect papers</span>
           </div>
 
           <div className="space-y-2.5">
@@ -250,17 +250,17 @@ export default function AnalyticsView({
                   onClick={() => handleSelectJournal(j)}
                   className={`flex items-center justify-between p-3.5 rounded-xl border text-xs cursor-pointer transition-all ${
                     isMacro 
-                      ? 'bg-teal-950/40 border-teal-500/50 hover:bg-teal-950/70 shadow-sm' 
+                      ? 'bg-teal-50 dark:bg-teal-950/40 border-teal-300 dark:border-teal-500/50 hover:bg-teal-100 dark:hover:bg-teal-950/70 shadow-sm' 
                       : isBiomacro
-                      ? 'bg-emerald-950/40 border-emerald-500/50 hover:bg-emerald-950/70 shadow-sm'
-                      : 'bg-slate-800/50 border-slate-800 hover:border-slate-700 hover:bg-slate-800'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-500/50 hover:bg-emerald-100 dark:hover:bg-emerald-950/70 shadow-sm'
+                      : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
                   <div className="min-w-0 flex-1 pr-3">
                     <div className="flex items-center gap-2">
-                      {(isMacro || isBiomacro) && <Star className="w-3.5 h-3.5 text-amber-400 shrink-0 fill-amber-400" />}
+                      {(isMacro || isBiomacro) && <Star className="w-3.5 h-3.5 text-amber-500 shrink-0 fill-amber-500" />}
                       <span className={`font-semibold truncate ${
-                        isMacro ? 'text-teal-200' : isBiomacro ? 'text-emerald-200' : 'text-slate-200'
+                        isMacro ? 'text-teal-900 dark:text-teal-200' : isBiomacro ? 'text-emerald-900 dark:text-emerald-200' : 'text-slate-800 dark:text-slate-200'
                       }`}>
                         {j.journal}
                       </span>
@@ -269,11 +269,11 @@ export default function AnalyticsView({
 
                   <div className="flex items-center gap-2.5 shrink-0">
                     {impactFactor && (
-                      <span className="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-700 text-teal-400 font-mono text-[11px] font-semibold">
+                      <span className="px-2 py-0.5 rounded-md bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-teal-700 dark:text-teal-400 font-mono text-[11px] font-semibold">
                         IF {impactFactor}
                       </span>
                     )}
-                    <span className="font-mono text-slate-400 font-semibold">
+                    <span className="font-mono text-slate-600 dark:text-slate-400 font-semibold">
                       {j.paper_count} articles
                     </span>
                   </div>
@@ -284,13 +284,13 @@ export default function AnalyticsView({
         </div>
 
         {/* Top Authors */}
-        <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md space-y-4">
+        <div className="p-6 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-sm dark:shadow-md space-y-4 card-glossy">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-              <Users className="w-4 h-4 text-purple-400" />
+            <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <Users className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               <span>Leading Researchers & Authors</span>
             </h2>
-            <span className="text-[11px] text-slate-400">Click to inspect contributions</span>
+            <span className="text-[11px] text-slate-500 dark:text-slate-400">Click to inspect contributions</span>
           </div>
 
           <div className="space-y-2.5">
@@ -298,15 +298,15 @@ export default function AnalyticsView({
               <div 
                 key={i}
                 onClick={() => handleSelectAuthor(a)}
-                className="flex items-center justify-between p-3.5 rounded-xl bg-slate-800/50 border border-slate-800 hover:border-slate-700 hover:bg-slate-800 text-xs cursor-pointer transition-all"
+                className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs cursor-pointer transition-all shadow-sm"
               >
                 <div className="min-w-0 flex-1 pr-3">
-                  <div className="font-semibold text-slate-200 truncate">{a.name}</div>
-                  <div className="text-[10px] text-slate-400 truncate mt-0.5">{a.affiliation}</div>
+                  <div className="font-semibold text-slate-800 dark:text-slate-200 truncate">{a.name}</div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">{a.affiliation}</div>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="font-mono text-purple-400 font-bold">
+                  <span className="font-mono text-purple-700 dark:text-purple-400 font-bold">
                     {a.paper_count} articles
                   </span>
                 </div>
@@ -318,20 +318,20 @@ export default function AnalyticsView({
 
       {/* Drawer / Modal for Entity Papers */}
       {selectedEntity && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-3xl bg-slate-900 border border-slate-700 rounded-2xl p-6 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl p-6 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
               <div>
-                <h3 className="text-base font-bold text-slate-100">
+                <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
                   {selectedEntity.name}
                 </h3>
-                <p className="text-xs text-teal-400 mt-0.5">
+                <p className="text-xs text-teal-600 dark:text-teal-400 mt-0.5 font-medium">
                   {selectedEntity.subtitle} · {selectedEntity.count} Publications
                 </p>
               </div>
               <button 
                 onClick={() => setSelectedEntity(null)}
-                className="text-slate-400 hover:text-slate-200 p-1"
+                className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-1 cursor-pointer"
               >
                 ✕
               </button>
@@ -339,14 +339,14 @@ export default function AnalyticsView({
 
             <div className="flex-1 overflow-y-auto space-y-3 pr-1">
               {loadingPapers ? (
-                <div className="text-center py-12 text-slate-400 text-xs">Loading publications...</div>
+                <div className="text-center py-12 text-slate-500 dark:text-slate-400 text-xs">Loading publications...</div>
               ) : entityPapers.length > 0 ? (
                 entityPapers.map(p => (
-                  <div key={p.id} className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 text-xs space-y-1.5">
-                    <h4 className="font-semibold text-slate-200 hover:text-teal-300 transition-colors">
+                  <div key={p.id} className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-xs space-y-1.5 shadow-sm">
+                    <h4 className="font-semibold text-slate-900 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-300 transition-colors">
                       {p.title}
                     </h4>
-                    <div className="text-[11px] text-slate-400 flex items-center gap-3">
+                    <div className="text-[11px] text-slate-600 dark:text-slate-400 flex items-center gap-3">
                       <span>{p.journal} ({p.publication_year})</span>
                       <span>DOI: {p.doi}</span>
                     </div>

@@ -128,22 +128,22 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
   return (
     <div className="max-w-7xl mx-auto space-y-6 pb-16 animate-in fade-in duration-200">
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-2.5 rounded-2xl bg-violet-500/10 border border-violet-500/30 text-violet-400">
+            <div className="p-2.5 rounded-2xl bg-violet-500/10 border border-violet-500/30 text-violet-600 dark:text-violet-400">
               <BookMarked className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-black text-white tracking-tight">
+                <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                   My Research Watchlist
                 </h1>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-500/20 text-violet-300 border border-violet-500/40">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-500/10 dark:bg-violet-500/20 text-violet-800 dark:text-violet-300 border border-violet-500/40">
                   Priority Queue
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
                 Curate reading targets, log experimental notes, and track literature progression
               </p>
             </div>
@@ -154,9 +154,9 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
           <button
             type="button"
             onClick={() => onNavigateToSearch('')}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-all shadow-sm"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition-all shadow-sm"
           >
-            <Search className="w-4 h-4 text-violet-400" />
+            <Search className="w-4 h-4 text-violet-600 dark:text-violet-400" />
             <span>Discover More Papers</span>
           </button>
         )}
@@ -164,41 +164,41 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-        <div className="p-4 rounded-2xl card-glossy card-glossy-purple shimmer-hover">
-          <span className="text-xs font-medium text-slate-400">Total Watchlisted</span>
-          <p className="text-2xl font-black text-white mt-1 font-mono">{stats.total}</p>
+        <div className="p-4 rounded-2xl card-glossy card-glossy-purple shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Watchlisted</span>
+          <p className="text-2xl font-black text-slate-900 dark:text-white mt-1 font-mono">{stats.total}</p>
           <span className="text-[11px] text-slate-500">Tracked articles</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-amber shimmer-hover">
-          <span className="text-xs font-medium text-amber-400">To Read</span>
-          <p className="text-2xl font-black text-amber-300 mt-1 font-mono">{stats.to_read}</p>
+        <div className="p-4 rounded-2xl card-glossy card-glossy-amber shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+          <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">To Read</span>
+          <p className="text-2xl font-black text-amber-700 dark:text-amber-300 mt-1 font-mono">{stats.to_read}</p>
           <span className="text-[11px] text-slate-500">High priority queue</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-cyan shimmer-hover">
-          <span className="text-xs font-medium text-cyan-400">Reading</span>
-          <p className="text-2xl font-black text-cyan-300 mt-1 font-mono">{stats.reading}</p>
+        <div className="p-4 rounded-2xl card-glossy card-glossy-cyan shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+          <span className="text-xs font-semibold text-cyan-600 dark:text-cyan-400">Reading</span>
+          <p className="text-2xl font-black text-cyan-700 dark:text-cyan-300 mt-1 font-mono">{stats.reading}</p>
           <span className="text-[11px] text-slate-500">Currently studying</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-emerald shimmer-hover">
-          <span className="text-xs font-medium text-emerald-400">Read / Analyzed</span>
-          <p className="text-2xl font-black text-emerald-300 mt-1 font-mono">{stats.read}</p>
+        <div className="p-4 rounded-2xl card-glossy card-glossy-emerald shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+          <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Read / Analyzed</span>
+          <p className="text-2xl font-black text-emerald-700 dark:text-emerald-300 mt-1 font-mono">{stats.read}</p>
           <span className="text-[11px] text-slate-500">Completed readings</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-indigo shimmer-hover">
-          <span className="text-xs font-medium text-indigo-400">Full-Text PDFs Ready</span>
-          <p className="text-2xl font-black text-indigo-300 mt-1 font-mono">{stats.with_pdf}</p>
+        <div className="p-4 rounded-2xl card-glossy card-glossy-indigo shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+          <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">Full-Text PDFs Ready</span>
+          <p className="text-2xl font-black text-indigo-700 dark:text-indigo-300 mt-1 font-mono">{stats.with_pdf}</p>
           <span className="text-[11px] text-slate-500">Saved in cloud vault</span>
         </div>
       </div>
 
       {/* Tabs & Search Bar */}
-      <div className="p-3 card-glossy rounded-2xl flex flex-col md:flex-row items-center justify-between gap-3 shadow-md">
+      <div className="p-3 card-glossy rounded-2xl flex flex-col md:flex-row items-center justify-between gap-3 shadow-md border-slate-200/80 dark:border-slate-800/80">
         {/* Status Tabs */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-950/80 rounded-xl border border-slate-800/80 w-full md:w-auto">
+        <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800/80 w-full md:w-auto">
           {[
             { id: 'all', label: 'All Items', count: stats.total },
             { id: 'to_read', label: 'To Read', count: stats.to_read },
@@ -212,12 +212,12 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 statusFilter === tab.id
                   ? 'bg-violet-600 text-white font-semibold shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-900'
               }`}
             >
               <span>{tab.label}</span>
               <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-mono ${
-                statusFilter === tab.id ? 'bg-violet-900/80 text-violet-200' : 'bg-slate-800 text-slate-400'
+                statusFilter === tab.id ? 'bg-violet-900/80 text-violet-100' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-400'
               }`}>
                 {tab.count}
               </span>
@@ -233,7 +233,7 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search title, notes, journal..."
-            className="w-full pl-9 pr-4 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-violet-500 font-sans"
+            className="w-full pl-9 pr-4 py-1.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-violet-500 font-sans"
           />
         </div>
       </div>
@@ -257,7 +257,7 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
             return (
               <div
                 key={item.id || item.article_id}
-                className="p-5 rounded-2xl card-glossy card-glossy-purple shimmer-hover transition-all duration-300 flex flex-col md:flex-row items-start justify-between gap-5 group"
+                className="p-5 rounded-2xl card-glossy card-glossy-purple shimmer-hover transition-all duration-300 flex flex-col md:flex-row items-start justify-between gap-5 group border-slate-200/80 dark:border-slate-800/80 shadow-md hover:shadow-xl"
               >
                 {/* Main Left Content */}
                 <div className="space-y-2.5 flex-1 min-w-0">
@@ -266,30 +266,30 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
                     {/* Status Badge */}
                     <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
                       item.reading_status === 'to_read' 
-                        ? 'bg-amber-500/15 text-amber-300 border-amber-500/30' 
+                        ? 'bg-amber-50 dark:bg-amber-500/15 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-500/30' 
                         : item.reading_status === 'reading' 
-                          ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30' 
-                          : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                          ? 'bg-cyan-50 dark:bg-cyan-500/15 text-cyan-800 dark:text-cyan-300 border-cyan-200 dark:border-cyan-500/30' 
+                          : 'bg-emerald-50 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/30'
                     }`}>
                       {item.reading_status === 'to_read' ? 'To Read' : item.reading_status === 'reading' ? 'Reading' : 'Completed'}
                     </span>
 
-                    <span className="font-semibold text-teal-400 bg-teal-950/40 border border-teal-800/40 px-2 py-0.5 rounded-lg text-[11px]">
+                    <span className="font-semibold text-teal-800 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800/40 px-2 py-0.5 rounded-lg text-[11px]">
                       {journal}
                     </span>
 
-                    <span className="text-slate-400 font-mono text-[11px]">
+                    <span className="text-slate-500 dark:text-slate-400 font-mono text-[11px]">
                       {year}
                     </span>
 
                     {/* PDF Availability Indicator */}
                     {item.has_pdf ? (
-                      <span className="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-semibold flex items-center gap-1">
-                        <FileText className="w-3 h-3 text-emerald-400" />
+                      <span className="px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 text-[10px] font-semibold flex items-center gap-1">
+                        <FileText className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                         <span>PDF Stored</span>
                       </span>
                     ) : paper.open_access_url ? (
-                      <span className="px-2 py-0.5 rounded-md bg-cyan-500/10 text-cyan-300 border border-cyan-500/25 text-[10px] font-medium">
+                      <span className="px-2 py-0.5 rounded-md bg-cyan-50 dark:bg-cyan-500/10 text-cyan-800 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-500/25 text-[10px] font-medium">
                         Open Access PDF
                       </span>
                     ) : null}
@@ -298,14 +298,14 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
                   {/* Title */}
                   <h3
                     onClick={() => onOpenDetails && onOpenDetails(paper)}
-                    className="text-base font-bold text-white hover:text-violet-300 transition-colors cursor-pointer leading-snug tracking-tight"
+                    className="text-base font-bold text-slate-900 dark:text-white hover:text-violet-600 dark:hover:text-violet-300 transition-colors cursor-pointer leading-snug tracking-tight"
                   >
                     {title}
                   </h3>
 
                   {/* Authors */}
                   {authors && (
-                    <p className="text-xs text-slate-400 line-clamp-1 font-sans">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-1 font-sans">
                       {authors}
                     </p>
                   )}
@@ -313,19 +313,19 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
                   {/* Personal Research Note */}
                   <div className="pt-1">
                     {editingItemId === item.article_id ? (
-                      <div className="p-3 bg-slate-950 rounded-xl border border-slate-750 space-y-2">
+                      <div className="p-3 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-250 dark:border-slate-750 space-y-2">
                         <textarea
                           rows={2}
                           value={noteDraft}
                           onChange={(e) => setNoteDraft(e.target.value)}
                           placeholder="Record key observations, reaction notes, LCST values..."
-                          className="w-full p-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-100 focus:outline-none focus:border-violet-500 resize-none font-sans"
+                          className="w-full p-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-violet-500 resize-none font-sans"
                         />
                         <div className="flex items-center justify-end gap-2">
                           <button
                             type="button"
                             onClick={() => setEditingItemId(null)}
-                            className="px-2.5 py-1 text-xs text-slate-400 hover:text-slate-200"
+                            className="px-2.5 py-1 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                           >
                             Cancel
                           </button>
@@ -344,11 +344,11 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
                           setEditingItemId(item.article_id);
                           setNoteDraft(item.personal_note || '');
                         }}
-                        className="p-2.5 bg-slate-950/70 rounded-xl border border-slate-800/80 hover:border-slate-700 text-xs text-slate-300 flex items-start gap-2 cursor-pointer group/note transition-colors"
+                        className="p-2.5 bg-slate-50 dark:bg-slate-950/70 rounded-xl border border-slate-200 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 text-xs text-slate-700 dark:text-slate-300 flex items-start gap-2 cursor-pointer group/note transition-colors"
                         title="Click to edit research note"
                       >
-                        <Edit3 className="w-3.5 h-3.5 text-violet-400 shrink-0 mt-0.5" />
-                        <span className={item.personal_note ? 'text-slate-200 italic' : 'text-slate-500'}>
+                        <Edit3 className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400 shrink-0 mt-0.5" />
+                        <span className={item.personal_note ? 'text-slate-800 dark:text-slate-200 italic' : 'text-slate-400 dark:text-slate-500'}>
                           {item.personal_note || 'Add personal research observations or synthesis notes...'}
                         </span>
                       </div>
@@ -357,12 +357,12 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
                 </div>
 
                 {/* Right Action Column */}
-                <div className="flex flex-row md:flex-col items-end justify-between gap-3 shrink-0 w-full md:w-auto pt-2 md:pt-0 border-t md:border-t-0 border-slate-800">
+                <div className="flex flex-row md:flex-col items-end justify-between gap-3 shrink-0 w-full md:w-auto pt-2 md:pt-0 border-t md:border-t-0 border-slate-200 dark:border-slate-800">
                   {/* Status Dropdown */}
                   <select
                     value={item.reading_status || 'to_read'}
                     onChange={(e) => handleUpdateStatus(item.article_id, e.target.value)}
-                    className="bg-slate-950 border border-slate-800 text-xs rounded-xl px-2.5 py-1.5 text-slate-300 focus:outline-none focus:border-violet-500 cursor-pointer shadow-sm"
+                    className="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-xs rounded-xl px-2.5 py-1.5 text-slate-800 dark:text-slate-300 focus:outline-none focus:border-violet-500 cursor-pointer shadow-sm"
                   >
                     <option value="to_read">Mark To Read</option>
                     <option value="reading">Mark Reading</option>
@@ -389,10 +389,10 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
                           setUploadPaper(paper);
                           setIsUploadOpen(true);
                         }}
-                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 text-xs font-medium border border-slate-700 transition-colors"
+                        className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-300 text-xs font-medium border border-slate-300 dark:border-slate-700 transition-colors"
                         title="Upload PDF file"
                       >
-                        <FileText className="w-3.5 h-3.5 text-indigo-400" />
+                        <FileText className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                         <span>Upload PDF</span>
                       </button>
                     )}
@@ -402,7 +402,7 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
                       <button
                         type="button"
                         onClick={() => onOpenDetails(paper)}
-                        className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+                        className="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-700 transition-colors"
                         title="View Article Details & TOC"
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
@@ -413,7 +413,7 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
                     <button
                       type="button"
                       onClick={() => handleRemove(item.article_id)}
-                      className="p-1.5 rounded-xl bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-slate-700 transition-colors"
+                      className="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-500/20 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 border border-slate-300 dark:border-slate-700 transition-colors"
                       title="Remove from Watchlist"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -426,13 +426,13 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
         </div>
       ) : (
         /* Empty State */
-        <div className="py-16 px-6 text-center rounded-3xl bg-slate-900/60 border border-slate-800 space-y-4 max-w-xl mx-auto">
-          <div className="w-16 h-16 rounded-3xl bg-violet-500/10 border border-violet-500/25 flex items-center justify-center mx-auto text-violet-400 shadow-inner">
+        <div className="py-16 px-6 text-center rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-4 max-w-xl mx-auto shadow-sm">
+          <div className="w-16 h-16 rounded-3xl bg-violet-500/10 border border-violet-500/25 flex items-center justify-center mx-auto text-violet-600 dark:text-violet-400 shadow-inner">
             <BookMarked className="w-8 h-8" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-lg font-bold text-white">Your Watchlist is Empty</h3>
-            <p className="text-xs text-slate-400 leading-relaxed max-w-md mx-auto">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Your Watchlist is Empty</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed max-w-md mx-auto">
               Add research publications from POx Search, Polymer Search, Journal Trackers, or Article Detail pages by clicking the bookmark icon.
             </p>
           </div>

@@ -139,22 +139,22 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
   return (
     <div className="max-w-7xl mx-auto space-y-6 pb-16 animate-in fade-in duration-200">
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400">
+            <div className="p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-600 dark:text-indigo-400">
               <FileText className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-black text-white tracking-tight">
+                <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                   My PDF Library
                 </h1>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/40">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-800 dark:text-indigo-300 border border-indigo-500/40">
                   Cloud Secured
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
                 Personal collection of research papers, in-app viewer, and offline reading library
               </p>
             </div>
@@ -179,45 +179,45 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
 
       {/* Metrics Overview Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl card-glossy card-glossy-indigo shimmer-hover">
+        <div className="p-4 rounded-2xl card-glossy card-glossy-indigo shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-400">Stored PDFs</span>
-            <FileText className="w-4 h-4 text-indigo-400" />
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Stored PDFs</span>
+            <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
           </div>
-          <p className="text-2xl font-black text-white mt-1 font-mono">
+          <p className="text-2xl font-black text-slate-900 dark:text-white mt-1 font-mono">
             {stats.total_pdfs}
           </p>
           <span className="text-[11px] text-slate-500">Indexed full-text articles</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-teal shimmer-hover">
+        <div className="p-4 rounded-2xl card-glossy card-glossy-teal shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-400">Cloud Storage Used</span>
-            <HardDrive className="w-4 h-4 text-teal-400" />
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Cloud Storage Used</span>
+            <HardDrive className="w-4 h-4 text-teal-600 dark:text-teal-400" />
           </div>
-          <p className="text-2xl font-black text-teal-300 mt-1 font-mono">
+          <p className="text-2xl font-black text-teal-700 dark:text-teal-300 mt-1 font-mono">
             {formatFileSize(stats.total_bytes)}
           </p>
           <span className="text-[11px] text-slate-500">Across encrypted storage buckets</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-purple shimmer-hover">
+        <div className="p-4 rounded-2xl card-glossy card-glossy-purple shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-400">Active Journals</span>
-            <Layers className="w-4 h-4 text-purple-400" />
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Active Journals</span>
+            <Layers className="w-4 h-4 text-purple-600 dark:text-purple-400" />
           </div>
-          <p className="text-2xl font-black text-purple-300 mt-1 font-mono">
+          <p className="text-2xl font-black text-purple-700 dark:text-purple-300 mt-1 font-mono">
             {stats.journals_count}
           </p>
           <span className="text-[11px] text-slate-500">Different publisher sources</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-emerald shimmer-hover">
+        <div className="p-4 rounded-2xl card-glossy card-glossy-emerald shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-400">Institutional / Subscribed</span>
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Institutional / Subscribed</span>
+            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           </div>
-          <p className="text-2xl font-black text-emerald-300 mt-1 font-mono">
+          <p className="text-2xl font-black text-emerald-700 dark:text-emerald-300 mt-1 font-mono">
             100%
           </p>
           <span className="text-[11px] text-slate-500">Directly accessible full-text</span>
@@ -225,7 +225,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 rounded-2xl card-glossy flex flex-col md:flex-row items-center justify-between gap-3 shadow-md">
+      <div className="p-4 rounded-2xl card-glossy flex flex-col md:flex-row items-center justify-between gap-3 shadow-md border-slate-200/80 dark:border-slate-800/80">
         {/* Search */}
         <div className="relative flex-1 w-full">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -234,19 +234,19 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search saved PDFs by title, author, journal, or filename..."
-            className="w-full pl-10 pr-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 font-sans"
+            className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-indigo-500 font-sans"
           />
         </div>
 
         {/* Filters */}
         <div className="flex items-center gap-2 w-full md:w-auto">
           {/* Journal Filter */}
-          <div className="flex items-center gap-1.5 bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-300">
+          <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300">
             <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <select
               value={journalFilter}
               onChange={(e) => setJournalFilter(e.target.value)}
-              className="bg-transparent border-none text-xs text-slate-200 focus:outline-none cursor-pointer"
+              className="bg-transparent border-none text-xs text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer"
             >
               <option value="all">All Journals</option>
               {availableJournals.map(j => (
@@ -256,12 +256,12 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
           </div>
 
           {/* Sort By */}
-          <div className="flex items-center gap-1.5 bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-300">
+          <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300">
             <ArrowUpDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-transparent border-none text-xs text-slate-200 focus:outline-none cursor-pointer"
+              className="bg-transparent border-none text-xs text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer"
             >
               <option value="created_at">Recently Added</option>
               <option value="title">Title (A-Z)</option>
@@ -276,10 +276,10 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[1, 2, 3, 4].map(n => (
-            <div key={n} className="h-44 bg-slate-900/60 rounded-2xl border border-slate-800 animate-pulse p-5 space-y-3">
-              <div className="h-4 bg-slate-800 rounded w-1/3" />
-              <div className="h-6 bg-slate-800 rounded w-4/5" />
-              <div className="h-4 bg-slate-800 rounded w-1/2" />
+            <div key={n} className="h-44 bg-slate-100 dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 animate-pulse p-5 space-y-3">
+              <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-1/3" />
+              <div className="h-6 bg-slate-200 dark:bg-slate-800 rounded w-4/5" />
+              <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-1/2" />
             </div>
           ))}
         </div>
@@ -295,25 +295,25 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
             return (
               <div
                 key={item.id || item.article_id}
-                className="p-5 rounded-2xl card-glossy card-glossy-emerald shimmer-hover transition-all duration-300 flex flex-col justify-between space-y-4 group"
+                className="p-5 rounded-2xl card-glossy card-glossy-emerald shimmer-hover transition-all duration-300 flex flex-col justify-between space-y-4 group border-slate-200/80 dark:border-slate-800/80 shadow-md hover:shadow-xl"
               >
                 <div className="space-y-2.5">
                   {/* Top Badges */}
                   <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-semibold text-cyan-400 bg-cyan-950/50 border border-cyan-800/40 px-2.5 py-0.5 rounded-lg text-[11px]">
+                      <span className="font-semibold text-cyan-800 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/50 border border-cyan-200 dark:border-cyan-800/40 px-2.5 py-0.5 rounded-lg text-[11px]">
                         {journal}
                       </span>
-                      <span className="text-slate-400 font-mono text-[11px]">
+                      <span className="text-slate-500 dark:text-slate-400 font-mono text-[11px]">
                         {year}
                       </span>
                     </div>
 
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                         {formatFileSize(item.file_size)}
                       </span>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-medium">
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-400 font-medium">
                         {item.source_type === 'institutional_access' ? 'Institutional' : item.source_type === 'open_access' ? 'Open Access' : 'Cloud Saved'}
                       </span>
                     </div>
@@ -328,7 +328,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
                         handleOpenReader(item);
                       }
                     }}
-                    className="text-base font-bold text-white hover:text-indigo-300 transition-colors cursor-pointer line-clamp-2 leading-snug"
+                    className="text-base font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-300 transition-colors cursor-pointer line-clamp-2 leading-snug"
                     title={title}
                   >
                     {title}
@@ -336,21 +336,21 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
 
                   {/* Authors */}
                   {authors && (
-                    <p className="text-xs text-slate-400 line-clamp-1 font-sans">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-1 font-sans">
                       {authors}
                     </p>
                   )}
 
                   {/* Filename & Timestamp */}
                   <div className="flex items-center gap-2 text-[11px] text-slate-500 font-mono pt-1">
-                    <span className="truncate max-w-[240px] text-slate-400">{item.original_filename}</span>
+                    <span className="truncate max-w-[240px] text-slate-600 dark:text-slate-400">{item.original_filename}</span>
                     <span>•</span>
                     <span>Added {new Date(item.created_at).toLocaleDateString()}</span>
                   </div>
                 </div>
 
                 {/* Bottom Actions Bar */}
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-800/80">
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-200 dark:border-slate-800/80">
                   <div className="flex items-center gap-2">
                     {/* Read PDF Button */}
                     <button
@@ -367,7 +367,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
                     <button
                       type="button"
                       onClick={() => handleDownloadPdf(item)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-colors cursor-pointer"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 text-xs font-semibold transition-colors cursor-pointer"
                       title="Download PDF directly to your computer"
                     >
                       <Download className="w-3.5 h-3.5" />
@@ -381,7 +381,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
                       <button
                         type="button"
                         onClick={() => onOpenDetails(paper)}
-                        className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+                        className="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-xs font-medium transition-colors"
                         title="View Article Details & TOC"
                       >
                         Details
@@ -396,7 +396,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
                         setIsReplacing(true);
                         setIsUploadOpen(true);
                       }}
-                      className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-colors"
+                      className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 border border-slate-300 dark:border-slate-700 transition-colors"
                       title="Replace PDF with newer version"
                     >
                       <RefreshCw className="w-3.5 h-3.5" />
@@ -406,7 +406,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
                     <button
                       type="button"
                       onClick={() => setDeleteConfirmId(item.id || item.article_id)}
-                      className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 transition-colors"
+                      className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-500/20 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 border border-slate-300 dark:border-slate-700 transition-colors"
                       title="Remove PDF from library"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -419,13 +419,13 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
         </div>
       ) : (
         /* Empty State */
-        <div className="py-16 px-6 text-center rounded-3xl bg-slate-900/60 border border-slate-800 space-y-4 max-w-xl mx-auto">
-          <div className="w-16 h-16 rounded-3xl bg-indigo-500/10 border border-indigo-500/25 flex items-center justify-center mx-auto text-indigo-400 shadow-inner">
+        <div className="py-16 px-6 text-center rounded-3xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-4 max-w-xl mx-auto shadow-sm">
+          <div className="w-16 h-16 rounded-3xl bg-indigo-500/10 border border-indigo-500/25 flex items-center justify-center mx-auto text-indigo-600 dark:text-indigo-400 shadow-inner">
             <FileText className="w-8 h-8" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-lg font-bold text-white">Your PDF Library is Ready</h3>
-            <p className="text-xs text-slate-400 leading-relaxed max-w-md mx-auto">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Your PDF Library is Ready</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed max-w-md mx-auto">
               Save research papers, upload university-authorized full texts, and read articles with the in-app scientific PDF reader.
             </p>
           </div>
@@ -446,7 +446,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
               <button
                 type="button"
                 onClick={() => onNavigateToSearch('')}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-all"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold border border-slate-300 dark:border-slate-700 transition-all"
               >
                 <Search className="w-4 h-4" />
                 <span>Search Papers</span>

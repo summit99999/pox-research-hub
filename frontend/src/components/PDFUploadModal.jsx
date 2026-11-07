@@ -131,22 +131,22 @@ export default function PDFUploadModal({
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-in fade-in duration-200"
       role="dialog"
       aria-modal="true"
     >
-      <div className="w-full max-w-xl bg-slate-900 border border-slate-750 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-750 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/90">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+            <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400">
               <Upload className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-semibold text-white">
+              <h3 className="text-base font-semibold text-slate-900 dark:text-white">
                 {isReplacement ? 'Replace Article PDF' : 'Upload Article PDF'}
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 {isReplacement ? 'Update existing full-text PDF document' : 'Save full-text research paper to your private cloud library'}
               </p>
             </div>
@@ -154,7 +154,7 @@ export default function PDFUploadModal({
           <button
             type="button"
             onClick={handleResetAndClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -163,22 +163,22 @@ export default function PDFUploadModal({
         {/* Content Body */}
         <div className="p-6 overflow-y-auto space-y-5">
           {/* Target Article Verification Card */}
-          <div className="p-4 bg-slate-950/60 rounded-xl border border-slate-800/80 space-y-2">
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-400">
+          <div className="p-4 bg-slate-50 dark:bg-slate-950/60 rounded-xl border border-slate-200 dark:border-slate-800/80 space-y-2">
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
               <BookOpen className="w-3.5 h-3.5" />
               <span>Target Canonical Publication</span>
             </div>
-            <h4 className="text-sm font-semibold text-slate-100 line-clamp-2 leading-snug">
+            <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100 line-clamp-2 leading-snug">
               {paper.title}
             </h4>
-            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 pt-1">
-              <span className="font-medium text-cyan-400">{paper.journal || 'Journal'}</span>
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400 pt-1">
+              <span className="font-medium text-cyan-700 dark:text-cyan-400">{paper.journal || 'Journal'}</span>
               <span>•</span>
               <span>{paper.publication_year || '2026'}</span>
               {paper.doi && (
                 <>
                   <span>•</span>
-                  <span className="font-mono text-slate-400 truncate max-w-[200px]">DOI: {paper.doi}</span>
+                  <span className="font-mono text-slate-500 dark:text-slate-400 truncate max-w-[200px]">DOI: {paper.doi}</span>
                 </>
               )}
             </div>
@@ -187,15 +187,15 @@ export default function PDFUploadModal({
           {/* Success State */}
           {uploadSuccessRecord ? (
             <div className="py-6 px-4 flex flex-col items-center text-center space-y-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/20">
-              <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/30">
+              <div className="p-3 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full border border-emerald-500/30">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
               <div className="space-y-1">
-                <h4 className="text-base font-semibold text-emerald-300">
+                <h4 className="text-base font-semibold text-emerald-800 dark:text-emerald-300">
                   PDF Stored Successfully!
                 </h4>
-                <p className="text-xs text-slate-300 max-w-sm">
-                  Document <span className="font-mono font-medium text-white">{uploadSuccessRecord.original_filename}</span> is now linked to this publication and saved in your cloud library.
+                <p className="text-xs text-slate-600 dark:text-slate-300 max-w-sm">
+                  Document <span className="font-mono font-medium text-slate-900 dark:text-white">{uploadSuccessRecord.original_filename}</span> is now linked to this publication and saved in your cloud library.
                 </p>
               </div>
 
@@ -224,7 +224,7 @@ export default function PDFUploadModal({
                     ? 'border-indigo-500 bg-indigo-500/10' 
                     : selectedFile 
                       ? 'border-emerald-500/50 bg-emerald-500/5' 
-                      : 'border-slate-700 hover:border-slate-600 bg-slate-950/40 hover:bg-slate-950/70'
+                      : 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 bg-slate-50 dark:bg-slate-950/40 hover:bg-slate-100 dark:hover:bg-slate-950/70'
                 }`}
               >
                 <input
@@ -237,31 +237,31 @@ export default function PDFUploadModal({
 
                 {selectedFile ? (
                   <div className="flex flex-col items-center gap-2">
-                    <div className="p-3 bg-emerald-500/10 rounded-2xl text-emerald-400 border border-emerald-500/20">
+                    <div className="p-3 bg-emerald-500/10 rounded-2xl text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                       <FileText className="w-7 h-7" />
                     </div>
                     <div className="text-center">
-                      <p className="text-sm font-semibold text-white truncate max-w-xs sm:max-w-sm">
+                      <p className="text-sm font-semibold text-slate-900 dark:text-white truncate max-w-xs sm:max-w-sm">
                         {selectedFile.name}
                       </p>
-                      <p className="text-xs text-slate-400 mt-0.5">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                         {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB • Ready to upload
                       </p>
                     </div>
-                    <span className="text-[11px] text-indigo-400 hover:underline mt-1">
+                    <span className="text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline mt-1">
                       Click to choose a different file
                     </span>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center gap-2">
-                    <div className="p-3 bg-slate-800 rounded-2xl text-slate-300">
+                    <div className="p-3 bg-slate-200 dark:bg-slate-800 rounded-2xl text-slate-700 dark:text-slate-300">
                       <Upload className="w-7 h-7" />
                     </div>
                     <div className="space-y-1">
-                      <p className="text-sm font-medium text-slate-200">
-                        Drop research PDF here, or <span className="text-indigo-400 font-semibold underline">browse</span>
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                        Drop research PDF here, or <span className="text-indigo-600 dark:text-indigo-400 font-semibold underline">browse</span>
                       </p>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
                         Adobe PDF (.pdf) only • Up to 50 MB
                       </p>
                     </div>
@@ -271,14 +271,14 @@ export default function PDFUploadModal({
 
               {/* Source/Attribution Selector */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-300 flex items-center justify-between">
+                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center justify-between">
                   <span>Acquisition Source</span>
                   <span className="text-[11px] text-slate-500">For compliance & library tracking</span>
                 </label>
                 <select
                   value={sourceType}
                   onChange={(e) => setSourceType(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-indigo-500"
                 >
                   <option value="institutional_access">Institutional Access / University Subscription</option>
                   <option value="open_access">Open Access (CC-BY / Public Repository)</option>
@@ -289,7 +289,7 @@ export default function PDFUploadModal({
 
               {/* Error Message */}
               {errorMessage && (
-                <div className="flex items-center gap-2 p-3 bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs rounded-xl">
+                <div className="flex items-center gap-2 p-3 bg-rose-500/10 border border-rose-500/20 text-rose-700 dark:text-rose-300 text-xs rounded-xl">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{errorMessage}</span>
                 </div>
@@ -298,11 +298,11 @@ export default function PDFUploadModal({
               {/* Progress Bar */}
               {isUploading && (
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs text-slate-400">
+                  <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
                     <span>Uploading and verifying checksum...</span>
-                    <span className="font-mono text-indigo-400">{uploadProgress}%</span>
+                    <span className="font-mono text-indigo-600 dark:text-indigo-400">{uploadProgress}%</span>
                   </div>
-                  <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 transition-all duration-300 rounded-full"
                       style={{ width: `${uploadProgress}%` }}
@@ -316,12 +316,12 @@ export default function PDFUploadModal({
 
         {/* Footer Actions */}
         {!uploadSuccessRecord && (
-          <div className="flex items-center justify-between px-6 py-4 border-t border-slate-800 bg-slate-900/90">
+          <div className="flex items-center justify-between px-6 py-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90">
             <button
               type="button"
               onClick={handleResetAndClose}
               disabled={isUploading}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 disabled:opacity-50 transition-colors"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-50 transition-colors"
             >
               Cancel
             </button>
