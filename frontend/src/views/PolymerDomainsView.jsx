@@ -32,28 +32,44 @@ import PolymerTopicModal from '../components/PolymerTopicModal';
 import PaperCard from '../components/PaperCard';
 import { api } from '../lib/api';
 import { ENGINE_SCOPES } from '../lib/searchEngine';
+import { getCategoryPlateClass } from '../lib/categoryColorMap';
 
 function getDomainIcon(domainId) {
   switch (domainId) {
-    case 'domain-1': return <Atom className="w-4 h-4 text-violet-300" />;
-    case 'domain-2': return <Layers className="w-4 h-4 text-sky-300" />;
-    case 'domain-3': return <FlaskConical className="w-4 h-4 text-amber-300" />;
-    case 'domain-4': return <Sparkles className="w-4 h-4 text-emerald-300" />;
-    case 'domain-5': return <BookOpen className="w-4 h-4 text-rose-300" />;
-    case 'domain-6': return <Boxes className="w-4 h-4 text-cyan-300" />;
-    case 'domain-7': return <Award className="w-4 h-4 text-blue-300" />;
-    case 'domain-8': return <Activity className="w-4 h-4 text-purple-300" />;
-    case 'domain-9': return <Compass className="w-4 h-4 text-teal-300" />;
-    case 'domain-10': return <TrendingUp className="w-4 h-4 text-cyan-300" />;
-    case 'domain-11': return <Sparkles className="w-4 h-4 text-emerald-300" />;
-    case 'domain-12': return <Boxes className="w-4 h-4 text-purple-300" />;
-    case 'domain-13': return <FlaskConical className="w-4 h-4 text-orange-300" />;
-    case 'domain-14': return <Eye className="w-4 h-4 text-indigo-300" />;
-    case 'domain-15': return <Activity className="w-4 h-4 text-pink-300" />;
-    case 'domain-16': return <CheckCircle2 className="w-4 h-4 text-rose-300" />;
-    case 'domain-17': return <Compass className="w-4 h-4 text-teal-300" />;
-    case 'domain-18': return <Layers className="w-4 h-4 text-indigo-300" />;
-    default: return <Boxes className="w-4 h-4 text-indigo-300" />;
+    case 'domain-1': return <Atom className="w-4 h-4 text-violet-500 dark:text-violet-300" />;
+    case 'domain-2': return <Layers className="w-4 h-4 text-sky-500 dark:text-sky-300" />;
+    case 'domain-3': return <FlaskConical className="w-4 h-4 text-amber-500 dark:text-amber-300" />;
+    case 'domain-4': return <Sparkles className="w-4 h-4 text-emerald-500 dark:text-emerald-300" />;
+    case 'domain-5': return <BookOpen className="w-4 h-4 text-rose-500 dark:text-rose-300" />;
+    case 'domain-6': return <Boxes className="w-4 h-4 text-cyan-500 dark:text-cyan-300" />;
+    case 'domain-7': return <Award className="w-4 h-4 text-blue-500 dark:text-blue-300" />;
+    case 'domain-8': return <Activity className="w-4 h-4 text-purple-500 dark:text-purple-300" />;
+    case 'domain-9': return <Compass className="w-4 h-4 text-teal-500 dark:text-teal-300" />;
+    case 'domain-10': return <TrendingUp className="w-4 h-4 text-cyan-500 dark:text-cyan-300" />;
+    case 'domain-11': return <Sparkles className="w-4 h-4 text-emerald-500 dark:text-emerald-300" />;
+    case 'domain-12': return <Boxes className="w-4 h-4 text-purple-500 dark:text-purple-300" />;
+    case 'domain-13': return <FlaskConical className="w-4 h-4 text-orange-500 dark:text-orange-300" />;
+    case 'domain-14': return <Eye className="w-4 h-4 text-indigo-500 dark:text-indigo-300" />;
+    case 'domain-15': return <Activity className="w-4 h-4 text-pink-500 dark:text-pink-300" />;
+    case 'domain-16': return <CheckCircle2 className="w-4 h-4 text-rose-500 dark:text-rose-300" />;
+    case 'domain-17': return <Compass className="w-4 h-4 text-teal-500 dark:text-teal-300" />;
+    case 'domain-18': return <Layers className="w-4 h-4 text-indigo-500 dark:text-indigo-300" />;
+    default: return <Boxes className="w-4 h-4 text-indigo-500 dark:text-indigo-300" />;
+  }
+}
+
+function getDomainSurfaceClass(domainId, categoryType) {
+  switch (categoryType) {
+    case 'synthetic': return 'surface-gradient-ice';
+    case 'sustainable': return 'surface-gradient-mint';
+    case 'functional': return 'surface-gradient-lavender';
+    case 'advanced': return 'surface-gradient-cyan';
+    default:
+      if (domainId === 'domain-1') return 'surface-gradient-lavender';
+      if (domainId === 'domain-2') return 'surface-gradient-ice';
+      if (domainId === 'domain-3') return 'surface-gradient-mint';
+      if (domainId === 'domain-4') return 'surface-gradient-peach';
+      return 'surface-gradient-pearl';
   }
 }
 
@@ -526,7 +542,7 @@ export default function PolymerDomainsView({
 
   return (
     <div className="space-y-8 animate-fadeIn pb-16">
-      {/* Hero Section with Interactive 3D Macromolecule */}
+      {/* Hero Section */}
       <div className="space-y-6">
         <div className="text-center max-w-4xl mx-auto space-y-3">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-violet-500/10 via-indigo-500/10 to-teal-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 text-xs font-bold uppercase tracking-wider shadow-sm">
@@ -534,7 +550,7 @@ export default function PolymerDomainsView({
             <span>Interactive Scientific Discovery Map</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold heading-gradient-primary tracking-tight">
             Universal Polymer Research Domains
           </h1>
 
@@ -545,25 +561,25 @@ export default function PolymerDomainsView({
 
         {/* Live Platform Taxonomy & Literature Metrics */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto">
-          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md border-slate-200/80 dark:border-slate-800/80">
+          <div className="p-4 rounded-2xl surface-gradient-ice shimmer-hover text-center shadow-md">
             <div className="text-2xl sm:text-3xl font-extrabold font-mono text-indigo-600 dark:text-indigo-400">18</div>
             <div className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mt-1">Research Domains</div>
             <div className="text-[11px] text-slate-500">Synthetic, Bio &amp; Functional</div>
           </div>
 
-          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md border-slate-200/80 dark:border-slate-800/80">
+          <div className="p-4 rounded-2xl surface-gradient-mint shimmer-hover text-center shadow-md">
             <div className="text-2xl sm:text-3xl font-extrabold font-mono text-teal-600 dark:text-teal-400">{totalCuratedCount}+</div>
             <div className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mt-1">Polymer Families</div>
             <div className="text-[11px] text-slate-500">Curated Acronyms &amp; Formulas</div>
           </div>
 
-          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md border-slate-200/80 dark:border-slate-800/80">
+          <div className="p-4 rounded-2xl surface-gradient-lavender shimmer-hover text-center shadow-md">
             <div className="text-2xl sm:text-3xl font-extrabold font-mono text-purple-600 dark:text-purple-400">80+</div>
             <div className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mt-1">Synthesis Methods</div>
             <div className="text-[11px] text-slate-500">Living ROP, ATRP, RAFT, CROP</div>
           </div>
 
-          <div className="p-4 rounded-2xl card-glossy shimmer-hover text-center shadow-md border-slate-200/80 dark:border-slate-800/80">
+          <div className="p-4 rounded-2xl surface-gradient-peach shimmer-hover text-center shadow-md">
             <div className="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-600 dark:text-emerald-400">100%</div>
             <div className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider mt-1">Real Data Verified</div>
             <div className="text-[11px] text-slate-500">No Mock Publication Counts</div>
@@ -572,7 +588,7 @@ export default function PolymerDomainsView({
       </div>
 
       {/* Large Interactive Polymer Domain Search Bar */}
-      <div className="relative max-w-3xl mx-auto">
+      <div className="relative max-w-3xl mx-auto p-2 rounded-3xl search-container-gradient shadow-md">
         <div className="relative flex items-center">
           <Search className="absolute left-4 w-5 h-5 text-indigo-500 dark:text-indigo-400 pointer-events-none" />
           <input
@@ -580,7 +596,7 @@ export default function PolymerDomainsView({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search polymer domains, acronyms (PLA, PEG, PMMA, POx, PNIPAM), or polymerization methods (ATRP, CROP)..."
-            className="w-full pl-12 pr-12 py-3.5 sm:py-4 rounded-2xl bg-white dark:bg-slate-900/95 border border-slate-300 dark:border-slate-700/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/25 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-sm shadow-md dark:shadow-xl transition-all"
+            className="w-full pl-12 pr-12 py-3.5 sm:py-4 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-300/80 dark:border-slate-700/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/25 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-sm shadow-sm transition-all"
           />
           {searchQuery && (
             <button
@@ -601,8 +617,8 @@ export default function PolymerDomainsView({
             onClick={() => setActiveCategory(cat.id)}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
               activeCategory === cat.id
-                ? 'bg-gradient-to-r from-teal-600 via-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-500/20'
-                : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-900/90 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 border border-slate-200 dark:border-slate-800'
+                ? 'filter-chip-active-indigo shadow-md shadow-indigo-500/20'
+                : 'filter-chip-inactive'
             }`}
           >
             {cat.label}
@@ -612,7 +628,7 @@ export default function PolymerDomainsView({
 
       {/* Recently Explored & Trending Domains Bar */}
       {recentlyExplored.length > 0 && !searchQuery && (
-        <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs shadow-sm">
+        <div className="p-4 rounded-2xl surface-gradient-pearl flex flex-wrap items-center justify-between gap-3 text-xs shadow-sm">
           <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
             <TrendingUp className="w-4 h-4 text-teal-600 dark:text-teal-400" />
             <span className="font-semibold text-slate-800 dark:text-slate-300">Recently Explored &amp; Trending:</span>
@@ -625,7 +641,7 @@ export default function PolymerDomainsView({
                 <button
                   key={slug}
                   onClick={() => setSelectedDomain(dom)}
-                  className="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-950 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-300 font-medium transition-colors"
+                  className="px-3 py-1 rounded-lg bg-white/80 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-300 font-medium transition-colors shadow-xs"
                 >
                   {dom.title}
                 </button>
@@ -638,7 +654,7 @@ export default function PolymerDomainsView({
       {/* The 18 Colourful 2D Domain Cards Grid */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <h2 className="text-base sm:text-lg font-bold heading-gradient-purple flex items-center gap-2">
             <Boxes className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
             <span>Polymer Chemistry Disciplines ({filteredDomains.length} of 18 Domains)</span>
           </h2>
@@ -651,12 +667,13 @@ export default function PolymerDomainsView({
           {filteredDomains.map(domain => {
             const ident = domain.visualIdentity;
             const count = domainPubCounts[domain.id] || 0;
+            const surfaceClass = getDomainSurfaceClass(domain.id, domain.categoryType);
 
             return (
               <div
                 key={domain.id}
                 onClick={() => setSelectedDomain(domain)}
-                className="h-full cursor-pointer flex flex-col justify-between group rounded-3xl card-glossy shimmer-hover border-slate-200/80 dark:border-slate-800/80 hover:border-teal-500/40 dark:hover:border-slate-700 shadow-md hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+                className={`h-full cursor-pointer flex flex-col justify-between group rounded-3xl ${surfaceClass} shimmer-hover hover:border-teal-500/40 dark:hover:border-slate-700 shadow-md hover:shadow-xl transition-all duration-300 relative overflow-hidden`}
               >
                 {/* Subtle gradient accent bar along the top edge */}
                 <div className={`h-1.5 w-full bg-gradient-to-r ${ident.gradient}`} />
@@ -679,7 +696,7 @@ export default function PolymerDomainsView({
                           {count} indexed papers
                         </span>
                       ) : (
-                        <span className="text-[11px] font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 px-2.5 py-0.5 rounded-full">
+                        <span className="text-[11px] font-mono text-slate-600 dark:text-slate-400 bg-white/70 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 px-2.5 py-0.5 rounded-full">
                           Literature available
                         </span>
                       )}
@@ -702,7 +719,7 @@ export default function PolymerDomainsView({
                       {domain.relatedTopics.slice(0, 4).map(top => (
                         <span
                           key={top}
-                          className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-950 text-[10px] text-slate-600 dark:text-slate-400 font-mono border border-slate-200 dark:border-slate-800"
+                          className={`cat-plate ${getCategoryPlateClass(top)} text-[10px] font-mono`}
                         >
                           #{top}
                         </span>

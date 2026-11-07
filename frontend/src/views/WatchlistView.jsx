@@ -136,7 +136,7 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                <h1 className="text-2xl font-black heading-gradient-primary tracking-tight">
                   My Research Watchlist
                 </h1>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-500/10 dark:bg-violet-500/20 text-violet-800 dark:text-violet-300 border border-violet-500/40">
@@ -164,31 +164,31 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-        <div className="p-4 rounded-2xl card-glossy card-glossy-purple shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+        <div className="p-4 rounded-2xl surface-gradient-lavender shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
           <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Watchlisted</span>
           <p className="text-2xl font-black text-slate-900 dark:text-white mt-1 font-mono">{stats.total}</p>
           <span className="text-[11px] text-slate-500">Tracked articles</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-amber shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+        <div className="p-4 rounded-2xl surface-gradient-peach shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
           <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">To Read</span>
           <p className="text-2xl font-black text-amber-700 dark:text-amber-300 mt-1 font-mono">{stats.to_read}</p>
           <span className="text-[11px] text-slate-500">High priority queue</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-cyan shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+        <div className="p-4 rounded-2xl surface-gradient-cyan shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
           <span className="text-xs font-semibold text-cyan-600 dark:text-cyan-400">Reading</span>
           <p className="text-2xl font-black text-cyan-700 dark:text-cyan-300 mt-1 font-mono">{stats.reading}</p>
           <span className="text-[11px] text-slate-500">Currently studying</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-emerald shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+        <div className="p-4 rounded-2xl surface-gradient-mint shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
           <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Read / Analyzed</span>
           <p className="text-2xl font-black text-emerald-700 dark:text-emerald-300 mt-1 font-mono">{stats.read}</p>
           <span className="text-[11px] text-slate-500">Completed readings</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-indigo shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+        <div className="p-4 rounded-2xl surface-gradient-ice shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
           <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">Full-Text PDFs Ready</span>
           <p className="text-2xl font-black text-indigo-700 dark:text-indigo-300 mt-1 font-mono">{stats.with_pdf}</p>
           <span className="text-[11px] text-slate-500">Saved in cloud vault</span>
@@ -196,7 +196,7 @@ export default function WatchlistView({ onOpenDetails, onNavigateToSearch }) {
       </div>
 
       {/* Tabs & Search Bar */}
-      <div className="p-3 card-glossy rounded-2xl flex flex-col md:flex-row items-center justify-between gap-3 shadow-md border-slate-200/80 dark:border-slate-800/80">
+      <div className="p-3 surface-gradient-pearl rounded-2xl flex flex-col md:flex-row items-center justify-between gap-3 shadow-md border-slate-200/80 dark:border-slate-800/80">
         {/* Status Tabs */}
         <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-950/80 rounded-xl border border-slate-200 dark:border-slate-800/80 w-full md:w-auto">
           {[

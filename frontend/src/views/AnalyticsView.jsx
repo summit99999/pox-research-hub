@@ -134,7 +134,9 @@ export default function AnalyticsView({
       {/* Header with Engine Switcher */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <h1 className={`text-xl sm:text-2xl font-bold flex items-center gap-2 ${
+            isPOx ? 'heading-gradient-teal' : 'heading-gradient-primary'
+          }`}>
             <TrendingUp className="w-5 h-5 text-teal-600 dark:text-teal-400" />
             <span>
               {isPOx ? 'POx & POzi Research Trend Analytics' : 'Universal Polymer Science Bibliometric Analytics'}
@@ -164,8 +166,8 @@ export default function AnalyticsView({
       </div>
 
       {/* 1. Annual Publication Trajectory */}
-      <div className="p-6 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-sm dark:shadow-md space-y-4 card-glossy">
-        <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+      <div className="p-6 rounded-2xl surface-gradient-pearl dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-4 card-glossy">
+        <h2 className="text-sm font-bold heading-gradient-teal flex items-center gap-2">
           <BarChart2 className="w-4 h-4 text-teal-600 dark:text-teal-400" />
           <span>
             {isPOx ? 'Annual Publication Growth: Poly(2-oxazoline) vs Poly(2-oxazine)' : 'Annual Publication Growth Across Polymer Disciplines'}
@@ -190,8 +192,8 @@ export default function AnalyticsView({
       </div>
 
       {/* 2. Stimuli-Responsive or Polymerization Innovation Breakdown */}
-      <div className="p-6 rounded-2xl bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-sm dark:shadow-md space-y-4 card-glossy">
-        <h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+      <div className="p-6 rounded-2xl surface-gradient-pearl dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-4 card-glossy">
+        <h2 className="text-sm font-bold heading-gradient-amber flex items-center gap-2">
           <Flame className="w-4 h-4 text-amber-500 dark:text-amber-400" />
           <span>
             {isPOx ? 'Stimuli-Responsive Polymer Chemistry Innovations' : 'Controlled & Advanced Polymerization Methodologies'}

@@ -69,14 +69,14 @@ export default function AISummariesView({ onOpenDetails, onOpenSummary }) {
   return (
     <div className="space-y-6 pb-12">
       {/* Header */}
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-purple-50 via-indigo-50/70 to-purple-50/60 dark:from-slate-900 dark:via-indigo-950/40 dark:to-slate-900 border border-purple-200/80 dark:border-slate-800 shadow-sm dark:shadow-xl space-y-4 card-glossy">
+      <div className="p-6 rounded-2xl surface-gradient-lavender dark:from-slate-900 dark:via-indigo-950/40 dark:to-slate-900 border border-purple-200/80 dark:border-slate-800 shadow-sm dark:shadow-xl space-y-4 card-glossy">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 text-xs font-semibold uppercase tracking-wider mb-2">
               <Sparkles className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
               AI Scientific Synthesis Suite
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+            <h1 className="text-xl sm:text-2xl font-bold heading-gradient-purple">
               13-Section Structured Scientific Summaries
             </h1>
             <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">

@@ -426,3 +426,482 @@ html:not(.dark) ::-webkit-scrollbar-thumb, html.light ::-webkit-scrollbar-thumb 
 html:not(.dark) ::-webkit-scrollbar-thumb:hover, html.light ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* ============================================================================
+   ADVANCED LIGHT THEME COLOUR ENHANCEMENT SUITE
+   ============================================================================ */
+
+/* 1. COORDINATED LIGHT GRADIENT SURFACES (Replacing flat white) */
+
+.surface-gradient-pearl {
+  background: linear-gradient(145deg, #ffffff 0%, #f6f8fe 45%, #eff2fc 100%);
+}
+html.dark .surface-gradient-pearl {
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 15, 29, 0.98) 100%);
+}
+
+.surface-gradient-ice {
+  background: linear-gradient(145deg, #ffffff 0%, #f0f7ff 50%, #e0f2fe 100%);
+}
+html.dark .surface-gradient-ice {
+  background: linear-gradient(145deg, rgba(12, 28, 48, 0.95) 0%, rgba(8, 16, 30, 0.98) 100%);
+}
+
+.surface-gradient-mint {
+  background: linear-gradient(145deg, #ffffff 0%, #f0fdf9 50%, #ccfbf1 100%);
+}
+html.dark .surface-gradient-mint {
+  background: linear-gradient(145deg, rgba(6, 35, 30, 0.95) 0%, rgba(4, 20, 18, 0.98) 100%);
+}
+
+.surface-gradient-cream {
+  background: linear-gradient(145deg, #ffffff 0%, #fefce8 50%, #fef3c7 100%);
+}
+html.dark .surface-gradient-cream {
+  background: linear-gradient(145deg, rgba(35, 26, 8, 0.95) 0%, rgba(20, 14, 4, 0.98) 100%);
+}
+
+.surface-gradient-peach {
+  background: linear-gradient(145deg, #ffffff 0%, #fff7ed 50%, #ffedd5 100%);
+}
+html.dark .surface-gradient-peach {
+  background: linear-gradient(145deg, rgba(38, 18, 8, 0.95) 0%, rgba(22, 10, 4, 0.98) 100%);
+}
+
+.surface-gradient-lavender {
+  background: linear-gradient(145deg, #ffffff 0%, #faf5ff 50%, #f3e8ff 100%);
+}
+html.dark .surface-gradient-lavender {
+  background: linear-gradient(145deg, rgba(28, 14, 45, 0.95) 0%, rgba(16, 8, 28, 0.98) 100%);
+}
+
+.surface-gradient-cyan {
+  background: linear-gradient(145deg, #ffffff 0%, #ecfeff 50%, #cffafe 100%);
+}
+html.dark .surface-gradient-cyan {
+  background: linear-gradient(145deg, rgba(8, 30, 40, 0.95) 0%, rgba(4, 18, 24, 0.98) 100%);
+}
+
+.surface-gradient-rose {
+  background: linear-gradient(145deg, #ffffff 0%, #fff1f2 50%, #ffe4e6 100%);
+}
+html.dark .surface-gradient-rose {
+  background: linear-gradient(145deg, rgba(38, 10, 18, 0.95) 0%, rgba(22, 5, 10, 0.98) 100%);
+}
+
+/* Subtle layered content panel background */
+.surface-panel-light {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 254, 0.94) 50%, rgba(241, 245, 253, 0.92) 100%);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 2px 6px -2px rgba(15, 23, 42, 0.03);
+}
+html.dark .surface-panel-light {
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(8, 12, 24, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.55);
+}
+
+/* 2. COLOURFUL GRADIENT TYPOGRAPHY (High-Contrast, WCAG Compliant) */
+
+.heading-gradient-primary {
+  background: linear-gradient(135deg, #090d16 0%, #1e1b4b 30%, #312e81 65%, #4338ca 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+html.dark .heading-gradient-primary {
+  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 45%, #a5b4fc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heading-gradient-blue {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 35%, #0284c7 75%, #0369a1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+html.dark .heading-gradient-blue {
+  background: linear-gradient(135deg, #ffffff 0%, #67e8f9 50%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heading-gradient-teal {
+  background: linear-gradient(135deg, #042f2e 0%, #0f766e 35%, #0d9488 70%, #0284c7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+html.dark .heading-gradient-teal {
+  background: linear-gradient(135deg, #ffffff 0%, #2dd4bf 50%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heading-gradient-purple {
+  background: linear-gradient(135deg, #2e1065 0%, #581c87 35%, #7e22ce 70%, #db2777 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+html.dark .heading-gradient-purple {
+  background: linear-gradient(135deg, #ffffff 0%, #c084fc 50%, #f472b6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heading-gradient-amber {
+  background: linear-gradient(135deg, #451a03 0%, #92400e 35%, #b45309 70%, #ea580c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+html.dark .heading-gradient-amber {
+  background: linear-gradient(135deg, #ffffff 0%, #fbbf24 50%, #fb923c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heading-gradient-rose {
+  background: linear-gradient(135deg, #4c0519 0%, #9f1239 35%, #e11d48 70%, #c026d3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+html.dark .heading-gradient-rose {
+  background: linear-gradient(135deg, #ffffff 0%, #fb7185 50%, #f43f5e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 3. COLOURFUL CATEGORY PLATES & RESEARCH TAGS */
+
+.cat-plate {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.cat-plate:hover {
+  transform: translateY(-1px);
+}
+
+/* POx / POzi: Lavender & Violet */
+.cat-plate-pox {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  color: #5b21b6;
+  box-shadow: 0 1px 4px rgba(139, 92, 246, 0.12);
+}
+html.dark .cat-plate-pox {
+  background: rgba(109, 40, 217, 0.18);
+  border-color: rgba(167, 139, 250, 0.4);
+  color: #ddd6fe;
+  box-shadow: none;
+}
+
+/* Polyolefins: Blue & Cyan */
+.cat-plate-polyolefins {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border: 1px solid rgba(59, 130, 246, 0.45);
+  color: #1e40af;
+  box-shadow: 0 1px 4px rgba(59, 130, 246, 0.12);
+}
+html.dark .cat-plate-polyolefins {
+  background: rgba(30, 64, 175, 0.18);
+  border-color: rgba(96, 165, 250, 0.4);
+  color: #bfdbfe;
+  box-shadow: none;
+}
+
+/* Polyesters: Mint & Emerald */
+.cat-plate-polyesters {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #065f46;
+  box-shadow: 0 1px 4px rgba(16, 185, 129, 0.12);
+}
+html.dark .cat-plate-polyesters {
+  background: rgba(5, 150, 105, 0.18);
+  border-color: rgba(52, 211, 153, 0.4);
+  color: #a7f3d0;
+  box-shadow: none;
+}
+
+/* Polyamides: Rose & Magenta */
+.cat-plate-polyamides {
+  background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+  border: 1px solid rgba(244, 63, 94, 0.45);
+  color: #9f1239;
+  box-shadow: 0 1px 4px rgba(244, 63, 94, 0.12);
+}
+html.dark .cat-plate-polyamides {
+  background: rgba(225, 29, 72, 0.18);
+  border-color: rgba(251, 113, 133, 0.4);
+  color: #fecdd3;
+  box-shadow: none;
+}
+
+/* Polyethers: Turquoise & Blue */
+.cat-plate-polyethers {
+  background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+  border: 1px solid rgba(20, 184, 166, 0.45);
+  color: #115e59;
+  box-shadow: 0 1px 4px rgba(20, 184, 166, 0.12);
+}
+html.dark .cat-plate-polyethers {
+  background: rgba(13, 148, 136, 0.18);
+  border-color: rgba(45, 212, 191, 0.4);
+  color: #99f6e4;
+  box-shadow: none;
+}
+
+/* Conducting Polymers: Cyan & Indigo */
+.cat-plate-conducting {
+  background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+  border: 1px solid rgba(6, 182, 212, 0.45);
+  color: #155e75;
+  box-shadow: 0 1px 4px rgba(6, 182, 212, 0.12);
+}
+html.dark .cat-plate-conducting {
+  background: rgba(8, 145, 178, 0.18);
+  border-color: rgba(34, 211, 238, 0.4);
+  color: #a5f3fc;
+  box-shadow: none;
+}
+
+/* Biopolymers: Green & Mint */
+.cat-plate-biopolymers {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1px solid rgba(34, 197, 94, 0.45);
+  color: #166534;
+  box-shadow: 0 1px 4px rgba(34, 197, 94, 0.12);
+}
+html.dark .cat-plate-biopolymers {
+  background: rgba(22, 163, 74, 0.18);
+  border-color: rgba(74, 222, 128, 0.4);
+  color: #bbf7d0;
+  box-shadow: none;
+}
+
+/* Responsive Polymers: Violet & Pink */
+.cat-plate-responsive {
+  background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%);
+  border: 1px solid rgba(217, 70, 239, 0.45);
+  color: #86198f;
+  box-shadow: 0 1px 4px rgba(217, 70, 239, 0.12);
+}
+html.dark .cat-plate-responsive {
+  background: rgba(192, 38, 211, 0.18);
+  border-color: rgba(232, 121, 249, 0.4);
+  color: #f5d0fe;
+  box-shadow: none;
+}
+
+/* Polymerization Methods: Amber & Coral */
+.cat-plate-methods {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #92400e;
+  box-shadow: 0 1px 4px rgba(245, 158, 11, 0.12);
+}
+html.dark .cat-plate-methods {
+  background: rgba(217, 119, 6, 0.18);
+  border-color: rgba(251, 191, 36, 0.4);
+  color: #fde68a;
+  box-shadow: none;
+}
+
+/* Polymer Characterization: Blue & Purple */
+.cat-plate-characterization {
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  border: 1px solid rgba(99, 102, 241, 0.45);
+  color: #3730a3;
+  box-shadow: 0 1px 4px rgba(99, 102, 241, 0.12);
+}
+html.dark .cat-plate-characterization {
+  background: rgba(79, 70, 229, 0.18);
+  border-color: rgba(129, 140, 248, 0.4);
+  color: #c7d2fe;
+  box-shadow: none;
+}
+
+/* Biomedical Applications: Peach & Rose */
+.cat-plate-biomedical {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border: 1px solid rgba(249, 115, 22, 0.45);
+  color: #9a3412;
+  box-shadow: 0 1px 4px rgba(249, 115, 22, 0.12);
+}
+html.dark .cat-plate-biomedical {
+  background: rgba(234, 88, 12, 0.18);
+  border-color: rgba(251, 146, 60, 0.4);
+  color: #fed7aa;
+  box-shadow: none;
+}
+
+/* Sustainability: Mint & Green */
+.cat-plate-sustainability {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #065f46;
+  box-shadow: 0 1px 4px rgba(16, 185, 129, 0.12);
+}
+html.dark .cat-plate-sustainability {
+  background: rgba(5, 150, 105, 0.18);
+  border-color: rgba(52, 211, 153, 0.4);
+  color: #a7f3d0;
+  box-shadow: none;
+}
+
+/* Advanced Materials: Indigo & Electric Blue */
+.cat-plate-advanced {
+  background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+  border: 1px solid rgba(79, 70, 229, 0.45);
+  color: #312e81;
+  box-shadow: 0 1px 4px rgba(79, 70, 229, 0.12);
+}
+html.dark .cat-plate-advanced {
+  background: rgba(67, 56, 202, 0.18);
+  border-color: rgba(165, 180, 252, 0.4);
+  color: #c7d2fe;
+  box-shadow: none;
+}
+
+/* 4. REDESIGNED ARTICLE CARDS WITH LEFT-EDGE ACCENTS & PASTEL GRADIENTS */
+
+.article-card-enhanced {
+  position: relative;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 255, 0.95) 45%, rgba(241, 245, 254, 0.92) 100%);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-left-width: 4px;
+  border-left-color: #0d9488;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.06), 0 2px 6px -2px rgba(15, 23, 42, 0.03);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+.article-card-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.2) 60%, transparent 100%);
+  pointer-events: none;
+}
+.article-card-enhanced:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+  border-color: rgba(148, 163, 184, 0.7);
+  border-left-color: #0d9488;
+}
+
+html.dark .article-card-enhanced {
+  background: linear-gradient(145deg, rgba(14, 20, 37, 0.88) 0%, rgba(8, 12, 24, 0.94) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left-width: 4px;
+  border-left-color: #14b8a6;
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.55);
+}
+html.dark .article-card-enhanced::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, transparent 100%);
+}
+html.dark .article-card-enhanced:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+  border-left-color: #2dd4bf;
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.7);
+}
+
+/* Left-Edge Accent Color Variants */
+.article-accent-teal { border-left-color: #0d9488 !important; }
+.article-accent-indigo { border-left-color: #4f46e5 !important; }
+.article-accent-purple { border-left-color: #9333ea !important; }
+.article-accent-amber { border-left-color: #d97706 !important; }
+.article-accent-emerald { border-left-color: #059669 !important; }
+.article-accent-rose { border-left-color: #e11d48 !important; }
+.article-accent-cyan { border-left-color: #0891b2 !important; }
+
+/* 5. SEARCH & FILTER GRADIENT CONTAINERS */
+
+.search-container-gradient {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 247, 255, 0.92) 50%, rgba(245, 243, 255, 0.88) 100%);
+  border: 1px solid rgba(203, 213, 225, 0.85);
+  box-shadow: 0 12px 32px -8px rgba(30, 58, 138, 0.08), 0 2px 8px -2px rgba(15, 23, 42, 0.04);
+}
+html.dark .search-container-gradient {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(10, 18, 38, 0.92) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.55);
+}
+
+/* Luminous Filter Chips */
+.filter-chip {
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.filter-chip-inactive {
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.9) 0%, rgba(241, 245, 249, 0.8) 100%);
+  border-color: rgba(203, 213, 225, 0.8);
+  color: #334155;
+}
+.filter-chip-inactive:hover {
+  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+  color: #0f172a;
+  border-color: rgba(148, 163, 184, 0.9);
+}
+html.dark .filter-chip-inactive {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(51, 65, 85, 0.8);
+  color: #cbd5e1;
+}
+html.dark .filter-chip-inactive:hover {
+  background: rgba(51, 65, 85, 0.8);
+  color: #f8fafc;
+}
+
+.filter-chip-active-teal {
+  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  color: #ffffff;
+  font-weight: 600;
+  border-color: #14b8a6;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+}
+
+.filter-chip-active-indigo {
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  color: #ffffff;
+  font-weight: 600;
+  border-color: #6366f1;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+.filter-chip-active-purple {
+  background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+  color: #ffffff;
+  font-weight: 600;
+  border-color: #a855f7;
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.25);
+}
+

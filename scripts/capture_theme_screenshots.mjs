@@ -70,73 +70,78 @@ server.listen(PORT, async () => {
   console.log(`Local static server listening on http://localhost:${PORT}`);
 
   const targets = [
-    // LIGHT THEME CAPTURES
+    // 12 LIGHT THEME CAPTURES
     {
-      name: 'screenshot_light_dashboard_with_sidebar.png',
+      name: 'screenshot_light_dashboard_enhanced.png',
       url: `http://localhost:${PORT}/?theme=light&view=dashboard`,
       size: '--window-size=1560,1100'
     },
     {
-      name: 'screenshot_light_sidebar_expanded.png',
-      url: `http://localhost:${PORT}/?theme=light&view=dashboard&sidebar=expanded`,
-      size: '--window-size=1440,960'
-    },
-    {
-      name: 'screenshot_light_domains.png',
+      name: 'screenshot_light_domains_enhanced.png',
       url: `http://localhost:${PORT}/?theme=light&view=domains`,
       size: '--window-size=1560,1100'
     },
     {
-      name: 'screenshot_light_pox_search.png',
+      name: 'screenshot_light_pox_search_enhanced.png',
       url: `http://localhost:${PORT}/?theme=light&view=search&engine=pox`,
       size: '--window-size=1560,1000'
     },
     {
-      name: 'screenshot_light_polymer_search.png',
+      name: 'screenshot_light_polymer_search_enhanced.png',
       url: `http://localhost:${PORT}/?theme=light&view=search&engine=universal`,
       size: '--window-size=1560,1000'
     },
     {
-      name: 'screenshot_light_journals.png',
+      name: 'screenshot_light_journals_directory_enhanced.png',
       url: `http://localhost:${PORT}/?theme=light&view=journals`,
       size: '--window-size=1560,1000'
     },
     {
-      name: 'screenshot_light_pdf_library.png',
+      name: 'screenshot_light_journal_feed_enhanced.png',
+      url: `http://localhost:${PORT}/?theme=light&view=journals&journal=jacs`,
+      size: '--window-size=1560,1000'
+    },
+    {
+      name: 'screenshot_light_article_detail_enhanced.png',
+      url: `http://localhost:${PORT}/?theme=light&view=article&id=1`,
+      size: '--window-size=1560,1100'
+    },
+    {
+      name: 'screenshot_light_pdf_library_enhanced.png',
       url: `http://localhost:${PORT}/?theme=light&view=pdf_library`,
       size: '--window-size=1560,1000'
     },
     {
-      name: 'screenshot_light_watchlist.png',
+      name: 'screenshot_light_watchlist_enhanced.png',
       url: `http://localhost:${PORT}/?theme=light&view=watchlist`,
       size: '--window-size=1560,1000'
     },
     {
-      name: 'screenshot_light_settings.png',
+      name: 'screenshot_light_analytics_enhanced.png',
+      url: `http://localhost:${PORT}/?theme=light&view=trends`,
+      size: '--window-size=1560,1000'
+    },
+    {
+      name: 'screenshot_light_ai_summaries_enhanced.png',
+      url: `http://localhost:${PORT}/?theme=light&view=summaries`,
+      size: '--window-size=1560,1000'
+    },
+    {
+      name: 'screenshot_light_settings_enhanced.png',
       url: `http://localhost:${PORT}/?theme=light&view=settings`,
       size: '--window-size=1560,1000'
     },
 
-    // DARK THEME CAPTURES (Zero Regression Verification)
+    // 2 DARK THEME REGRESSION VERIFICATIONS
     {
-      name: 'screenshot_dark_dashboard.png',
+      name: 'screenshot_dark_dashboard_regression.png',
       url: `http://localhost:${PORT}/?theme=dark&view=dashboard`,
       size: '--window-size=1560,1100'
     },
     {
-      name: 'screenshot_dark_domains.png',
+      name: 'screenshot_dark_domains_regression.png',
       url: `http://localhost:${PORT}/?theme=dark&view=domains`,
       size: '--window-size=1560,1100'
-    },
-    {
-      name: 'screenshot_dark_journals.png',
-      url: `http://localhost:${PORT}/?theme=dark&view=journals`,
-      size: '--window-size=1560,1000'
-    },
-    {
-      name: 'screenshot_dark_settings.png',
-      url: `http://localhost:${PORT}/?theme=dark&view=settings`,
-      size: '--window-size=1560,1000'
     }
   ];
 
@@ -173,7 +178,7 @@ server.listen(PORT, async () => {
   }
 
   server.close(() => {
-    console.log('\n🎉 All requested verification screenshots successfully captured and saved to artifacts directory.');
+    console.log('\n🎉 All 14 verification screenshots successfully captured and saved to artifacts directory.');
     process.exit(0);
   });
 });

@@ -52,6 +52,7 @@ import {
 } from '../lib/doiHelper.js';
 import { api } from '../lib/api.js';
 import PaperDetailModal from '../components/PaperDetailModal';
+import { getCategoryPlateClass, getArticleAccentClass } from '../lib/categoryColorMap.js';
 
 export default function JournalsTrackerView({ 
   onOpenDetails, 
@@ -328,7 +329,7 @@ export default function JournalsTrackerView({
             </button>
 
             <div className="flex items-center gap-2.5 flex-wrap">
-              <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+              <h1 className="text-xl sm:text-2xl font-bold heading-gradient-primary">
                 {selectedJournal.canonical_title}
               </h1>
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-teal-500/10 dark:bg-teal-500/20 text-teal-700 dark:text-teal-300 border border-teal-500/30 flex items-center gap-1">
@@ -357,7 +358,7 @@ export default function JournalsTrackerView({
 
         {/* Quick Stats Pill Row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="p-3.5 rounded-xl card-glossy">
+          <div className="p-3.5 rounded-xl surface-gradient-pearl shadow-sm">
             <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold block">Confirmed Polymer Articles</span>
             <span className="text-xl font-bold text-slate-900 dark:text-slate-100 font-mono mt-0.5 block">{feedData.total}</span>
             <span className="text-[10px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
@@ -366,19 +367,19 @@ export default function JournalsTrackerView({
             </span>
           </div>
 
-          <div className="p-3.5 rounded-xl card-glossy">
+          <div className="p-3.5 rounded-xl surface-gradient-ice shadow-sm">
             <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold block">ASAP / Online-First</span>
             <span className="text-xl font-bold text-teal-600 dark:text-teal-300 font-mono mt-0.5 block">{feedData.asapCount}</span>
             <span className="text-[10px] text-teal-600 dark:text-teal-400">Ahead-of-print publications</span>
           </div>
 
-          <div className="p-3.5 rounded-xl card-glossy">
+          <div className="p-3.5 rounded-xl surface-gradient-lavender shadow-sm">
             <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold block">Last 30 Days</span>
             <span className="text-xl font-bold text-indigo-600 dark:text-indigo-300 font-mono mt-0.5 block">{feedData.recent30dCount}</span>
             <span className="text-[10px] text-indigo-600 dark:text-indigo-400">Newly indexed polymer works</span>
           </div>
 
-          <div className="p-3.5 rounded-xl card-glossy">
+          <div className="p-3.5 rounded-xl surface-gradient-mint shadow-sm">
             <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold block">Inclusion Integrity</span>
             <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-300 mt-1.5 flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
@@ -391,7 +392,7 @@ export default function JournalsTrackerView({
         </div>
 
         {/* Filters and Search Bar */}
-        <div className="p-4 rounded-2xl card-glossy space-y-3.5 shadow-md">
+        <div className="p-4 rounded-2xl search-container-gradient space-y-3.5 shadow-md">
           {/* Top row: Keyword Search + Family + Topic */}
           <div className="flex flex-col sm:flex-row gap-2.5">
             <div className="relative flex-1">
@@ -588,7 +589,7 @@ export default function JournalsTrackerView({
                 <div
                   key={articleKey}
                   onClick={() => onOpenDetails && onOpenDetails(article)}
-                  className="p-5 rounded-2xl card-glossy shimmer-hover border-slate-200/80 dark:border-slate-800 hover:border-teal-500/40 transition-all space-y-3 relative group cursor-pointer shadow-sm hover:shadow-md"
+                  className="p-5 rounded-2xl article-card-enhanced article-accent-teal shimmer-hover border-slate-200/80 dark:border-slate-800 hover:border-teal-500/40 transition-all space-y-3 relative group cursor-pointer shadow-sm hover:shadow-md"
                 >
                   {/* Top Badge Row */}
                   <div className="flex flex-wrap items-center justify-between gap-2">
@@ -620,7 +621,7 @@ export default function JournalsTrackerView({
 
                       {/* Detected Family Badge */}
                       {article.polymer_family && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-slate-100 dark:bg-slate-800 text-teal-700 dark:text-teal-300 border border-slate-200 dark:border-slate-700">
+                        <span className={`cat-plate ${getCategoryPlateClass(article.polymer_family)} text-[10px] font-mono`}>
                           {article.polymer_family}
                         </span>
                       )}
@@ -886,7 +887,7 @@ export default function JournalsTrackerView({
             <span className="p-2 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 border border-teal-500/30">
               <BookOpen className="w-5 h-5" />
             </span>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            <h1 className="text-xl sm:text-2xl font-bold heading-gradient-blue">
               Journals — Strict Polymer Publication Tracker
             </h1>
           </div>
@@ -924,7 +925,7 @@ export default function JournalsTrackerView({
       )}
 
       {/* Directory Search & Summary Bar */}
-      <div className="p-4 rounded-2xl card-glossy shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="p-4 rounded-2xl surface-gradient-pearl shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="relative flex-1 w-full">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
@@ -944,12 +945,15 @@ export default function JournalsTrackerView({
 
       {/* Journals Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filteredJournals.map(journal => {
+        {filteredJournals.map((journal, jIdx) => {
+          const surfaces = ['surface-gradient-pearl', 'surface-gradient-ice', 'surface-gradient-lavender', 'surface-gradient-mint', 'surface-gradient-peach', 'surface-gradient-cyan'];
+          const surfaceClass = surfaces[jIdx % surfaces.length];
+
           return (
             <div
               key={journal.id}
               onClick={() => handleOpenJournal(journal)}
-              className="p-5 rounded-3xl card-glossy card-glossy-teal shimmer-hover cursor-pointer group flex flex-col justify-between transition-all border-slate-200/80 dark:border-slate-800/80 shadow-md hover:shadow-xl"
+              className={`p-5 rounded-3xl ${surfaceClass} shimmer-hover cursor-pointer group flex flex-col justify-between transition-all border-slate-200/80 dark:border-slate-800/80 shadow-md hover:shadow-xl`}
             >
               <div className="space-y-2.5">
                 {/* Top Badges */}

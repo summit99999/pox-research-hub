@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { getJournalImpactFactor } from '../lib/journalMeta';
 import { getPaperDoiUrl, getOfficialPublisherUrl, formatDoiDisplay, cleanDoi } from '../lib/doiHelper';
+import { getCategoryPlateClass, getArticleAccentClass } from '../lib/categoryColorMap';
 import { api } from '../lib/api';
 
 export default function PaperCard({ 
@@ -78,16 +79,17 @@ export default function PaperCard({
   const publisherUrl = getOfficialPublisherUrl(paper);
   const displayDoi = formatDoiDisplay(paper.doi);
   const impactFactor = getJournalImpactFactor(paper.journal);
+  const accentClass = getArticleAccentClass(paper.polymer_family || paper.journal || paper.title);
 
   const hasLongAbstract = paper.abstract && paper.abstract.length > 220;
 
   return (
     <article 
       onClick={() => onOpenDetails && onOpenDetails(paper)}
-      className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 group relative cursor-pointer card-glossy shimmer-hover ${
+      className={`article-card-enhanced ${accentClass} shimmer-hover ${
         isSelected 
-          ? 'card-glossy-teal ring-1 ring-teal-500/40 bg-gradient-to-br from-teal-50/80 via-white to-teal-50/40 dark:from-slate-900 dark:via-slate-900 dark:to-teal-950/40' 
-          : 'border-slate-200/80 dark:border-slate-800/80 hover:border-teal-500/40'
+          ? 'ring-2 ring-teal-500/50 bg-gradient-to-br from-teal-50 via-white to-teal-50/50 dark:from-slate-900 dark:via-slate-900 dark:to-teal-950/40' 
+          : ''
       }`}
     >
       <div className="flex items-start gap-3 sm:gap-3.5">
@@ -209,20 +211,27 @@ export default function PaperCard({
             </div>
           )}
 
-          {/* Categories / Topic Tags */}
-          {paper.categories && paper.categories.length > 0 && (
+          {/* Categories / Topic Tags with Coordinated Category Plates */}
+          {((paper.categories && paper.categories.length > 0) || paper.polymer_family) && (
             <div className="flex flex-wrap items-center gap-1.5 mt-3">
-              {paper.categories.slice(0, 4).map(cat => (
+              {paper.polymer_family && (
+                <span className={`cat-plate ${getCategoryPlateClass(paper.polymer_family)}`}>
+                  <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70" />
+                  <span>{paper.polymer_family}</span>
+                </span>
+              )}
+              {paper.categories && paper.categories.slice(0, 3).map(cat => (
                 <span 
                   key={cat.id || cat.slug}
-                  className="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800/90 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700/70 hover:border-teal-500/40 transition-colors"
+                  className={`cat-plate ${getCategoryPlateClass(cat.category_name)}`}
                 >
-                  {cat.category_name}
+                  <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70" />
+                  <span>{cat.category_name}</span>
                 </span>
               ))}
-              {paper.categories.length > 4 && (
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
-                  +{paper.categories.length - 4} more
+              {paper.categories && paper.categories.length > 3 && (
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium px-1">
+                  +{paper.categories.length - 3} more
                 </span>
               )}
             </div>

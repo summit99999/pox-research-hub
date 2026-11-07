@@ -578,7 +578,7 @@ export default function ArticleDetailView({
       </div>
 
       {/* Main Metadata Banner Card */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-sm dark:shadow-xl space-y-4 card-glossy">
+      <div className="p-6 sm:p-8 rounded-3xl surface-panel-light dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-sm dark:shadow-xl space-y-4 card-glossy">
         {/* Badges Bar */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
           {paper.is_asap && (
@@ -683,7 +683,7 @@ export default function ArticleDetailView({
       {/* ========================================================================= */}
       {/* PERSONAL ARTICLE PDF LIBRARY CARD */}
       {/* ========================================================================= */}
-      <section className="p-6 rounded-3xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-md dark:shadow-xl space-y-4">
+      <section className="p-6 rounded-3xl surface-gradient-mint dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-md dark:shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-600 dark:text-indigo-400">
@@ -850,7 +850,7 @@ export default function ArticleDetailView({
       {/* ========================================================================= */}
       {/* RESEARCH WATCHLIST & READING NOTES CARD */}
       {/* ========================================================================= */}
-      <section className="p-6 rounded-3xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-md dark:shadow-xl space-y-4">
+      <section className="p-6 rounded-3xl surface-gradient-lavender dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 shadow-md dark:shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-2xl bg-violet-500/10 border border-violet-500/30 text-violet-600 dark:text-violet-400">

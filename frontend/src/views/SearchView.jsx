@@ -250,7 +250,9 @@ export default function SearchView({
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <h1 className={`text-xl sm:text-2xl font-bold flex items-center gap-2 ${
+              isPOx ? 'heading-gradient-teal' : 'heading-gradient-primary'
+            }`}>
               {isPOx ? (
                 <Atom className="w-5 h-5 text-teal-600 dark:text-teal-400" />
               ) : (
@@ -290,7 +292,7 @@ export default function SearchView({
       </div>
 
       {/* Main Search Bar & Boolean Engine */}
-      <div className={`p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-md dark:shadow-xl space-y-4 transition-all duration-300 card-glossy ${
+      <div className={`p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-md dark:shadow-xl space-y-4 transition-all duration-300 card-glossy search-container-gradient ${
         isPOx 
           ? 'card-glossy-teal' 
           : 'card-glossy-indigo'
@@ -428,7 +430,7 @@ export default function SearchView({
       </div>
 
       {/* Results Header & Batch Operations Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-3.5 rounded-2xl bg-white/90 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-xs shadow-sm dark:shadow-md">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-3.5 rounded-2xl surface-gradient-pearl border border-slate-200/80 dark:border-slate-800 text-xs shadow-sm">
         <div className="text-slate-700 dark:text-slate-300 font-medium flex items-center gap-2">
           <span>
             Found <strong className={isPOx ? 'text-teal-700 dark:text-teal-400' : 'text-indigo-700 dark:text-indigo-400'}>{totalCount}</strong> publications matching criteria

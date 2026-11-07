@@ -147,7 +147,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                <h1 className="text-2xl font-black heading-gradient-purple tracking-tight">
                   My PDF Library
                 </h1>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-800 dark:text-indigo-300 border border-indigo-500/40">
@@ -179,7 +179,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
 
       {/* Metrics Overview Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl card-glossy card-glossy-indigo shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+        <div className="p-4 rounded-2xl surface-gradient-ice shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Stored PDFs</span>
             <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -190,7 +190,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
           <span className="text-[11px] text-slate-500">Indexed full-text articles</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-teal shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+        <div className="p-4 rounded-2xl surface-gradient-mint shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Cloud Storage Used</span>
             <HardDrive className="w-4 h-4 text-teal-600 dark:text-teal-400" />
@@ -201,7 +201,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
           <span className="text-[11px] text-slate-500">Across encrypted storage buckets</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-purple shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+        <div className="p-4 rounded-2xl surface-gradient-lavender shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Active Journals</span>
             <Layers className="w-4 h-4 text-purple-600 dark:text-purple-400" />
@@ -212,7 +212,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
           <span className="text-[11px] text-slate-500">Different publisher sources</span>
         </div>
 
-        <div className="p-4 rounded-2xl card-glossy card-glossy-emerald shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
+        <div className="p-4 rounded-2xl surface-gradient-peach shimmer-hover border-slate-200/80 dark:border-slate-800/80 shadow-md">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Institutional / Subscribed</span>
             <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
@@ -225,7 +225,7 @@ export default function PdfLibraryView({ onOpenDetails, onNavigateToSearch }) {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 rounded-2xl card-glossy flex flex-col md:flex-row items-center justify-between gap-3 shadow-md border-slate-200/80 dark:border-slate-800/80">
+      <div className="p-4 rounded-2xl surface-gradient-pearl flex flex-col md:flex-row items-center justify-between gap-3 shadow-md border-slate-200/80 dark:border-slate-800/80">
         {/* Search */}
         <div className="relative flex-1 w-full">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />

@@ -37,6 +37,7 @@ import {
 } from 'recharts';
 import PaperCard from '../components/PaperCard';
 import EngineSelector from '../components/EngineSelector';
+import { getCategoryPlateClass } from '../lib/categoryColorMap';
 import { api } from '../lib/api';
 import { ENGINE_SCOPES } from '../lib/searchEngine';
 
@@ -213,12 +214,12 @@ export default function DashboardView({
       {/* Hero Welcome Header & Terminal Bar */}
       <div className={`relative rounded-3xl border p-6 sm:p-8 lg:p-10 overflow-hidden shadow-2xl transition-all duration-300 card-glossy ${
         isPOx 
-          ? 'bg-gradient-to-br from-teal-50/90 via-white to-teal-50/40 dark:from-slate-900/95 dark:via-slate-900/90 dark:to-teal-950/40 border-teal-500/25 shadow-teal-500/5 dark:shadow-teal-950/20'
-          : 'bg-gradient-to-br from-indigo-50/90 via-white to-indigo-50/40 dark:from-slate-900/95 dark:via-slate-900/90 dark:to-indigo-950/40 border-indigo-500/25 shadow-indigo-500/5 dark:shadow-indigo-950/20'
+          ? 'surface-gradient-ice border-teal-500/35 shadow-teal-500/10 dark:shadow-teal-950/20'
+          : 'surface-gradient-lavender border-indigo-500/35 shadow-indigo-500/10 dark:shadow-indigo-950/20'
       }`}>
         {/* Subtle geometric glowing backdrop orb */}
-        <div className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-20 -mr-20 -mt-20 ${
-          isPOx ? 'bg-teal-500' : 'bg-indigo-500'
+        <div className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none opacity-25 -mr-20 -mt-20 ${
+          isPOx ? 'bg-teal-400' : 'bg-indigo-400'
         }`} />
 
         <div className="relative z-10 max-w-4xl">
@@ -226,38 +227,38 @@ export default function DashboardView({
           <div className="flex flex-wrap items-center gap-2 mb-4">
             <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
               isPOx 
-                ? 'bg-teal-500/10 border border-teal-500/30 text-teal-800 dark:text-teal-300 shadow-sm' 
-                : 'bg-indigo-500/10 border border-indigo-500/30 text-indigo-800 dark:text-indigo-300 shadow-sm'
+                ? 'bg-teal-500/15 border border-teal-500/40 text-teal-800 dark:text-teal-300 shadow-sm' 
+                : 'bg-indigo-500/15 border border-indigo-500/40 text-indigo-800 dark:text-indigo-300 shadow-sm'
             }`}>
               {isPOx ? <Atom className="w-4 h-4 animate-spin text-teal-600 dark:text-teal-400" /> : <Network className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />}
               <span>{isPOx ? 'Engine 1 · Dedicated POx/POzi Scope' : 'Engine 2 · Universal Polymer Scope'}</span>
             </div>
 
             {totalIndexed > 0 && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700/80 text-xs text-slate-700 dark:text-slate-300 shadow-sm font-mono">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700/80 text-xs text-slate-800 dark:text-slate-300 shadow-sm font-mono">
                 <Database className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
                 <strong className={isPOx ? 'text-teal-800 dark:text-teal-300 font-bold' : 'text-indigo-800 dark:text-indigo-300 font-bold'}>{totalIndexed}</strong> indexed articles
               </span>
             )}
 
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700/80 text-xs text-slate-700 dark:text-slate-300 shadow-sm">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700/80 text-xs text-slate-800 dark:text-slate-300 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
               <span>Developer: <strong className="text-teal-800 dark:text-teal-300 font-semibold">Sumit Barik</strong> (IACS Kolkata)</span>
             </span>
           </div>
 
-          {/* Heading - Strictly "Scientific Research Platform" */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-slate-100 tracking-tight leading-tight">
+          {/* Heading with Attractive Gradient Typography */}
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black heading-gradient-primary tracking-tight leading-tight">
             Scientific Research Platform
           </h1>
 
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-2.5 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 mt-2.5 max-w-2xl leading-relaxed font-sans">
             {isPOx 
               ? 'Exclusively dedicated to Poly(2-oxazoline) and Poly(2-oxazine) chemistry: cationic ring-opening polymerization (CROP) kinetics, monomer design, and stimuli-responsive smart materials.' 
               : 'Universal, unbiased literature search covering all polymer families: PE, PP, PS, PLA, PEG, hydrogels, biopolymers, ATRP, RAFT, and conducting polymers from 1950 to 2026+.'}
           </p>
 
-          {/* Hero Quick Search Bar */}
+          {/* Hero Quick Search Bar with Ambient Light Surface */}
           <form onSubmit={handleQuickSearch} className="mt-6 flex flex-col sm:flex-row gap-2.5 max-w-2xl">
             <div className="relative flex-1">
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400" />
@@ -268,15 +269,15 @@ export default function DashboardView({
                 placeholder={isPOx 
                   ? 'Search monomers, CROP, ROS-responsive, micelles...' 
                   : 'Search any polymer keyword, e.g. RAFT, PLA, hydrogel, polyethylene...'}
-                className="w-full bg-white dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700/90 rounded-2xl pl-10 pr-4 py-3 text-xs sm:text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-all shadow-inner font-mono"
+                className="w-full bg-white/95 dark:bg-slate-800/90 border border-slate-300 dark:border-slate-700/90 rounded-2xl pl-10 pr-4 py-3 text-xs sm:text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/25 transition-all shadow-sm font-mono"
               />
             </div>
             <button
               type="submit"
-              className={`px-6 py-3 rounded-2xl text-white text-xs sm:text-sm font-bold transition-all shadow-lg whitespace-nowrap hover:scale-[1.02] active:scale-[0.98] ${
+              className={`px-6 py-3 rounded-2xl text-white text-xs sm:text-sm font-bold transition-all shadow-lg whitespace-nowrap hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${
                 isPOx 
-                  ? 'bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 shadow-teal-500/20' 
-                  : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-indigo-500/20'
+                  ? 'bg-gradient-to-r from-teal-600 via-teal-700 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 shadow-teal-500/25' 
+                  : 'bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-indigo-500/25'
               }`}
             >
               Search Literature
@@ -294,7 +295,7 @@ export default function DashboardView({
                 key={chip}
                 type="button"
                 onClick={() => handleSuggestionClick(chip)}
-                className="text-[11px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300 hover:text-teal-700 dark:hover:text-teal-300 border border-slate-300 dark:border-slate-700/60 hover:border-teal-500/40 transition-all font-mono shadow-sm"
+                className="text-[11px] px-2.5 py-1 rounded-full bg-white/90 hover:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-700/80 text-slate-800 dark:text-slate-300 hover:text-teal-700 dark:hover:text-teal-300 border border-slate-300 dark:border-slate-700/60 hover:border-teal-500/40 transition-all font-mono shadow-sm cursor-pointer"
               >
                 {chip}
               </button>
@@ -303,18 +304,18 @@ export default function DashboardView({
         </div>
       </div>
 
-      {/* Scientific Research Metrics Strip */}
+      {/* Scientific Research Metrics Strip - Layered Pastel Surfaces */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div 
           onClick={() => onOpenDomains && onOpenDomains('')}
-          className="p-3.5 rounded-2xl card-glossy bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-teal-500/40 flex items-center gap-3 shadow-sm cursor-pointer transition-all group"
+          className="p-3.5 rounded-2xl card-glossy surface-gradient-ice border border-teal-200 dark:border-slate-800 hover:border-teal-500/50 flex items-center gap-3 shadow-sm cursor-pointer transition-all group"
         >
-          <div className="w-8 h-8 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-8 h-8 rounded-xl bg-teal-500/15 border border-teal-500/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <Compass className="w-4 h-4 text-teal-600 dark:text-teal-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Research Domains</div>
-            <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate flex items-center gap-1">
+            <div className="text-[10px] font-semibold text-teal-900/70 dark:text-slate-400 uppercase tracking-wider">Research Domains</div>
+            <div className="text-xs font-bold text-slate-900 dark:text-slate-200 truncate flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-teal-500 dark:bg-teal-400" />
               <span>18 Polymer Disciplines</span>
             </div>
@@ -323,38 +324,38 @@ export default function DashboardView({
 
         <div 
           onClick={() => onNavigateToView && onNavigateToView('journals')}
-          className="p-3.5 rounded-2xl card-glossy bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/40 flex items-center gap-3 shadow-sm cursor-pointer transition-all group"
+          className="p-3.5 rounded-2xl card-glossy surface-gradient-lavender border border-indigo-200 dark:border-slate-800 hover:border-indigo-500/50 flex items-center gap-3 shadow-sm cursor-pointer transition-all group"
         >
-          <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <div className="w-8 h-8 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
             <BookOpen className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Monitored Journals</div>
-            <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+            <div className="text-[10px] font-semibold text-indigo-900/70 dark:text-slate-400 uppercase tracking-wider">Monitored Journals</div>
+            <div className="text-xs font-bold text-slate-900 dark:text-slate-200 truncate">
               10 Core Feeds Live
             </div>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl card-glossy bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 flex items-center gap-3 shadow-sm">
-          <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
-            <Calendar className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+        <div className="p-3.5 rounded-2xl card-glossy surface-gradient-peach border border-amber-200 dark:border-slate-800 flex items-center gap-3 shadow-sm">
+          <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0">
+            <Calendar className="w-4 h-4 text-amber-600 dark:text-amber-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Publication Horizon</div>
-            <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+            <div className="text-[10px] font-semibold text-amber-900/70 dark:text-slate-400 uppercase tracking-wider">Publication Horizon</div>
+            <div className="text-xs font-bold text-slate-900 dark:text-slate-200 truncate">
               1950 – 2026+ ASAP
             </div>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl card-glossy bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 flex items-center gap-3 shadow-sm">
-          <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
+        <div className="p-3.5 rounded-2xl card-glossy surface-gradient-mint border border-emerald-200 dark:border-slate-800 flex items-center gap-3 shadow-sm">
+          <div className="w-8 h-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Curated Literature</div>
-            <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+            <div className="text-[10px] font-semibold text-emerald-900/70 dark:text-slate-400 uppercase tracking-wider">Curated Literature</div>
+            <div className="text-xs font-bold text-slate-900 dark:text-slate-200 truncate">
               100% Peer-Reviewed
             </div>
           </div>
@@ -546,12 +547,12 @@ export default function DashboardView({
       </div>
 
       {/* Research Trends Chart: Smooth Area Gradient vs Annual Bar Distribution */}
-      <div className="p-6 sm:p-7 rounded-3xl card-glossy shadow-xl space-y-4">
+      <div className="p-6 sm:p-7 rounded-3xl card-glossy surface-gradient-pearl shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <h2 className="text-base sm:text-lg font-bold flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-teal-600 dark:text-teal-400" />
-              <span>Publication Growth & Trajectory ({isPOx ? 'POx vs POzi 2020–2026+' : 'Macromolecular Trajectory'})</span>
+              <span className="heading-gradient-teal">Publication Growth & Trajectory ({isPOx ? 'POx vs POzi 2020–2026+' : 'Macromolecular Trajectory'})</span>
             </h2>
             <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
               {isPOx 
@@ -562,14 +563,14 @@ export default function DashboardView({
 
           <div className="flex items-center gap-3">
             {/* View Toggle */}
-            <div className="flex items-center bg-slate-100 dark:bg-slate-800/90 rounded-xl p-1 border border-slate-300 dark:border-slate-700/80 text-xs">
+            <div className="flex items-center bg-white/90 dark:bg-slate-800/90 rounded-xl p-1 border border-slate-300 dark:border-slate-700/80 text-xs shadow-sm">
               <button
                 type="button"
                 onClick={() => setChartMode('area')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
                   chartMode === 'area'
                     ? 'bg-teal-600 text-white shadow-md'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                    : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
                 title="View Smooth Gradient Area Chart"
               >
@@ -579,10 +580,10 @@ export default function DashboardView({
               <button
                 type="button"
                 onClick={() => setChartMode('bar')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${
                   chartMode === 'bar'
                     ? 'bg-teal-600 text-white shadow-md'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                    : 'text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
                 title="View Annual Bar Distribution"
               >
@@ -593,10 +594,10 @@ export default function DashboardView({
 
             {/* Legend */}
             <div className="hidden lg:flex items-center gap-3 text-xs">
-              <span className="flex items-center gap-1.5 text-teal-700 dark:text-teal-400 font-medium">
+              <span className="flex items-center gap-1.5 text-teal-800 dark:text-teal-400 font-medium">
                 <span className="w-2.5 h-2.5 rounded-full bg-teal-500 dark:bg-teal-400" /> {isPOx ? 'POx' : 'Synthetic Polymers'}
               </span>
-              <span className="flex items-center gap-1.5 text-purple-700 dark:text-purple-400 font-medium">
+              <span className="flex items-center gap-1.5 text-purple-800 dark:text-purple-400 font-medium">
                 <span className="w-2.5 h-2.5 rounded-full bg-purple-500 dark:bg-purple-400" /> {isPOx ? 'POzi' : 'Biopolymers & Advanced'}
               </span>
             </div>
@@ -609,15 +610,15 @@ export default function DashboardView({
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={trends}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" className="dark:opacity-20 opacity-60" />
                   <XAxis dataKey="year" stroke="#64748b" textAnchor="end" tick={{ fontSize: 11 }} />
                   <YAxis stroke="#64748b" tick={{ fontSize: 11 }} />
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
                     itemStyle={{ color: '#e2e8f0' }}
                   />
-                  <Bar dataKey="pox_count" fill="#14b8a6" radius={[4, 4, 0, 0]} name={isPOx ? 'POx Papers' : 'Synthetic Polymers'} />
-                  <Bar dataKey="pozi_count" fill="#a855f7" radius={[4, 4, 0, 0]} name={isPOx ? 'POzi Papers' : 'Biopolymers'} />
+                  <Bar dataKey="pox_count" fill="#0d9488" radius={[4, 4, 0, 0]} name={isPOx ? 'POx Papers' : 'Synthetic Polymers'} />
+                  <Bar dataKey="pozi_count" fill="#9333ea" radius={[4, 4, 0, 0]} name={isPOx ? 'POzi Papers' : 'Biopolymers'} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -627,23 +628,23 @@ export default function DashboardView({
                 <AreaChart data={trends}>
                   <defs>
                     <linearGradient id="chartGrad1" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#14b8a6" stopOpacity={0.4}/>
-                      <stop offset="95%" stopColor="#14b8a6" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#0d9488" stopOpacity={0.4}/>
+                      <stop offset="95%" stopColor="#0d9488" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="chartGrad2" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#a855f7" stopOpacity={0.4}/>
-                      <stop offset="95%" stopColor="#a855f7" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#9333ea" stopOpacity={0.4}/>
+                      <stop offset="95%" stopColor="#9333ea" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" className="dark:opacity-20 opacity-60" />
                   <XAxis dataKey="year" stroke="#64748b" textAnchor="end" tick={{ fontSize: 11 }} />
                   <YAxis stroke="#64748b" tick={{ fontSize: 11 }} />
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
                     itemStyle={{ color: '#e2e8f0' }}
                   />
-                  <Area type="monotone" dataKey="pox_count" stroke="#14b8a6" strokeWidth={2} fillOpacity={1} fill="url(#chartGrad1)" name={isPOx ? 'POx Papers' : 'Synthetic Polymers'} />
-                  <Area type="monotone" dataKey="pozi_count" stroke="#a855f7" strokeWidth={2} fillOpacity={1} fill="url(#chartGrad2)" name={isPOx ? 'POzi Papers' : 'Biopolymers'} />
+                  <Area type="monotone" dataKey="pox_count" stroke="#0d9488" strokeWidth={2} fillOpacity={1} fill="url(#chartGrad1)" name={isPOx ? 'POx Papers' : 'Synthetic Polymers'} />
+                  <Area type="monotone" dataKey="pozi_count" stroke="#9333ea" strokeWidth={2} fillOpacity={1} fill="url(#chartGrad2)" name={isPOx ? 'POzi Papers' : 'Biopolymers'} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -651,13 +652,13 @@ export default function DashboardView({
         </div>
       </div>
 
-      {/* Research Categories Grid */}
+      {/* Research Categories Grid with Coordinated Category Plates */}
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <FlaskConical className="w-4 h-4 text-teal-600 dark:text-teal-400" />
-              <span>{isPOx ? 'POx/POzi Specialized Categories' : 'Universal Polymer Research Domains'}</span>
+            <h2 className="text-base sm:text-lg font-bold flex items-center gap-2">
+              <FlaskConical className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+              <span className="heading-gradient-purple">{isPOx ? 'POx/POzi Specialized Categories' : 'Universal Polymer Research Domains'}</span>
             </h2>
             <p className="text-xs text-slate-600 dark:text-slate-400">
               {isPOx 
@@ -669,35 +670,41 @@ export default function DashboardView({
           <button
             type="button"
             onClick={() => onOpenDomains ? onOpenDomains() : (onSelectCategory && onSelectCategory(''))}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600/30 via-indigo-600/30 to-teal-600/30 hover:from-violet-600/50 hover:to-indigo-600/50 border border-violet-500/40 text-violet-900 dark:text-violet-200 text-xs font-bold transition-all flex items-center gap-2 shadow-md hover:shadow-violet-500/10 self-start sm:self-auto transform hover:-translate-y-0.5"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-teal-600 hover:from-violet-500 hover:to-indigo-500 text-white text-xs font-bold transition-all flex items-center gap-2 shadow-md hover:shadow-violet-500/20 self-start sm:self-auto transform hover:-translate-y-0.5 cursor-pointer"
           >
-            <Compass className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+            <Compass className="w-4 h-4 text-white" />
             <span>Explore Research Domains (18 Classes)</span>
-            <ArrowRight className="w-3.5 h-3.5 text-violet-700 dark:text-violet-300" />
+            <ArrowRight className="w-3.5 h-3.5 text-white" />
           </button>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-          {categories.slice(0, 12).map(cat => (
-            <button
-              key={cat.id || cat.slug}
-              onClick={() => {
-                if (!isPOx && onOpenDomains) {
-                  onOpenDomains(cat.slug);
-                } else if (onSelectCategory) {
-                  onSelectCategory(cat.slug);
-                }
-              }}
-              className="p-3.5 rounded-2xl card-glossy hover:border-teal-500/50 text-left transition-all group shadow-sm"
-            >
-              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-teal-600 dark:group-hover:text-teal-300 block truncate">
-                {cat.category_name}
-              </span>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 block line-clamp-1">
-                {cat.description || 'Polymer research domain'}
-              </span>
-            </button>
-          ))}
+          {categories.slice(0, 12).map(cat => {
+            const plateClass = getCategoryPlateClass(cat.category_name);
+            return (
+              <button
+                key={cat.id || cat.slug}
+                onClick={() => {
+                  if (!isPOx && onOpenDomains) {
+                    onOpenDomains(cat.slug);
+                  } else if (onSelectCategory) {
+                    onSelectCategory(cat.slug);
+                  }
+                }}
+                className={`p-3.5 rounded-2xl border text-left transition-all group shadow-sm hover:scale-[1.02] cursor-pointer ${plateClass}`}
+              >
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className="w-2 h-2 rounded-full bg-current opacity-80" />
+                  <span className="text-xs font-bold truncate">
+                    {cat.category_name}
+                  </span>
+                </div>
+                <span className="text-[10px] opacity-75 block line-clamp-1">
+                  {cat.description || 'Polymer research domain'}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -705,9 +712,9 @@ export default function DashboardView({
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-teal-600 dark:text-teal-400" />
-              <span>Recent Literature Updates ({isPOx ? 'POx Scope' : 'Universal Polymer Scope'})</span>
+            <h2 className="text-base sm:text-lg font-bold flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <span className="heading-gradient-blue">Recent Literature Updates ({isPOx ? 'POx Scope' : 'Universal Polymer Scope'})</span>
               <span className="text-[10px] font-semibold font-mono text-teal-800 dark:text-teal-300 bg-teal-500/15 dark:bg-teal-500/10 border border-teal-500/30 px-2 py-0.5 rounded-full">
                 Date (Newest First)
               </span>

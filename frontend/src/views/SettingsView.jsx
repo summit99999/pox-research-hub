@@ -120,13 +120,13 @@ export default function SettingsView({
   return (
     <div className="space-y-8 pb-16 max-w-5xl mx-auto">
       {/* Header Banner */}
-      <div className="rounded-3xl card-glossy card-glossy-indigo p-6 sm:p-8 shadow-xl border">
+      <div className="rounded-3xl surface-panel-light dark:bg-slate-900/90 p-6 sm:p-8 shadow-xl border border-slate-200/90 dark:border-slate-800">
         <div className="flex items-center gap-3 mb-2">
           <span className="p-2.5 rounded-2xl bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-500/20 shadow-sm">
             <Settings className="w-5 h-5" />
           </span>
           <div>
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-black heading-gradient-primary tracking-tight">
               Platform Settings &amp; Research Preferences
             </h1>
             <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
@@ -137,7 +137,7 @@ export default function SettingsView({
       </div>
 
       {/* 1. Interface & Visual System */}
-      <div className="p-6 rounded-3xl card-glossy shadow-md space-y-5 border border-slate-200/80 dark:border-slate-800">
+      <div className="p-6 rounded-3xl surface-gradient-pearl dark:bg-slate-900/90 shadow-md space-y-5 border border-slate-200/80 dark:border-slate-800">
         <div className="flex items-center gap-2.5 border-b border-slate-200/80 dark:border-slate-800 pb-3">
           <div className="p-2 rounded-xl bg-violet-500/10 text-violet-700 dark:text-violet-400 border border-violet-500/20">
             <Sliders className="w-4 h-4" />
@@ -244,7 +244,7 @@ export default function SettingsView({
       </div>
 
       {/* 2. Literature Search & Filtering Defaults */}
-      <div className="p-6 rounded-3xl card-glossy shadow-md space-y-5 border border-slate-200/80 dark:border-slate-800">
+      <div className="p-6 rounded-3xl surface-gradient-ice dark:bg-slate-900/90 shadow-md space-y-5 border border-slate-200/80 dark:border-slate-800">
         <div className="flex items-center gap-2.5 border-b border-slate-200/80 dark:border-slate-800 pb-3">
           <div className="p-2 rounded-xl bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-500/20">
             <BookOpen className="w-4 h-4" />
@@ -290,7 +290,7 @@ export default function SettingsView({
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 flex items-start gap-3">
+        <div className="p-4 rounded-2xl bg-white/70 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 flex items-start gap-3">
           <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
           <div className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
             <strong className="text-slate-900 dark:text-slate-100">Strict Polymer Classification:</strong> Active across all 10 monitored journal feeds (JACS, Macromolecules, Biomacromolecules, Polymer Chemistry, etc.). Articles without genuine polymer chemistry contributions are automatically filtered from the primary publication feeds.
@@ -299,7 +299,7 @@ export default function SettingsView({
       </div>
 
       {/* 3. Personal PDF Library & Watchlist Storage */}
-      <div className="p-6 rounded-3xl card-glossy shadow-md space-y-5 border border-slate-200/80 dark:border-slate-800">
+      <div className="p-6 rounded-3xl surface-gradient-mint dark:bg-slate-900/90 shadow-md space-y-5 border border-slate-200/80 dark:border-slate-800">
         <div className="flex items-center gap-2.5 border-b border-slate-200/80 dark:border-slate-800 pb-3">
           <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
             <FileText className="w-4 h-4" />
@@ -312,7 +312,7 @@ export default function SettingsView({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
           {/* PDF Cache */}
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
+          <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-900 dark:text-slate-200">Local PDF Offline Cache</span>
               <span className="text-[11px] font-mono text-teal-700 dark:text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded-full border border-teal-500/20 font-bold">
@@ -338,7 +338,7 @@ export default function SettingsView({
           </div>
 
           {/* Watchlist Backup */}
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
+          <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-900 dark:text-slate-200">Watchlist &amp; Notes Export</span>
               <span className="text-[11px] font-mono text-indigo-700 dark:text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20 font-bold">
@@ -366,7 +366,7 @@ export default function SettingsView({
       </div>
 
       {/* 4. Platform Scope & Version Overview */}
-      <div className="p-6 rounded-3xl card-glossy shadow-md space-y-4 border border-slate-200/80 dark:border-slate-800">
+      <div className="p-6 rounded-3xl surface-gradient-lavender dark:bg-slate-900/90 shadow-md space-y-4 border border-slate-200/80 dark:border-slate-800">
         <div className="flex items-center gap-2.5 border-b border-slate-200/80 dark:border-slate-800 pb-3">
           <div className="p-2 rounded-xl bg-purple-500/10 text-purple-700 dark:text-purple-400 border border-purple-500/20">
             <Compass className="w-4 h-4" />
