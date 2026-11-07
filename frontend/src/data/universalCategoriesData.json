@@ -1,0 +1,128 @@
+[
+  {
+    "id": "univ-1",
+    "category_name": "Polyolefins & Vinyl Polymers",
+    "slug": "polyolefins-vinyl",
+    "description": "Commodity and specialty vinyls: Polyethylene (PE), Polypropylene (PP), Polystyrene (PS), PVC, PMMA, PTFE",
+    "display_order": 1
+  },
+  {
+    "id": "univ-2",
+    "category_name": "Polyesters & Biodegradable Polymers",
+    "slug": "polyesters-biodegradable",
+    "description": "Degradable and bio-based polyesters: Poly(lactic acid) (PLA), PCL, PLGA, PET, polyhydroxyalkanoates (PHA)",
+    "display_order": 2
+  },
+  {
+    "id": "univ-3",
+    "category_name": "Biopolymers & Polysaccharides",
+    "slug": "biopolymers-polysaccharides",
+    "description": "Naturally occurring polymer systems: Cellulose, Chitin, Chitosan, Alginate, Hyaluronic acid, Natural rubber",
+    "display_order": 3
+  },
+  {
+    "id": "univ-4",
+    "category_name": "Protein & Nucleic Acid Conjugates",
+    "slug": "proteins-nucleic-acids",
+    "description": "Biohybrid macromolecules, DNA/RNA polymers, synthetic polypeptides, polymer-protein therapeutic conjugates",
+    "display_order": 4
+  },
+  {
+    "id": "univ-5",
+    "category_name": "Controlled Radical Polymerizations",
+    "slug": "controlled-radical",
+    "description": "Living radical methods: ATRP, RAFT, NMP, photo-induced living polymerization, precise sequence control",
+    "display_order": 5
+  },
+  {
+    "id": "univ-6",
+    "category_name": "Ring-Opening Polymerizations",
+    "slug": "ring-opening-polymerizations",
+    "description": "Living ring-opening: ROP of lactones/lactides, ROMP with Grubbs catalysts, CROP of cyclic imino ethers",
+    "display_order": 6
+  },
+  {
+    "id": "univ-7",
+    "category_name": "Stimuli-Responsive & Smart Polymers",
+    "slug": "stimuli-responsive-smart",
+    "description": "Environmentally adaptable polymers: Thermoresponsive (LCST/UCST), pH, redox/ROS, light, and multi-responsive",
+    "display_order": 7
+  },
+  {
+    "id": "univ-8",
+    "category_name": "Hydrogels & 3D Biofabrication",
+    "slug": "hydrogels-biofabrication",
+    "description": "Chemical and physical network hydrogels, injectable matrices, 3D bio-printing, tissue engineering scaffolds",
+    "display_order": 8
+  },
+  {
+    "id": "univ-9",
+    "category_name": "Conjugated & Conducting Polymers",
+    "slug": "conjugated-conducting",
+    "description": "Electroactive polymers: PEDOT:PSS, Polyaniline, Polythiophenes, organic photovoltaics, bioelectronics",
+    "display_order": 9
+  },
+  {
+    "id": "univ-10",
+    "category_name": "Polymer Electrolytes & Battery Materials",
+    "slug": "polymer-electrolytes",
+    "description": "Solid polymer electrolytes (SPEs), single-ion conducting polymers, gel electrolytes for lithium/sodium batteries",
+    "display_order": 10
+  },
+  {
+    "id": "univ-11",
+    "category_name": "Biomedical Delivery & Nanomedicine",
+    "slug": "biomedical-delivery",
+    "description": "Targeted drug delivery, polymeric micelles, gene delivery polyplexes, stealth polymer coatings (PEG, POx)",
+    "display_order": 11
+  },
+  {
+    "id": "univ-12",
+    "category_name": "Architectural Block & Graft Copolymers",
+    "slug": "architectural-copolymers",
+    "description": "Complex architectures: Block, graft, star polymers, hyperbranched macromolecules, dendrimers, polymer brushes",
+    "display_order": 12
+  },
+  {
+    "id": "univ-13",
+    "category_name": "Polymer Physics, Rheology & Dynamics",
+    "slug": "physics-rheology",
+    "description": "Fundamental physics: Chain conformations, melt rheology, crystallization kinetics, phase separation, scattering",
+    "display_order": 13
+  },
+  {
+    "id": "univ-14",
+    "category_name": "Polymer Composites & Nanocomposites",
+    "slug": "composites-nanocomposites",
+    "description": "Reinforced polymeric systems: Carbon nanotube, graphene, silica, and cellulose nanofiber composites",
+    "display_order": 14
+  },
+  {
+    "id": "univ-15",
+    "category_name": "Polymer Recycling, Upcycling & Vitrimers",
+    "slug": "recycling-upcycling",
+    "description": "Circular polymer chemistry: Chemical depolymerization, enzymatic degradation, covalent adaptable networks (CANs)",
+    "display_order": 15
+  },
+  {
+    "id": "univ-16",
+    "category_name": "Polymer Membranes & Separation Tech",
+    "slug": "membranes-separation",
+    "description": "Permeation and sieving: Desalination membranes, gas separation, organic solvent nanofiltration, fuel cell PEMs",
+    "display_order": 16
+  },
+  {
+    "id": "univ-17",
+    "category_name": "Supramolecular & Self-Healing Polymers",
+    "slug": "supramolecular-polymers",
+    "description": "Dynamic non-covalent interactions: Hydrogen bonding networks, host-guest complexes, autonomic self-healing",
+    "display_order": 17
+  },
+  {
+    "id": "univ-18",
+    "category_name": "Computational & Molecular Modeling",
+    "slug": "computational-modeling",
+    "description": "In silico simulations: Coarse-grained molecular dynamics, DFT transition states, machine learning polymer property prediction",
+    "display_order": 18
+  }
+]

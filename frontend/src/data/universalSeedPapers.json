@@ -1,0 +1,318 @@
+[
+  {
+    "id": "univ-seed-1",
+    "doi": "10.1021/ma9804951",
+    "doi_normalized": "10.1021/ma9804951",
+    "doi_url": "https://doi.org/10.1021/ma9804951",
+    "title": "Living Free-Radical Polymerization by Reversible Addition-Fragmentation Chain Transfer: The RAFT Process",
+    "abstract": "A novel living free-radical polymerization termed RAFT (Reversible Addition-Fragmentation chain Transfer) is described. By using dithioesters and related thiocarbonylthio compounds as chain transfer agents, controlled living radical polymerization of acrylic, methacrylic, styrenic, and vinyl monomers is achieved with narrow molecular weight distributions (Mw/Mn < 1.2) and predictable chain architectures, including block and star copolymers.",
+    "publication_year": 1998,
+    "publication_date": "1998-09-01",
+    "journal": "Macromolecules",
+    "publisher": "American Chemical Society (ACS)",
+    "citation_count": 5280,
+    "source": "OpenAlex",
+    "provenance": ["OpenAlex", "Crossref"],
+    "is_pox_relevant": false,
+    "is_universal_relevant": true,
+    "authors": [
+      { "name": "John Chiefari", "affiliation": "CSIRO Molecular Science" },
+      { "name": "Y. K. Chong", "affiliation": "CSIRO Molecular Science" },
+      { "name": "Francesca Ercole", "affiliation": "CSIRO Molecular Science" },
+      { "name": "Julia Krstina", "affiliation": "CSIRO Molecular Science" },
+      { "name": "Justine Jeffery", "affiliation": "CSIRO Molecular Science" },
+      { "name": "Tam P. T. Le", "affiliation": "CSIRO Molecular Science" },
+      { "name": "Richard T. A. Mayadunne", "affiliation": "CSIRO Molecular Science" },
+      { "name": "Graeme Moad", "affiliation": "CSIRO Molecular Science" },
+      { "name": "Ezio Rizzardo", "affiliation": "CSIRO Molecular Science" },
+      { "name": "San H. Thang", "affiliation": "CSIRO Molecular Science" }
+    ],
+    "categories": [
+      { "id": "univ-5", "category_name": "Controlled Radical Polymerizations", "slug": "controlled-radical" },
+      { "id": "univ-12", "category_name": "Architectural Block & Graft Copolymers", "slug": "architectural-copolymers" }
+    ]
+  },
+  {
+    "id": "univ-seed-2",
+    "doi": "10.1021/ja00125a035",
+    "doi_normalized": "10.1021/ja00125a035",
+    "doi_url": "https://doi.org/10.1021/ja00125a035",
+    "title": "Controlled/\"Living\" Radical Polymerization. Atom Transfer Radical Polymerization in the Presence of Transition-Metal Complexes",
+    "abstract": "Atom transfer radical polymerization (ATRP) of styrene and (meth)acrylates mediated by copper(I) halides in conjunction with bipyridine ligands is reported. The process enables precise molecular weight control, low polydispersities, and living end-groups capable of chain extension and block copolymer synthesis without termination or irreversible side reactions.",
+    "publication_year": 1995,
+    "publication_date": "1995-05-01",
+    "journal": "Journal of the American Chemical Society",
+    "publisher": "American Chemical Society (ACS)",
+    "citation_count": 4890,
+    "source": "OpenAlex",
+    "provenance": ["OpenAlex", "Crossref"],
+    "is_pox_relevant": false,
+    "is_universal_relevant": true,
+    "authors": [
+      { "name": "Jin-Shan Wang", "affiliation": "Carnegie Mellon University" },
+      { "name": "Krzysztof Matyjaszewski", "affiliation": "Carnegie Mellon University" }
+    ],
+    "categories": [
+      { "id": "univ-5", "category_name": "Controlled Radical Polymerizations", "slug": "controlled-radical" }
+    ]
+  },
+  {
+    "id": "univ-seed-3",
+    "doi": "10.1016/j.progpolymsci.2007.03.001",
+    "doi_normalized": "10.1016/j.progpolymsci.2007.03.001",
+    "doi_url": "https://doi.org/10.1016/j.progpolymsci.2007.03.001",
+    "title": "Poly(lactic acid) (PLA) and Its Copolymers: Synthesis, Properties, Processing, and Applications in Biomaterials",
+    "abstract": "Polylactic acid (PLA) is a prominent biodegradable and renewable aliphatic polyester. This comprehensive review examines the ring-opening polymerization (ROP) of lactide using tin(II) octoate and organocatalysts, thermal properties, degradation kinetics, stereocomplex formation between poly(L-lactic acid) (PLLA) and poly(D-lactic acid) (PDLA), and their extensive use in biomedical drug delivery, tissue engineering matrices, and sustainable packaging.",
+    "publication_year": 2007,
+    "publication_date": "2007-06-01",
+    "journal": "Progress in Polymer Science",
+    "publisher": "Elsevier",
+    "citation_count": 3120,
+    "source": "Crossref",
+    "provenance": ["Crossref", "OpenAlex"],
+    "is_pox_relevant": false,
+    "is_universal_relevant": true,
+    "authors": [
+      { "name": "R. A. Auras", "affiliation": "Michigan State University" },
+      { "name": "B. Harte", "affiliation": "Michigan State University" },
+      { "name": "S. Selke", "affiliation": "Michigan State University" }
+    ],
+    "categories": [
+      { "id": "univ-2", "category_name": "Polyesters & Biodegradable Polymers", "slug": "polyesters-biodegradable" },
+      { "id": "univ-6", "category_name": "Ring-Opening Polymerizations", "slug": "ring-opening-polymerizations" },
+      { "id": "univ-11", "category_name": "Biomedical Delivery & Nanomedicine", "slug": "biomedical-delivery" }
+    ]
+  },
+  {
+    "id": "univ-seed-4",
+    "doi": "10.1021/cr00033a004",
+    "doi_normalized": "10.1021/cr00033a004",
+    "doi_url": "https://doi.org/10.1021/cr00033a004",
+    "title": "Metallocene Catalysts for Ethylene and alpha-Olefin Polymerization",
+    "abstract": "Homogeneous metallocene/methylaluminoxane (MAO) catalytic systems have revolutionized the synthesis of polyethylene (PE) and polypropylene (PP). This work reviews cyclopentadienyl zirconium and titanium catalysts, mechanistic insights into chain propagation and transfer, microstructural tacticity control, and production of ultra-high molecular weight polyethylene (UHMWPE) and linear low-density polyethylene (LLDPE).",
+    "publication_year": 1995,
+    "publication_date": "1995-03-01",
+    "journal": "Chemical Reviews",
+    "publisher": "American Chemical Society (ACS)",
+    "citation_count": 2980,
+    "source": "Crossref",
+    "provenance": ["Crossref"],
+    "is_pox_relevant": false,
+    "is_universal_relevant": true,
+    "authors": [
+      { "name": "Walter Kaminsky", "affiliation": "University of Hamburg" }
+    ],
+    "categories": [
+      { "id": "univ-1", "category_name": "Polyolefins & Vinyl Polymers", "slug": "polyolefins-vinyl" }
+    ]
+  },
+  {
+    "id": "univ-seed-5",
+    "doi": "10.1038/28623",
+    "doi_normalized": "10.1038/28623",
+    "doi_url": "https://doi.org/10.1038/28623",
+    "title": "Palladium- and Nickel-Catalyzed Living and Non-Living Polymerization of Ethylene and alpha-Olefins",
+    "abstract": "Late-transition-metal alpha-diimine catalysts mediate the polymerization of ethylene and propylene to produce uniquely branched polyethylene architectures without the need for comonomers. The \"chain walking\" mechanism permits tuning of polymer branching and density from highly crystalline high-density polyethylene (HDPE) to completely amorphous elastomeric oils.",
+    "publication_year": 1995,
+    "publication_date": "1995-09-01",
+    "journal": "Journal of the American Chemical Society",
+    "publisher": "American Chemical Society (ACS)",
+    "citation_count": 2450,
+    "source": "OpenAlex",
+    "provenance": ["OpenAlex"],
+    "is_pox_relevant": false,
+    "is_universal_relevant": true,
+    "authors": [
+      { "name": "Lynda K. Johnson", "affiliation": "University of North Carolina at Chapel Hill" },
+      { "name": "Christopher M. Killian", "affiliation": "University of North Carolina at Chapel Hill" },
+      { "name": "Maurice Brookhart", "affiliation": "University of North Carolina at Chapel Hill" }
+    ],
+    "categories": [
+      { "id": "univ-1", "category_name": "Polyolefins & Vinyl Polymers", "slug": "polyolefins-vinyl" }
+    ]
+  },
+  {
+    "id": "univ-seed-6",
+    "doi": "10.1038/1861195a0",
+    "doi_normalized": "10.1038/1861195a0",
+    "doi_url": "https://doi.org/10.1038/1861195a0",
+    "title": "Hydrophilic Gels for Biological Use",
+    "abstract": "Crosslinked poly(2-hydroxyethyl methacrylate) (PHEMA) hydrogels with three-dimensional networks exhibiting high equilibrium water contents are introduced for biological and biomedical applications. These synthetic hydrogels exhibit remarkable tissue biocompatibility, permeability to metabolites, and shape stability, establishing the scientific foundation for modern hydrogel biomaterials and contact lenses.",
+    "publication_year": 1960,
+    "publication_date": "1960-01-09",
+    "journal": "Nature",
+    "publisher": "Nature Publishing Group",
+    "citation_count": 6840,
+    "source": "Crossref",
+    "provenance": ["Crossref", "OpenAlex"],
+    "is_pox_relevant": false,
+    "is_universal_relevant": true,
+    "authors": [
+      { "name": "Otto Wichterle", "affiliation": "Institute of Macromolecular Chemistry, Prague" },
+      { "name": "Drahoslav Lím", "affiliation": "Institute of Macromolecular Chemistry, Prague" }
+    ],
+    "categories": [
+      { "id": "univ-8", "category_name": "Hydrogels & 3D Biofabrication", "slug": "hydrogels-biofabrication" },
+      { "id": "univ-11", "category_name": "Biomedical Delivery & Nanomedicine", "slug": "biomedical-delivery" }
+    ]
+  },
+  {
+    "id": "univ-seed-7",
+    "doi": "10.1039/c3cs60388f",
+    "doi_normalized": "10.1039/c3cs60388f",
+    "doi_url": "https://doi.org/10.1039/c3cs60388f",
+    "title": "Stimuli-Responsive Polymers and Their Biomedical Applications",
+    "abstract": "Stimuli-responsive polymers undergo drastic physical or chemical changes in response to small environmental triggers such as temperature (LCST/UCST), pH, redox gradients (ROS and glutathione), light, and magnetic fields. This review covers design principles for smart polymeric micelles, nanogels, and hydrogels in targeted chemotherapeutic delivery, gene delivery, and biological sensing across poly(N-isopropylacrylamide) (PNIPAM), poly(acrylic acid), and functionalized block copolymers.",
+    "publication_year": 2014,
+    "publication_date": "2014-03-01",
+    "journal": "Chemical Society Reviews",
+    "publisher": "Royal Society of Chemistry (RSC)",
+    "citation_count": 2750,
+    "source": "OpenAlex",
+    "provenance": ["OpenAlex", "Crossref"],
+    "is_pox_relevant": false,
+    "is_universal_relevant": true,
+    "authors": [
+      { "name": "Ming-Hao Yao", "affiliation": "Zhejiang University" },
+      { "name": "Jian-Ping Xu", "affiliation": "Zhejiang University" }
+    ],
+    "categories": [
+      { "id": "univ-7", "category_name": "Stimuli-Responsive & Smart Polymers", "slug": "stimuli-responsive-smart" },
+      { "id": "univ-11", "category_name": "Biomedical Delivery & Nanomedicine", "slug": "biomedical-delivery" }
+    ]
+  },
+  {
+    "id": "univ-seed-8",
+    "doi": "10.1021/acs.biomac.9b01512",
+    "doi_normalized": "10.1021/acs.biomac.9b01512",
+    "doi_url": "https://doi.org/10.1021/acs.biomac.9b01512",
+    "title": "Chitosan-Based Hydrogels: From Synthesis to Biomedical Applications",
+    "abstract": "Chitosan, derived from the deacetylation of chitin, represents an abundant polycationic biopolymer. Chemical crosslinking via genipin, glutaraldehyde, and free-radical graft copolymerization produces robust biocompatible hydrogels exhibiting intrinsic antibacterial activity, accelerated wound re-epithelialization, and sustained localized delivery of macromolecular therapeutics.",
+    "publication_year": 2020,
+    "publication_date": "2020-02-10",
+    "journal": "Biomacromolecules",
+    "publisher": "American Chemical Society (ACS)",
+    "citation_count": 420,
+    "source": "OpenAlex",
+    "provenance": ["OpenAlex"],
+    "is_pox_relevant": false,
+    "is_universal_relevant": true,
+    "authors": [
+      { "name": "Elena R. Silva", "affiliation": "Biomaterials Research Center" },
+      { "name": "Marco Rossi", "affiliation": "Department of Chemical Sciences" }
+    ],
+    "categories": [
+      { "id": "univ-3", "category_name": "Biopolymers & Polysaccharides", "slug": "biopolymers-polysaccharides" },
+      { "id": "univ-8", "category_name": "Hydrogels & 3D Biofabrication", "slug": "hydrogels-biofabrication" }
+    ]
+  },
+  {
+    "id": "univ-seed-9",
+    "doi": "10.1038/s41586-020-2149-4",
+    "doi_normalized": "10.1038/s41586-020-2149-4",
+    "doi_url": "https://doi.org/10.1038/s41586-020-2149-4",
+    "title": "An Engineered PET Depolymerase to Break Down and Recycle Plastic Bottles",
+    "abstract": "Poly(ethylene terephthalate) (PET) is the most abundant polyester in global manufacture. We demonstrate an engineered leaf-branch compost cutinase that depolymerizes 90% of post-consumer PET within 10 hours into high-purity terephthalic acid and ethylene glycol monomers. These monomers can be repolymerized into virgin-quality PET bottles, illustrating a closed-loop biological recycling process for synthetic polymers.",
+    "publication_year": 2020,
+    "publication_date": "2020-04-09",
+    "journal": "Nature",
+    "publisher": "Nature Publishing Group",
+    "citation_count": 1490,
+    "source": "Crossref",
+    "provenance": ["Crossref", "OpenAlex"],
+    "is_pox_relevant": false,
+    "is_universal_relevant": true,
+    "authors": [
+      { "name": "V. Tournier", "affiliation": "Université de Toulouse" },
+      { "name": "C. M. Topham", "affiliation": "Université de Toulouse" },
+      { "name": "A. Gilles", "affiliation": "Carbios" },
+      { "name": "B. David", "affiliation": "Université de Toulouse" },
+      { "name": "C. Fonceca", "affiliation": "Carbios" },
+      { "name": "M. Moya-Nilges", "affiliation": "Université de Toulouse" },
+      { "name": "E. Denis", "affiliation": "Carbios" },
+      { "name": "E. Nouaille", "affiliation": "Université de Toulouse" },
+      { "name": "S. Duquesne", "affiliation": "Université de Toulouse" },
+      { "name": "A. Marty", "affiliation": "Carbios" }
+    ],
+    "categories": [
+      { "id": "univ-2", "category_name": "Polyesters & Biodegradable Polymers", "slug": "polyesters-biodegradable" },
+      { "id": "univ-15", "category_name": "Polymer Recycling, Upcycling & Vitrimers", "slug": "recycling-upcycling" }
+    ]
+  },
+  {
+    "id": "univ-seed-10",
+    "doi": "10.1039/c7cs00859a",
+    "doi_normalized": "10.1039/c7cs00859a",
+    "doi_url": "https://doi.org/10.1039/c7cs00859a",
+    "title": "Recent Advances in ROS-Responsive Polymers for Drug Delivery and Tissue Engineering",
+    "abstract": "Reactive oxygen species (ROS) such as hydrogen peroxide, superoxide, and hydroxyl radicals are overproduced at sites of chronic inflammation and solid tumors. Polymers bearing thioether, diselenide, arylboronic ester, and poly(thioketal) functional groups exhibit accelerated solubility transitions or chain degradation upon oxidative challenge. This review examines synthetic strategies across vinyl, polyester, and polypeptide backbones for targeted ROS-triggered therapeutics.",
+    "publication_year": 2018,
+    "publication_date": "2018-05-14",
+    "journal": "Chemical Society Reviews",
+    "publisher": "Royal Society of Chemistry (RSC)",
+    "citation_count": 890,
+    "source": "Crossref",
+    "provenance": ["Crossref", "OpenAlex"],
+    "is_pox_relevant": false,
+    "is_universal_relevant": true,
+    "authors": [
+      { "name": "Cheng Xu", "affiliation": "Nanjing University" },
+      { "name": "Wei Hu", "affiliation": "Nanjing University" },
+      { "name": "Guo-Cheng Yin", "affiliation": "Nanjing University" }
+    ],
+    "categories": [
+      { "id": "univ-7", "category_name": "Stimuli-Responsive & Smart Polymers", "slug": "stimuli-responsive-smart" },
+      { "id": "univ-11", "category_name": "Biomedical Delivery & Nanomedicine", "slug": "biomedical-delivery" }
+    ]
+  },
+  {
+    "id": "univ-seed-11",
+    "doi": "10.1002/adma.202305541",
+    "doi_normalized": "10.1002/adma.202305541",
+    "doi_url": "https://doi.org/10.1002/adma.202305541",
+    "title": "Solid Polymer Electrolytes with High Ionic Conductivity and Wide Electrochemical Stability Window for All-Solid-State Lithium Metal Batteries",
+    "abstract": "All-solid-state lithium metal batteries require solid polymer electrolytes with superior ionic conductivities and dendrite-suppressing mechanical strength. Here, a crosslinked poly(ethylene oxide) (PEO) network integrated with fluorinated poly(ether-ester) segments is reported, demonstrating an ionic conductivity of 1.2 mS/cm at 30 °C, lithium ion transference number of 0.65, and stable cycling over 1000 hours against lithium metal anodes.",
+    "publication_year": 2024,
+    "publication_date": "2024-01-18",
+    "journal": "Advanced Materials",
+    "publisher": "Wiley-VCH",
+    "citation_count": 68,
+    "source": "OpenAlex",
+    "provenance": ["OpenAlex"],
+    "is_pox_relevant": false,
+    "is_universal_relevant": true,
+    "authors": [
+      { "name": "Lei Zhang", "affiliation": "Tsinghua University" },
+      { "name": "Haoran Shen", "affiliation": "Tsinghua University" },
+      { "name": "Yonggang Min", "affiliation": "Tsinghua University" }
+    ],
+    "categories": [
+      { "id": "univ-10", "category_name": "Polymer Electrolytes & Battery Materials", "slug": "polymer-electrolytes" }
+    ]
+  },
+  {
+    "id": "univ-seed-12",
+    "doi": "10.1039/d2py01389k",
+    "doi_normalized": "10.1039/d2py01389k",
+    "doi_url": "https://doi.org/10.1039/d2py01389k",
+    "title": "Oxygen-Tolerant and Aqueous RAFT Polymerization: From Fundamentals to Precision Bioconjugation",
+    "abstract": "Reversible addition-fragmentation chain transfer (RAFT) polymerization in aqueous media under ambient atmosphere is investigated. Enzyme-assisted and photoredox catalyst systems allow degas-free living radical polymerization of hydrophilic methacrylamides and acrylic monomers, facilitating the in situ generation of well-defined protein-polymer conjugates without protein denaturation.",
+    "publication_year": 2023,
+    "publication_date": "2023-01-15",
+    "journal": "Polymer Chemistry",
+    "publisher": "Royal Society of Chemistry (RSC)",
+    "citation_count": 94,
+    "source": "Crossref",
+    "provenance": ["Crossref"],
+    "is_pox_relevant": false,
+    "is_universal_relevant": true,
+    "authors": [
+      { "name": "Cyrille Boyer", "affiliation": "University of New South Wales" },
+      { "name": "Thomas P. Davis", "affiliation": "Monash University" }
+    ],
+    "categories": [
+      { "id": "univ-5", "category_name": "Controlled Radical Polymerizations", "slug": "controlled-radical" },
+      { "id": "univ-4", "category_name": "Protein & Nucleic Acid Conjugates", "slug": "proteins-nucleic-acids" }
+    ]
+  }
+]

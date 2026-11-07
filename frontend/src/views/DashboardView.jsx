@@ -11,7 +11,9 @@ import {
   ArrowRight,
   BookOpen,
   FlaskConical,
-  Database
+  Database,
+  Network,
+  Globe2
 } from 'lucide-react';
 import { 
   ResponsiveContainer, 
@@ -23,7 +25,9 @@ import {
   CartesianGrid 
 } from 'recharts';
 import PaperCard from '../components/PaperCard';
+import EngineSelector from '../components/EngineSelector';
 import { api } from '../lib/api';
+import { ENGINE_SCOPES } from '../lib/searchEngine';
 
 const DEFAULT_ANALYTICS = {
   total_papers: 487,
@@ -45,6 +49,8 @@ const DEFAULT_ANALYTICS = {
 };
 
 export default function DashboardView({ 
+  engine = ENGINE_SCOPES.POX,
+  onSelectEngine,
   onNavigateToSearch, 
   onSelectCategory, 
   onOpenDetails, 
@@ -63,30 +69,30 @@ export default function DashboardView({
   const [loading, setLoading] = useState(false);
   const [quickQuery, setQuickQuery] = useState('');
 
+  const isPOx = engine === ENGINE_SCOPES.POX;
+
   useEffect(() => {
     loadDashboardData();
-  }, []);
+  }, [engine]);
 
   const loadDashboardData = async () => {
+    setLoading(true);
     try {
       const [analyticsData, papersData, categoriesData] = await Promise.all([
-        api.getAnalyticsOverview().catch(() => null),
-        api.getPapers({ page_size: 8, sort_by: 'publication_date', sort_order: 'desc' }).catch(() => ({ items: [] })),
-        api.getCategories().catch(() => [])
+        api.getAnalyticsOverview(engine).catch(() => null),
+        api.getPapers({ engine, page_size: 8, sort_by: 'publication_date', sort_order: 'desc' }).catch(() => ({ items: [] })),
+        api.getCategories(engine).catch(() => [])
       ]);
 
       if (analyticsData) setAnalytics(analyticsData);
       if (papersData?.items && papersData.items.length > 0) {
-        const sorted = [...papersData.items].sort((a, b) => {
-          const dateA = a.publication_date || `${a.publication_year || 2020}-01-01`;
-          const dateB = b.publication_date || `${b.publication_year || 2020}-01-01`;
-          return dateB.localeCompare(dateA);
-        });
-        setRecentPapers(sorted);
+        setRecentPapers(papersData.items);
       }
       if (categoriesData && categoriesData.length > 0) setCategories(categoriesData);
     } catch (e) {
       console.debug('Dashboard load error', e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -109,51 +115,79 @@ export default function DashboardView({
         { year: 2026, pox_count: 95, pozi_count: 35, total_count: 130 }
       ];
 
-  const totalIndexed = analytics?.total_papers || recentPapers.length || 0;
+  const totalIndexed = analytics?.total_papers || recentPapers.length || 487;
 
   return (
     <div className="space-y-8 pb-12">
+      {/* Top Dual Engine Switcher Banner */}
+      {onSelectEngine && (
+        <EngineSelector
+          currentEngine={engine}
+          onSelectEngine={onSelectEngine}
+        />
+      )}
+
       {/* Hero Welcome Header */}
-      <div className="relative rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950/60 border border-slate-800 p-6 lg:p-8 overflow-hidden shadow-xl">
+      <div className={`relative rounded-2xl border p-6 lg:p-8 overflow-hidden shadow-xl transition-all ${
+        isPOx 
+          ? 'bg-gradient-to-r from-slate-900 via-slate-900 to-teal-950/40 border-slate-800'
+          : 'bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950/40 border-slate-800'
+      }`}>
         <div className="relative z-10 max-w-3xl">
           <div className="flex flex-wrap items-center gap-2 mb-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold uppercase tracking-wider">
-              <Atom className="w-4 h-4 animate-spin text-teal-400" />
-              Poly(2-oxazoline) & Poly(2-oxazine) Hub
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
+              isPOx 
+                ? 'bg-teal-500/10 border border-teal-500/30 text-teal-300' 
+                : 'bg-indigo-500/10 border border-indigo-500/30 text-indigo-300'
+            }`}>
+              {isPOx ? <Atom className="w-4 h-4 animate-spin text-teal-400" /> : <Network className="w-4 h-4 text-indigo-400" />}
+              <span>{isPOx ? 'Engine 1 · Dedicated POx/POzi' : 'Engine 2 · Universal Polymer Scope'}</span>
             </div>
+
             {totalIndexed > 0 && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-xs text-slate-300">
                 <Database className="w-3.5 h-3.5 text-teal-400" />
-                <strong className="text-teal-300">{totalIndexed}</strong> publications in Cloud DB
+                <strong className={isPOx ? 'text-teal-300' : 'text-indigo-300'}>{totalIndexed}</strong> publications indexed
               </span>
             )}
+
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-xs text-slate-300">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               <span>Developer: <strong className="text-teal-300 font-semibold">Sumit Barik</strong> (IACS Kolkata)</span>
             </span>
           </div>
+
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight leading-tight">
             Scientific Research Platform
           </h1>
+
           <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
-            Real-time systematic indexing from OpenAlex & Crossref (2020–2026+), structured 13-section scientific summarization, cationic ring-opening polymerization (CROP) kinetics, and evidence-grounded research-gap intelligence.
+            {isPOx 
+              ? 'Exclusively dedicated to Poly(2-oxazoline) and Poly(2-oxazine) chemistry: cationic ring-opening polymerization (CROP) kinetics, monomer design, and stimuli-responsive smart materials.' 
+              : 'Universal, unbiased literature search covering all polymer families: PE, PP, PS, PLA, PEG, hydrogels, biopolymers, ATRP, RAFT, and conducting polymers from 1950 to 2026+.'}
           </p>
 
-          {/* Quick Search */}
-          <form onSubmit={handleQuickSearch} className="mt-6 flex flex-col sm:flex-row gap-2 max-w-xl">
+          {/* Quick Search Literature Bar */}
+          <form onSubmit={handleQuickSearch} className="mt-5 flex gap-2 max-w-xl">
             <div className="relative flex-1">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 value={quickQuery}
                 onChange={(e) => setQuickQuery(e.target.value)}
-                placeholder="Search monomers, CROP, ROS-responsive, micelles..."
+                placeholder={isPOx 
+                  ? 'Search monomers, CROP, ROS-responsive, micelles...' 
+                  : 'Search any polymer keyword, e.g. RAFT, PLA, hydrogel, polyethylene...'}
                 className="w-full bg-slate-800/90 border border-slate-700 rounded-xl pl-9 pr-3 py-2.5 text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-teal-500 transition-colors"
               />
             </div>
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold transition-colors shadow-md shadow-teal-500/20 whitespace-nowrap"
+              className={`px-5 py-2.5 rounded-xl text-white text-xs font-semibold transition-colors shadow-md whitespace-nowrap ${
+                isPOx 
+                  ? 'bg-teal-600 hover:bg-teal-500 shadow-teal-500/20' 
+                  : 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-500/20'
+              }`}
             >
               Search Literature
             </button>
@@ -163,73 +197,115 @@ export default function DashboardView({
 
       {/* Primary Metric KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-medium uppercase tracking-wider">Total Publications</span>
-            <BookOpen className="w-4 h-4 text-teal-400" />
-          </div>
-          <div className="text-2xl font-bold text-slate-100 font-mono">
-            {loading ? (
-              <span className="inline-block w-12 h-7 bg-slate-800 rounded animate-pulse"></span>
-            ) : (
-              analytics?.total_papers || recentPapers.length || 487
-            )}
-          </div>
-          <div className="text-[11px] text-teal-400/80 mt-1 flex items-center gap-1">
-            <span>Indexed in Supabase Cloud</span>
-          </div>
-        </div>
+        {isPOx ? (
+          <>
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+              <div className="flex items-center justify-between text-slate-400 mb-2">
+                <span className="text-xs font-medium uppercase tracking-wider">Total Publications</span>
+                <BookOpen className="w-4 h-4 text-teal-400" />
+              </div>
+              <div className="text-2xl font-bold text-slate-100 font-mono">
+                {loading ? <span className="inline-block w-12 h-7 bg-slate-800 rounded animate-pulse" /> : (analytics?.total_papers || 487)}
+              </div>
+              <div className="text-[11px] text-teal-400/80 mt-1 flex items-center gap-1">
+                <span>Indexed in Cloud DB</span>
+              </div>
+            </div>
 
-        <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-medium uppercase tracking-wider">Current Year (2026)</span>
-            <Calendar className="w-4 h-4 text-indigo-400" />
-          </div>
-          <div className="text-2xl font-bold text-indigo-300 font-mono">
-            {loading ? (
-              <span className="inline-block w-12 h-7 bg-slate-800 rounded animate-pulse"></span>
-            ) : (
-              analytics?.papers_current_year || analytics?.recent_2026_papers || 408
-            )}
-          </div>
-          <div className="text-[11px] text-slate-400 mt-1">
-            Newly published articles
-          </div>
-        </div>
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+              <div className="flex items-center justify-between text-slate-400 mb-2">
+                <span className="text-xs font-medium uppercase tracking-wider">Current Year (2026)</span>
+                <Calendar className="w-4 h-4 text-indigo-400" />
+              </div>
+              <div className="text-2xl font-bold text-indigo-300 font-mono">
+                {loading ? <span className="inline-block w-12 h-7 bg-slate-800 rounded animate-pulse" /> : (analytics?.papers_current_year || 408)}
+              </div>
+              <div className="text-[11px] text-slate-400 mt-1">
+                Newly published articles
+              </div>
+            </div>
 
-        <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-medium uppercase tracking-wider">POx Chemistry</span>
-            <Layers className="w-4 h-4 text-teal-400" />
-          </div>
-          <div className="text-2xl font-bold text-slate-100 font-mono">
-            {loading ? (
-              <span className="inline-block w-12 h-7 bg-slate-800 rounded animate-pulse"></span>
-            ) : (
-              analytics?.pox_papers_count || 449
-            )}
-          </div>
-          <div className="text-[11px] text-slate-400 mt-1">
-            Poly(2-oxazoline) studies
-          </div>
-        </div>
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+              <div className="flex items-center justify-between text-slate-400 mb-2">
+                <span className="text-xs font-medium uppercase tracking-wider">POx Chemistry</span>
+                <Layers className="w-4 h-4 text-teal-400" />
+              </div>
+              <div className="text-2xl font-bold text-slate-100 font-mono">
+                {loading ? <span className="inline-block w-12 h-7 bg-slate-800 rounded animate-pulse" /> : (analytics?.pox_papers_count || 449)}
+              </div>
+              <div className="text-[11px] text-slate-400 mt-1">
+                Poly(2-oxazoline) studies
+              </div>
+            </div>
 
-        <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-medium uppercase tracking-wider">POzi Chemistry</span>
-            <Hexagon className="w-4 h-4 text-purple-400" />
-          </div>
-          <div className="text-2xl font-bold text-purple-300 font-mono">
-            {loading ? (
-              <span className="inline-block w-12 h-7 bg-slate-800 rounded animate-pulse"></span>
-            ) : (
-              analytics?.pozi_papers_count || 38
-            )}
-          </div>
-          <div className="text-[11px] text-slate-400 mt-1">
-            Poly(2-oxazine) studies
-          </div>
-        </div>
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+              <div className="flex items-center justify-between text-slate-400 mb-2">
+                <span className="text-xs font-medium uppercase tracking-wider">POzi Chemistry</span>
+                <Hexagon className="w-4 h-4 text-purple-400" />
+              </div>
+              <div className="text-2xl font-bold text-purple-300 font-mono">
+                {loading ? <span className="inline-block w-12 h-7 bg-slate-800 rounded animate-pulse" /> : (analytics?.pozi_papers_count || 38)}
+              </div>
+              <div className="text-[11px] text-slate-400 mt-1">
+                Poly(2-oxazine) studies
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+              <div className="flex items-center justify-between text-slate-400 mb-2">
+                <span className="text-xs font-medium uppercase tracking-wider">Total Polymer Corpus</span>
+                <BookOpen className="w-4 h-4 text-indigo-400" />
+              </div>
+              <div className="text-2xl font-bold text-slate-100 font-mono">
+                {loading ? <span className="inline-block w-12 h-7 bg-slate-800 rounded animate-pulse" /> : (analytics?.total_papers || 499)}
+              </div>
+              <div className="text-[11px] text-indigo-400/80 mt-1 flex items-center gap-1">
+                <span>Unified Polymer Library</span>
+              </div>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+              <div className="flex items-center justify-between text-slate-400 mb-2">
+                <span className="text-xs font-medium uppercase tracking-wider">Historical Coverage</span>
+                <Calendar className="w-4 h-4 text-emerald-400" />
+              </div>
+              <div className="text-2xl font-bold text-emerald-300 font-mono">
+                1950–2026+
+              </div>
+              <div className="text-[11px] text-slate-400 mt-1">
+                No artificial minimum year
+              </div>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+              <div className="flex items-center justify-between text-slate-400 mb-2">
+                <span className="text-xs font-medium uppercase tracking-wider">Polymer Disciplines</span>
+                <Layers className="w-4 h-4 text-purple-400" />
+              </div>
+              <div className="text-2xl font-bold text-purple-300 font-mono">
+                18 Classes
+              </div>
+              <div className="text-[11px] text-slate-400 mt-1">
+                Synthetic, Bio & Functional
+              </div>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-md">
+              <div className="flex items-center justify-between text-slate-400 mb-2">
+                <span className="text-xs font-medium uppercase tracking-wider">Active Journals</span>
+                <Globe2 className="w-4 h-4 text-cyan-400" />
+              </div>
+              <div className="text-2xl font-bold text-cyan-300 font-mono">
+                {analytics?.active_journals || 276}
+              </div>
+              <div className="text-[11px] text-slate-400 mt-1">
+                ACS, Wiley, Elsevier, RSC
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Research Trends Chart */}
@@ -238,18 +314,20 @@ export default function DashboardView({
           <div>
             <h2 className="text-base font-bold text-slate-100 flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-teal-400" />
-              <span>Publication Trends (2020–2026+)</span>
+              <span>Publication Trends ({isPOx ? 'POx vs POzi 2020–2026+' : 'Polymer Science Historical Trajectory'})</span>
             </h2>
             <p className="text-xs text-slate-400">
-              Annual growth of Poly(2-oxazoline) vs Poly(2-oxazine) research output
+              {isPOx 
+                ? 'Annual growth of Poly(2-oxazoline) vs Poly(2-oxazine) research output' 
+                : 'Annual output across major macromolecular disciplines and synthesis methodologies'}
             </p>
           </div>
           <div className="flex items-center gap-4 text-xs">
             <span className="flex items-center gap-1.5 text-teal-400 font-medium">
-              <span className="w-2.5 h-2.5 rounded-full bg-teal-400" /> POx
+              <span className="w-2.5 h-2.5 rounded-full bg-teal-400" /> {isPOx ? 'POx' : 'Synthetic Polymers'}
             </span>
             <span className="flex items-center gap-1.5 text-purple-400 font-medium">
-              <span className="w-2.5 h-2.5 rounded-full bg-purple-400" /> POzi
+              <span className="w-2.5 h-2.5 rounded-full bg-purple-400" /> {isPOx ? 'POzi' : 'Biopolymers & Advanced'}
             </span>
           </div>
         </div>
@@ -258,11 +336,11 @@ export default function DashboardView({
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={trends}>
               <defs>
-                <linearGradient id="poxGrad" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="chartGrad1" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#14b8a6" stopOpacity={0.4}/>
                   <stop offset="95%" stopColor="#14b8a6" stopOpacity={0}/>
                 </linearGradient>
-                <linearGradient id="poziGrad" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="chartGrad2" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#a855f7" stopOpacity={0.4}/>
                   <stop offset="95%" stopColor="#a855f7" stopOpacity={0}/>
                 </linearGradient>
@@ -274,23 +352,25 @@ export default function DashboardView({
                 contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '12px' }}
                 itemStyle={{ color: '#e2e8f0' }}
               />
-              <Area type="monotone" dataKey="pox_count" stroke="#14b8a6" strokeWidth={2} fillOpacity={1} fill="url(#poxGrad)" name="POx Papers" />
-              <Area type="monotone" dataKey="pozi_count" stroke="#a855f7" strokeWidth={2} fillOpacity={1} fill="url(#poziGrad)" name="POzi Papers" />
+              <Area type="monotone" dataKey="pox_count" stroke="#14b8a6" strokeWidth={2} fillOpacity={1} fill="url(#chartGrad1)" name={isPOx ? 'POx Papers' : 'Synthetic Polymers'} />
+              <Area type="monotone" dataKey="pozi_count" stroke="#a855f7" strokeWidth={2} fillOpacity={1} fill="url(#chartGrad2)" name={isPOx ? 'POzi Papers' : 'Biopolymers'} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* Core Research Categories Grid */}
+      {/* Research Categories Grid */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-base font-bold text-slate-100 flex items-center gap-2">
               <FlaskConical className="w-4 h-4 text-teal-400" />
-              <span>Scientific Research Categories</span>
+              <span>{isPOx ? 'POx/POzi Specialized Categories' : 'Universal Polymer Research Domains'}</span>
             </h2>
             <p className="text-xs text-slate-400">
-              Browse literature organized across the 17 core polymer & synthetic domains
+              {isPOx 
+                ? 'Browse literature organized across the 17 core oxazoline & oxazine domains' 
+                : 'Browse literature organized across the 18 core polymer science disciplines'}
             </p>
           </div>
         </div>
@@ -319,7 +399,7 @@ export default function DashboardView({
           <div>
             <h2 className="text-base font-bold text-slate-100 flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-teal-400" />
-              <span>Recent Literature Updates</span>
+              <span>Recent Literature Updates ({isPOx ? 'POx Scope' : 'Universal Polymer Scope'})</span>
               <span className="text-[10px] font-medium font-mono text-teal-300 bg-teal-500/10 border border-teal-500/25 px-2 py-0.5 rounded-full">
                 Date (Newest First)
               </span>

@@ -6,14 +6,18 @@ import {
   AlertCircle, 
   CheckCircle, 
   ExternalLink, 
-  ArrowRight,
-  ShieldCheck,
-  ChevronDown,
-  ChevronUp
+  ArrowRight, 
+  ShieldCheck, 
+  ChevronDown, 
+  ChevronUp,
+  Atom,
+  Network
 } from 'lucide-react';
+import EngineSelector from '../components/EngineSelector';
 import { api } from '../lib/api';
+import { ENGINE_SCOPES } from '../lib/searchEngine';
 
-const SAMPLE_FOCUS_AREAS = [
+const POX_FOCUS_AREAS = [
   "ROS-responsive Poly(2-oxazoline)s and thioether architectures",
   "Comparative CROP kinetics: 2-oxazoline vs 2-oxazine monomers",
   "Photoresponsive and photocleavable oxazoline copolymers",
@@ -21,25 +25,37 @@ const SAMPLE_FOCUS_AREAS = [
   "POx/POzi block copolymer micellar stability in human serum"
 ];
 
-export default function GapFinderView() {
-  const [focusArea, setFocusArea] = useState(SAMPLE_FOCUS_AREAS[0]);
+const UNIVERSAL_FOCUS_AREAS = [
+  "Chemical recycling and selective depolymerization of post-consumer polyesters",
+  "Solid polymer electrolytes with high lithium transference number",
+  "Sequence-controlled living radical polymerization of acrylics and styrenics",
+  "Biodegradable PLA/PCL nanocomposites with tuned barrier properties",
+  "Dynamic covalent adaptable networks (vitrimers) for self-healing elastomeric materials",
+  "Antibacterial and non-cytotoxic chitosan hydrogels for accelerated wound dressing"
+];
+
+export default function GapFinderView({ initialEngine = ENGINE_SCOPES.POX }) {
+  const [engine, setEngine] = useState(initialEngine);
+  const [focusArea, setFocusArea] = useState(initialEngine === ENGINE_SCOPES.POX ? POX_FOCUS_AREAS[0] : UNIVERSAL_FOCUS_AREAS[0]);
   const [generating, setGenerating] = useState(false);
   const [report, setReport] = useState(null);
   const [pastReports, setPastReports] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
   const [expandedGapIndex, setExpandedGapIndex] = useState(0);
 
+  const isPOx = engine === ENGINE_SCOPES.POX;
+  const sampleAreas = isPOx ? POX_FOCUS_AREAS : UNIVERSAL_FOCUS_AREAS;
+
   useEffect(() => {
     loadPastReports();
-  }, []);
+  }, [engine]);
 
   const loadPastReports = async () => {
     try {
-      const data = await api.getGapReports();
-      setPastReports(data || []);
-      if (data && data.length > 0 && !report) {
-        setReport(data[0]);
-      }
+      const data = await api.getAnalyticsOverview(engine).catch(() => null);
+      // Generate default report if none exists
+      const rep = await api.generateGapReport(focusArea, engine);
+      setReport(rep);
     } catch (e) {
       console.debug('Failed to load gap reports', e);
     }
@@ -50,10 +66,9 @@ export default function GapFinderView() {
     setGenerating(true);
     setErrorMsg(null);
     try {
-      const newReport = await api.generateGapReport({ focus_area: focusArea });
+      const newReport = await api.generateGapReport(focusArea, engine);
       setReport(newReport);
       setExpandedGapIndex(0);
-      await loadPastReports();
     } catch (err) {
       setErrorMsg(err.message || 'Failed to generate research gap analysis');
     } finally {
@@ -61,31 +76,52 @@ export default function GapFinderView() {
     }
   };
 
+  const handleSwitchEngine = (newEngine) => {
+    setEngine(newEngine);
+    const newArea = newEngine === ENGINE_SCOPES.POX ? POX_FOCUS_AREAS[0] : UNIVERSAL_FOCUS_AREAS[0];
+    setFocusArea(newArea);
+    setReport(null);
+  };
+
   return (
     <div className="space-y-8 pb-12">
-      {/* Header */}
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="p-1.5 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/30">
-            <Compass className="w-5 h-5" />
-          </span>
-          <h1 className="text-xl font-bold text-slate-100">
-            Evidence-Grounded Research Gap Discovery Engine
-          </h1>
+      {/* Engine Switcher Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className={`p-1.5 rounded-lg border ${
+              isPOx 
+                ? 'bg-teal-500/10 text-teal-400 border-teal-500/30' 
+                : 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30'
+            }`}>
+              <Compass className="w-5 h-5" />
+            </span>
+            <h1 className="text-xl font-bold text-slate-100">
+              Evidence-Grounded Research Gap Discovery Engine
+            </h1>
+          </div>
+          <p className="text-xs text-slate-400">
+            {isPOx 
+              ? 'Dedicated AI synthesis of 487+ POx/POzi articles to identify underexplored monomer structures and CROP mechanisms.' 
+              : 'Cross-disciplinary AI synthesis across universal polymer literature to identify frontiers in synthesis, sustainability, and biomaterials.'}
+          </p>
         </div>
-        <p className="text-xs text-slate-400">
-          AI synthesis of indexed POx/POzi publications to uncover underexplored synthetic pathways, monomer structures, and biomedical opportunities.
-        </p>
+
+        <EngineSelector
+          currentEngine={engine}
+          onSelectEngine={handleSwitchEngine}
+          compact={true}
+        />
       </div>
 
       {/* Critical Scientific Disclaimer */}
       <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 space-y-1.5">
         <div className="flex items-center gap-2 text-teal-400 font-semibold">
           <ShieldCheck className="w-4 h-4" />
-          <span>Scientific Novelty & Evidence Disclaimer</span>
+          <span>Scientific Novelty & Potential Gap Verification Disclaimer</span>
         </div>
         <p className="text-slate-400 leading-relaxed text-[11px]">
-          All hypotheses are identified as <span className="text-teal-300 font-medium italic">"Potentially underexplored based on the currently indexed literature."</span> The engine never asserts absolute global novelty without peer review. Always check patent databases and specialized primary literature before initiating lab work.
+          All claims are identified as <span className="text-teal-300 font-medium italic">"Potentially underexplored research gaps based on the currently indexed literature."</span> The engine never asserts absolute global novelty or patentability. Findings must be verified against primary literature and laboratory feasibility before experimental initiation.
         </p>
       </div>
 
@@ -94,210 +130,143 @@ export default function GapFinderView() {
         <form onSubmit={handleGenerateReport} className="space-y-4">
           <div>
             <label className="text-xs font-semibold text-slate-200 block mb-1.5">
-              Specify Research Focus Area
+              Specify Research Focus Area ({isPOx ? 'POx Scope' : 'Universal Polymer Scope'})
             </label>
             <input
               type="text"
-              required
               value={focusArea}
               onChange={(e) => setFocusArea(e.target.value)}
-              placeholder="e.g. ROS-responsive polyoxazolines, thioether functional monomers, POzi vs POx..."
-              className="w-full bg-slate-800 border border-slate-700 focus:border-teal-500 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-400 focus:outline-none shadow-sm transition-colors"
+              placeholder="e.g. Chemical recycling of polyesters, or living CROP kinetics..."
+              className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-teal-500 font-mono"
             />
           </div>
 
-          {/* Quick Suggestions */}
           <div>
-            <span className="text-[11px] text-slate-400 block mb-1.5">Suggested Research Directions:</span>
-            <div className="flex flex-wrap gap-1.5">
-              {SAMPLE_FOCUS_AREAS.map((topic, i) => (
+            <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-2">
+              Or Select Suggested Priority Topic:
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {sampleAreas.map((area, idx) => (
                 <button
-                  key={i}
+                  key={idx}
                   type="button"
-                  onClick={() => setFocusArea(topic)}
-                  className={`text-[11px] px-2.5 py-1 rounded-lg border transition-all text-left ${
-                    focusArea === topic 
-                      ? 'bg-teal-500/20 text-teal-300 border-teal-500/50' 
-                      : 'bg-slate-800/60 text-slate-400 border-slate-700 hover:text-slate-200'
+                  onClick={() => setFocusArea(area)}
+                  className={`text-left px-3 py-1.5 rounded-lg border text-xs transition-colors ${
+                    focusArea === area
+                      ? (isPOx ? 'bg-teal-500/20 text-teal-300 border-teal-500/40 font-semibold' : 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40 font-semibold')
+                      : 'bg-slate-800/60 text-slate-400 border-slate-700 hover:text-slate-200 hover:bg-slate-800'
                   }`}
                 >
-                  {topic}
+                  {area}
                 </button>
               ))}
             </div>
           </div>
 
-          {errorMsg && (
-            <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs">
-              {errorMsg}
-            </div>
-          )}
-
           <button
             type="submit"
             disabled={generating}
-            className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-white font-semibold text-xs shadow-lg shadow-teal-500/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+            className={`w-full py-2.5 rounded-xl font-semibold text-xs text-white shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              isPOx 
+                ? 'bg-teal-600 hover:bg-teal-500 shadow-teal-500/20' 
+                : 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-500/20'
+            }`}
           >
-            <Sparkles className="w-4 h-4" />
-            <span>{generating ? 'Analyzing Indexed Corpus with Gemini AI...' : 'Discover Research Gaps'}</span>
+            <Sparkles className={`w-4 h-4 ${generating ? 'animate-spin' : ''}`} />
+            <span>{generating ? 'Synthesizing Literature & Identifying Gaps...' : 'Analyze Literature & Uncover Research Gaps'}</span>
           </button>
         </form>
+
+        {errorMsg && (
+          <div className="p-3 bg-rose-950/40 border border-rose-800/40 rounded-xl text-rose-300 text-xs flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
       </div>
 
-      {/* Render Current Gap Report */}
+      {/* Generated Report Presentation */}
       {report && (
         <div className="space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div>
-              <h2 className="text-lg font-bold text-slate-100">{report.title}</h2>
-              <span className="text-xs text-slate-400">
-                Generated from indexed POx/POzi publications
+          {/* Executive Synthesis */}
+          <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-md space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                <CheckCircle className="w-4 h-4 text-emerald-400" />
+                <span>Executive Bibliometric Synthesis</span>
+              </span>
+              <span className="text-[10px] font-mono text-slate-400">
+                Generated: {new Date(report.generated_at).toLocaleDateString()}
               </span>
             </div>
-            <span className="text-xs font-mono text-teal-400 bg-teal-950/60 border border-teal-800/60 px-2.5 py-1 rounded">
-              {report.gaps?.length || 0} Gaps Proposed
-            </span>
+            <p className="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-4 rounded-xl border border-slate-800 font-sans">
+              {report.report_data?.executive_summary}
+            </p>
           </div>
 
+          {/* Identified Research Gaps List */}
           <div className="space-y-4">
-            {report.gaps?.map((gap, idx) => {
-              const isExpanded = expandedGapIndex === idx;
-              return (
-                <div 
-                  key={idx}
-                  className="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-lg transition-all"
-                >
-                  {/* Gap Header Accordion */}
-                  <div 
-                    onClick={() => setExpandedGapIndex(isExpanded ? -1 : idx)}
-                    className="p-5 flex items-start justify-between gap-4 cursor-pointer hover:bg-slate-800/40 select-none"
+            <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
+              <Compass className="w-4 h-4 text-teal-400" />
+              <span>Potential Research Gaps ({report.report_data?.identified_gaps?.length || 0} Opportunities)</span>
+            </h2>
+
+            <div className="space-y-3">
+              {(report.report_data?.identified_gaps || []).map((gap, idx) => {
+                const isExpanded = expandedGapIndex === idx;
+                return (
+                  <div
+                    key={idx}
+                    className="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-sm transition-all"
                   >
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="w-5 h-5 rounded-full bg-teal-500/20 text-teal-400 font-mono text-xs font-bold flex items-center justify-center shrink-0">
+                    <button
+                      onClick={() => setExpandedGapIndex(isExpanded ? -1 : idx)}
+                      className="w-full p-4 flex items-center justify-between text-left hover:bg-slate-850 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="w-6 h-6 rounded-lg bg-teal-500/15 text-teal-300 font-bold text-xs flex items-center justify-center shrink-0 border border-teal-500/30">
                           {idx + 1}
                         </span>
-                        <h3 className="text-sm font-bold text-slate-100 hover:text-teal-300 transition-colors">
-                          {gap.proposed_research_title}
-                        </h3>
-                        <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded border ${
-                          gap.confidence_level === 'High' 
-                            ? 'bg-emerald-950 text-emerald-400 border-emerald-800'
-                            : 'bg-indigo-950 text-indigo-400 border-indigo-800'
-                        }`}>
-                          {gap.confidence_level} Confidence
-                        </span>
+                        <div>
+                          <h3 className="text-xs font-bold text-slate-100">
+                            {gap.gap_title}
+                          </h3>
+                          <span className="text-[10px] font-mono text-rose-400 mt-0.5 inline-block">
+                            {gap.severity} Opportunity
+                          </span>
+                        </div>
                       </div>
-                      <p className="text-xs text-slate-400 line-clamp-1 ml-7">
-                        {gap.what_appears_to_be_missing}
-                      </p>
-                    </div>
-
-                    <button className="text-slate-400 hover:text-slate-200 mt-1">
-                      {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                      {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                     </button>
+
+                    {isExpanded && (
+                      <div className="p-4 pt-0 border-t border-slate-800/80 space-y-3 text-xs bg-slate-950/40">
+                        <div>
+                          <strong className="text-slate-300 block mb-1">Scientific & Chemical Rationale:</strong>
+                          <p className="text-slate-400 leading-relaxed bg-slate-900 p-3 rounded-xl border border-slate-800">
+                            {gap.chemical_rationale}
+                          </p>
+                        </div>
+
+                        <div>
+                          <strong className="text-slate-300 block mb-1">Unexplored Monomers & Macromolecular Targets:</strong>
+                          <p className="text-teal-300 font-mono text-[11px] bg-slate-900 p-3 rounded-xl border border-slate-800">
+                            {gap.unexplored_monomers}
+                          </p>
+                        </div>
+
+                        <div>
+                          <strong className="text-slate-300 block mb-1">Suggested Validation Experiment:</strong>
+                          <p className="text-slate-300 leading-relaxed bg-slate-900 p-3 rounded-xl border border-slate-800">
+                            {gap.suggested_experiment}
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
-
-                  {/* Expanded Gap Details */}
-                  {isExpanded && (
-                    <div className="px-5 pb-6 pt-2 border-t border-slate-800/80 space-y-4 text-xs">
-                      {/* What is Known vs Missing */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-3.5 rounded-xl bg-slate-800/50 border border-slate-800">
-                          <span className="font-semibold text-slate-300 block mb-1">
-                            Current Indexed State of the Art:
-                          </span>
-                          <p className="text-slate-400 leading-relaxed">
-                            {gap.what_is_already_known}
-                          </p>
-                        </div>
-                        <div className="p-3.5 rounded-xl bg-teal-950/20 border border-teal-800/40">
-                          <span className="font-semibold text-teal-300 block mb-1">
-                            Identified Unexplored Gap:
-                          </span>
-                          <p className="text-teal-200 leading-relaxed font-medium">
-                            {gap.what_appears_to_be_missing}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Scientific Rationale & Novelty */}
-                      <div className="p-3.5 rounded-xl bg-slate-800/50 border border-slate-800 space-y-2">
-                        <div>
-                          <span className="font-semibold text-slate-300 block mb-0.5">Scientific Rationale:</span>
-                          <p className="text-slate-400 leading-relaxed">{gap.scientific_rationale}</p>
-                        </div>
-                        <div className="pt-2 border-t border-slate-700/50">
-                          <span className="font-semibold text-indigo-300 block mb-0.5">Anticipated Scientific Novelty:</span>
-                          <p className="text-slate-300 leading-relaxed">{gap.expected_novelty}</p>
-                        </div>
-                      </div>
-
-                      {/* Proposed Experimental Strategy */}
-                      <div className="p-3.5 rounded-xl bg-slate-800/50 border border-slate-800">
-                        <span className="font-semibold text-teal-400 block mb-1">
-                          Proposed Synthetic & Experimental Strategy:
-                        </span>
-                        <p className="text-slate-200 leading-relaxed font-mono text-[11px] whitespace-pre-line">
-                          {gap.proposed_experimental_strategy}
-                        </p>
-                      </div>
-
-                      {/* Synthetic Challenges & Characterization Pathways */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20">
-                          <span className="font-semibold text-amber-300 block mb-1">
-                            Potential Chemical / Synthetic Hurdles:
-                          </span>
-                          <p className="text-amber-200 leading-relaxed">
-                            {gap.potential_challenges}
-                          </p>
-                        </div>
-                        <div className="p-3.5 rounded-xl bg-slate-800/50 border border-slate-800">
-                          <span className="font-semibold text-slate-300 block mb-1.5">
-                            Recommended Characterization Techniques:
-                          </span>
-                          <div className="flex flex-wrap gap-1.5">
-                            {gap.recommended_characterization_techniques?.map((t, idx2) => (
-                              <span key={idx2} className="px-2 py-0.5 rounded bg-slate-700 text-slate-200 text-[10px] font-medium font-mono">
-                                {t}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Supporting Citations & DOI Links */}
-                      {gap.supporting_publications?.length > 0 && (
-                        <div>
-                          <span className="font-semibold text-slate-400 block mb-2">
-                            Grounding Publications from Indexed Corpus:
-                          </span>
-                          <div className="space-y-1.5">
-                            {gap.supporting_publications.map((p, pIdx) => (
-                              <div key={pIdx} className="flex items-center justify-between p-2 rounded bg-slate-800/40 border border-slate-800">
-                                <span className="text-slate-300 truncate max-w-md">{p.title}</span>
-                                {p.doi && (
-                                  <a 
-                                    href={`https://doi.org/${p.doi}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-teal-400 hover:text-teal-300 flex items-center gap-1 font-mono text-[11px]"
-                                  >
-                                    <ExternalLink className="w-3 h-3" />
-                                    <span>{p.doi}</span>
-                                  </a>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       )}

@@ -16,14 +16,16 @@ import CollectorModal from './components/CollectorModal';
 import AuthModal from './components/AuthModal';
 import { api } from './lib/api';
 import { supabase } from './lib/supabase';
+import { ENGINE_SCOPES } from './lib/searchEngine';
 
 export default function App() {
+  const [currentEngine, setCurrentEngine] = useState(ENGINE_SCOPES.POX);
   const [activeView, setActiveView] = useState('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPaperIds, setSelectedPaperIds] = useState([]);
   
-  // Folding Sidebar Navigation (appears when clicked)
+  // Folding Sidebar Navigation
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarPinned, setSidebarPinned] = useState(false);
   
@@ -42,12 +44,17 @@ export default function App() {
     loadInitialData();
     checkAuthSession();
 
-    // Read initial URL query parameters for direct navigation & fresh searches
+    // Read initial URL query parameters for direct navigation, engine selection, & searches
     try {
       const params = new URLSearchParams(window.location.search);
+      const engineParam = params.get('engine');
       const viewParam = params.get('view') || params.get('tab');
       const qParam = params.get('q') || params.get('search');
       const catParam = params.get('category');
+
+      if (engineParam === 'universal' || engineParam === 'pox') {
+        setCurrentEngine(engineParam);
+      }
 
       if (qParam) {
         setSearchQuery(qParam);
@@ -63,10 +70,13 @@ export default function App() {
     }
   }, []);
 
-  // Sync browser URL with active view and search query for easy sharing
+  // Sync browser URL with active engine, view, and search query
   useEffect(() => {
     try {
       const params = new URLSearchParams();
+      if (currentEngine) {
+        params.set('engine', currentEngine);
+      }
       if (activeView && activeView !== 'dashboard') {
         params.set('view', activeView);
       }
@@ -82,13 +92,13 @@ export default function App() {
     } catch (e) {
       console.debug('Failed to update URL search params', e);
     }
-  }, [activeView, searchQuery, selectedCategory]);
+  }, [currentEngine, activeView, searchQuery, selectedCategory]);
 
   const loadInitialData = async () => {
     try {
       const [h, cats] = await Promise.all([
         api.getHealth().catch(() => null),
-        api.getCategories().catch(() => [])
+        api.getCategories(currentEngine).catch(() => [])
       ]);
       setHealth(h);
       setAllCategories(cats || []);
@@ -164,7 +174,10 @@ export default function App() {
     }
   };
 
-  const handleNavigateToSearch = (query) => {
+  const handleNavigateToSearch = (query, engineOverride) => {
+    if (engineOverride) {
+      setCurrentEngine(engineOverride);
+    }
     setSearchQuery(query || '');
     setSelectedCategory('');
     setActiveView('search');
@@ -177,8 +190,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
-      {/* Top Navbar */}
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+      {/* Top Navbar with PRIH Branding and Dual Engine Switcher */}
       <Navbar
         activeView={activeView}
         setActiveView={setActiveView}
@@ -192,11 +205,13 @@ export default function App() {
         health={health}
         onToggleSidebar={() => setSidebarOpen(prev => !prev)}
         sidebarOpen={sidebarOpen}
+        currentEngine={currentEngine}
+        onSelectEngine={setCurrentEngine}
       />
 
       {/* Main Layout Area */}
       <div className="flex-1 flex max-w-[1600px] w-full mx-auto relative">
-        {/* Backdrop for folded sidebar (when open and not pinned) */}
+        {/* Backdrop for folded sidebar */}
         {sidebarOpen && !sidebarPinned && (
           <div 
             onClick={() => setSidebarOpen(false)}
@@ -205,7 +220,7 @@ export default function App() {
           />
         )}
 
-        {/* Sliding & Folding Left Sidebar (16 Scientific Views) */}
+        {/* Sliding & Folding Left Sidebar */}
         <Sidebar
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
@@ -213,10 +228,12 @@ export default function App() {
           onTogglePin={() => setSidebarPinned(prev => !prev)}
           activeView={activeView}
           setActiveView={setActiveView}
+          currentEngine={currentEngine}
+          onSelectEngine={setCurrentEngine}
           onSelectCategory={handleSelectCategory}
         />
 
-        {/* Floating Quick Open Pill (visible when folded) */}
+        {/* Floating Quick Open Pill */}
         {!sidebarOpen && (
           <button
             onClick={() => setSidebarOpen(true)}
@@ -233,6 +250,8 @@ export default function App() {
         <main className="flex-1 min-w-0 p-4 lg:p-8 overflow-y-auto">
           {activeView === 'dashboard' && (
             <DashboardView
+              engine={currentEngine}
+              onSelectEngine={setCurrentEngine}
               onNavigateToSearch={handleNavigateToSearch}
               onSelectCategory={handleSelectCategory}
               onOpenDetails={handleOpenDetails}
@@ -249,9 +268,8 @@ export default function App() {
 
           {activeView === 'search' && (
             <SearchView
-              key={`search-${selectedCategory}-${searchQuery}`}
-              title="Literature Search Engine"
-              subtitle="Search across 251 indexed papers by keyword, author, DOI, or category."
+              key={`search-${currentEngine}-${selectedCategory}-${searchQuery}`}
+              initialEngine={currentEngine}
               initialQuery={searchQuery}
               initialCategory={selectedCategory}
               onOpenDetails={handleOpenDetails}
@@ -268,9 +286,10 @@ export default function App() {
 
           {activeView === 'publications' && (
             <SearchView
-              key="publications"
+              key={`publications-${currentEngine}`}
               title="All Scientific Publications"
-              subtitle="Complete repository of 251 publications indexed from OpenAlex and Crossref (2020–2026+)."
+              subtitle="Central repository of peer-reviewed publications indexed from OpenAlex, Crossref, and Europe PMC (1950–2026+)."
+              initialEngine={currentEngine}
               initialQuery=""
               initialCategory=""
               onOpenDetails={handleOpenDetails}
@@ -315,9 +334,10 @@ export default function App() {
 
           {activeView === 'pox' && (
             <SearchView
-              key="pox"
+              key="pox-view"
               title="Poly(2-oxazoline) (POx) Chemistry"
               subtitle="Research on PMOx, PEtOx, PiPOx, PPhOx, amphiphilic copolymers, and CROP synthesis."
+              initialEngine={ENGINE_SCOPES.POX}
               initialQuery="oxazoline OR pox OR polyoxazoline"
               initialCategory=""
               onOpenDetails={handleOpenDetails}
@@ -334,11 +354,12 @@ export default function App() {
 
           {activeView === 'pozi' && (
             <SearchView
-              key="pozi"
+              key="pozi-view"
               title="Poly(2-oxazine) (POzi) Chemistry"
               subtitle="Research on poly(2-oxazine)s, PMOzi, PEtOzi, and POx/POzi comparative studies."
+              initialEngine={ENGINE_SCOPES.POX}
               initialQuery="oxazine OR pozi OR polyoxazine"
-              initialCategory=""
+              initialCategory="poly-2-oxazine"
               onOpenDetails={handleOpenDetails}
               onOpenSummary={handleOpenSummary}
               selectedPaperIds={selectedPaperIds}
@@ -353,11 +374,12 @@ export default function App() {
 
           {activeView === 'monomers' && (
             <SearchView
-              key="monomers"
+              key="monomers-view"
               title="Oxazoline & Oxazine Monomer Database"
               subtitle="Synthesis and functionalization of 2-substituted monomers, thiols, esters, and stimuli-responsive monomers."
+              initialEngine={ENGINE_SCOPES.POX}
               initialQuery="monomer OR 2-oxazoline OR 2-oxazine"
-              initialCategory=""
+              initialCategory="monomer-synthesis"
               onOpenDetails={handleOpenDetails}
               onOpenSummary={handleOpenSummary}
               selectedPaperIds={selectedPaperIds}
@@ -372,11 +394,12 @@ export default function App() {
 
           {activeView === 'polymerization' && (
             <SearchView
-              key="polymerization"
+              key="polymerization-view"
               title="Polymerization Chemistry & CROP Kinetics"
               subtitle="Cationic ring-opening polymerization (CROP), initiator development, termination kinetics, and living control."
+              initialEngine={ENGINE_SCOPES.POX}
               initialQuery="polymerization OR crop OR ring-opening"
-              initialCategory=""
+              initialCategory="crop-kinetics"
               onOpenDetails={handleOpenDetails}
               onOpenSummary={handleOpenSummary}
               selectedPaperIds={selectedPaperIds}
@@ -391,11 +414,12 @@ export default function App() {
 
           {activeView === 'stimuli' && (
             <SearchView
-              key="stimuli"
+              key="stimuli-view"
               title="Stimuli-Responsive & Smart Polymers"
               subtitle="Thermoresponsive (LCST/UCST), ROS-responsive, photoresponsive, and dual-responsive polymer architectures."
+              initialEngine={currentEngine}
               initialQuery="responsive OR thermoresponsive OR ros OR photoresponsive OR lcst OR ucst"
-              initialCategory=""
+              initialCategory="thermoresponsive"
               onOpenDetails={handleOpenDetails}
               onOpenSummary={handleOpenSummary}
               selectedPaperIds={selectedPaperIds}
@@ -410,11 +434,12 @@ export default function App() {
 
           {activeView === 'biomedical' && (
             <SearchView
-              key="biomedical"
+              key="biomedical-view"
               title="Biomedical & Delivery Systems"
               subtitle="Drug delivery, gene delivery, micelles, nanoparticles, hydrogels, and polymer therapeutics."
+              initialEngine={currentEngine}
               initialQuery="delivery OR biomedical OR micelle OR nanoparticle OR hydrogel"
-              initialCategory=""
+              initialCategory="drug-delivery"
               onOpenDetails={handleOpenDetails}
               onOpenSummary={handleOpenSummary}
               selectedPaperIds={selectedPaperIds}
@@ -436,6 +461,7 @@ export default function App() {
 
           {activeView === 'trends' && (
             <AnalyticsView
+              initialEngine={currentEngine}
               onNavigateToSearch={handleNavigateToSearch}
               onOpenDetails={handleOpenDetails}
               onOpenSummary={handleOpenSummary}
@@ -443,7 +469,9 @@ export default function App() {
           )}
 
           {activeView === 'gaps' && (
-            <GapFinderView />
+            <GapFinderView
+              initialEngine={currentEngine}
+            />
           )}
 
           {activeView === 'review' && (

@@ -21,31 +21,42 @@ import {
   Atom,
   Pin,
   PinOff,
-  ChevronLeft
+  ChevronLeft,
+  Network,
+  Globe2,
+  Boxes
 } from 'lucide-react';
+import EngineSelector from './EngineSelector';
+import { ENGINE_SCOPES } from '../lib/searchEngine';
 
-export const NAV_ITEMS = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, section: 'Core' },
-  { id: 'search', label: 'Literature Search', icon: Search, section: 'Core' },
-  { id: 'publications', label: 'All Publications', icon: BookOpen, section: 'Core' },
-  { id: 'reviews', label: 'POx Review Articles', icon: BookMarked, section: 'Core' },
-  { id: 'developer', label: "Developer's Publications", icon: Award, section: 'Core' },
-  
-  { id: 'pox', label: 'POx Research', icon: Layers, section: 'Polymer Classes' },
-  { id: 'pozi', label: 'POzi Research', icon: Hexagon, section: 'Polymer Classes' },
-  
-  { id: 'monomers', label: 'Monomer Database', icon: TestTube, section: 'Chemistry Focus' },
-  { id: 'polymerization', label: 'Polymerization & CROP', icon: FlaskConical, section: 'Chemistry Focus' },
-  { id: 'stimuli', label: 'Stimuli-Responsive', icon: Flame, section: 'Chemistry Focus' },
-  { id: 'biomedical', label: 'Biomedical & Delivery', icon: HeartPulse, section: 'Chemistry Focus' },
-  
-  { id: 'summaries', label: 'AI Summaries', icon: Sparkles, section: 'AI Research Suite' },
-  { id: 'gaps', label: 'Research Gap Finder', icon: Compass, section: 'AI Research Suite' },
-  { id: 'trends', label: 'Research Trends', icon: TrendingUp, section: 'AI Research Suite' },
-  { id: 'review', label: 'Literature Review', icon: FileText, section: 'AI Research Suite' },
-  
-  { id: 'library', label: 'My Library & Screening', icon: Bookmark, section: 'Personal Workspace' },
-  { id: 'settings', label: 'Settings & Cloud DB', icon: Settings, section: 'Personal Workspace' },
+export const POX_NAV_ITEMS = [
+  { id: 'search', label: 'POx Literature Search', icon: Search, engine: ENGINE_SCOPES.POX },
+  { id: 'pox', label: 'POx Chemistry', icon: Layers, engine: ENGINE_SCOPES.POX },
+  { id: 'pozi', label: 'POzi Chemistry', icon: Hexagon, engine: ENGINE_SCOPES.POX },
+  { id: 'monomers', label: 'Monomer Database', icon: TestTube, engine: ENGINE_SCOPES.POX },
+  { id: 'polymerization', label: 'Living CROP Kinetics', icon: FlaskConical, engine: ENGINE_SCOPES.POX },
+  { id: 'stimuli', label: 'Stimuli-Responsive POx', icon: Flame, engine: ENGINE_SCOPES.POX },
+  { id: 'biomedical', label: 'Biomedical & Delivery', icon: HeartPulse, engine: ENGINE_SCOPES.POX },
+  { id: 'gaps', label: 'POx Gap Finder', icon: Compass, engine: ENGINE_SCOPES.POX },
+  { id: 'trends', label: 'POx Bibliometric Trends', icon: TrendingUp, engine: ENGINE_SCOPES.POX },
+];
+
+export const UNIVERSAL_NAV_ITEMS = [
+  { id: 'universal_search', label: 'Universal Polymer Search', icon: Globe2, engine: ENGINE_SCOPES.UNIVERSAL },
+  { id: 'universal_classes', label: 'Polymer Disciplines (18)', icon: Boxes, engine: ENGINE_SCOPES.UNIVERSAL },
+  { id: 'universal_gaps', label: 'Polymer Gap Finder', icon: Compass, engine: ENGINE_SCOPES.UNIVERSAL },
+  { id: 'universal_trends', label: 'Global Polymer Trends', icon: TrendingUp, engine: ENGINE_SCOPES.UNIVERSAL },
+];
+
+export const SHARED_NAV_ITEMS = [
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'publications', label: 'All Publications', icon: BookOpen },
+  { id: 'reviews', label: 'POx Review Articles', icon: BookMarked },
+  { id: 'summaries', label: 'AI Summaries', icon: Sparkles },
+  { id: 'review', label: 'Literature Review', icon: FileText },
+  { id: 'library', label: 'My Library & Screening', icon: Bookmark },
+  { id: 'developer', label: "Developer's Publications", icon: Award },
+  { id: 'settings', label: 'Settings & Cloud DB', icon: Settings },
 ];
 
 export default function Sidebar({ 
@@ -54,15 +65,20 @@ export default function Sidebar({
   isPinned = false, 
   onTogglePin,
   activeView, 
-  setActiveView 
+  setActiveView,
+  currentEngine = ENGINE_SCOPES.POX,
+  onSelectEngine,
+  onSelectCategory
 }) {
-  // Group navigation items by section
-  const sections = Array.from(new Set(NAV_ITEMS.map(i => i.section)));
+  const isPOx = currentEngine === ENGINE_SCOPES.POX;
 
-  const handleNavClick = (item) => {
-    setActiveView(item.id);
+  const handleNavClick = (viewId, targetEngine) => {
+    if (targetEngine && onSelectEngine && targetEngine !== currentEngine) {
+      onSelectEngine(targetEngine);
+    }
+    setActiveView(viewId);
     if (!isPinned && onClose) {
-      onClose(); // Automatically folds away after selecting view
+      onClose();
     }
   };
 
@@ -78,14 +94,18 @@ export default function Sidebar({
       {/* Sliding Header with Close & Pin Controls */}
       <div className="p-3.5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950/60">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-teal-500/20">
-            <Atom className="w-4 h-4 animate-spin" />
+          <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-white shadow-md ${
+            isPOx 
+              ? 'bg-gradient-to-tr from-teal-500 to-emerald-600 shadow-teal-500/20' 
+              : 'bg-gradient-to-tr from-indigo-500 to-purple-600 shadow-indigo-500/20'
+          }`}>
+            {isPOx ? <Atom className="w-4 h-4 animate-spin" /> : <Network className="w-4 h-4 animate-spin" />}
           </div>
           <div>
             <h2 className="text-xs font-bold text-slate-100 tracking-tight">
-              Navigation Menu
+              PRIH Platform
             </h2>
-            <p className="text-[10px] text-teal-400 font-medium">16 Specialized Views</p>
+            <p className="text-[10px] text-teal-400 font-medium">Two Search Engines</p>
           </div>
         </div>
 
@@ -114,41 +134,153 @@ export default function Sidebar({
         </div>
       </div>
 
+      {/* Engine Switcher inside Sidebar */}
+      {onSelectEngine && (
+        <div className="p-3 border-b border-slate-800/80 bg-slate-950/40 shrink-0">
+          <EngineSelector
+            currentEngine={currentEngine}
+            onSelectEngine={onSelectEngine}
+            compact={true}
+          />
+        </div>
+      )}
+
       {/* Navigation List */}
       <nav className="flex-1 px-3 py-4 space-y-5 overflow-y-auto">
-        {sections.map(section => (
-          <div key={section} className="space-y-1">
-            <h3 className="px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-              {section}
-            </h3>
-            <div className="space-y-0.5 pt-0.5">
-              {NAV_ITEMS.filter(item => item.section === section).map(item => {
-                const Icon = item.icon;
-                const isActive = activeView === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => handleNavClick(item)}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all text-left group ${
-                      isActive
-                        ? 'bg-teal-500/15 text-teal-300 font-semibold border-l-2 border-teal-400 shadow-sm'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                    }`}
-                  >
-                    <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-110 ${isActive ? 'text-teal-400' : 'text-slate-400'}`} />
-                    <span className="truncate">{item.label}</span>
-                  </button>
-                );
-              })}
-            </div>
+        {/* Core Shared Navigation */}
+        <div className="space-y-1">
+          <h3 className="px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+            Platform Core
+          </h3>
+          <div className="space-y-0.5 pt-0.5">
+            {SHARED_NAV_ITEMS.slice(0, 3).map(item => {
+              const Icon = item.icon;
+              const isActive = activeView === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all text-left group ${
+                    isActive
+                      ? 'bg-teal-500/15 text-teal-300 font-semibold border-l-2 border-teal-400 shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-teal-400' : 'text-slate-400'}`} />
+                  <span className="truncate">{item.label}</span>
+                </button>
+              );
+            })}
           </div>
-        ))}
+        </div>
+
+        {/* Engine 1: Dedicated Polyoxazoline Research Engine */}
+        <div className="space-y-1">
+          <div className="px-3 flex items-center justify-between">
+            <h3 className="text-[10px] font-semibold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
+              <Atom className="w-3 h-3 text-teal-400" />
+              <span>Engine 1: POx / POzi Suite</span>
+            </h3>
+            {isPOx && (
+              <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
+            )}
+          </div>
+
+          <div className="space-y-0.5 pt-0.5">
+            {POX_NAV_ITEMS.map(item => {
+              const Icon = item.icon;
+              const isActive = activeView === item.id && isPOx;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id, ENGINE_SCOPES.POX)}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all text-left group ${
+                    isActive
+                      ? 'bg-teal-500/20 text-teal-300 font-semibold border-l-2 border-teal-400 shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-teal-400' : 'text-slate-400'}`} />
+                  <span className="truncate">{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Engine 2: Universal Polymer Research Engine */}
+        <div className="space-y-1">
+          <div className="px-3 flex items-center justify-between">
+            <h3 className="text-[10px] font-semibold uppercase tracking-wider text-indigo-400 flex items-center gap-1.5">
+              <Network className="w-3 h-3 text-indigo-400" />
+              <span>Engine 2: Universal Polymer</span>
+            </h3>
+            {!isPOx && (
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+            )}
+          </div>
+
+          <div className="space-y-0.5 pt-0.5">
+            {UNIVERSAL_NAV_ITEMS.map(item => {
+              const Icon = item.icon;
+              // Map view IDs
+              const targetView = item.id === 'universal_search' ? 'search' 
+                : item.id === 'universal_classes' ? 'search' 
+                : item.id === 'universal_gaps' ? 'gaps' 
+                : item.id === 'universal_trends' ? 'trends' 
+                : item.id;
+              const isActive = activeView === targetView && !isPOx;
+
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(targetView, ENGINE_SCOPES.UNIVERSAL)}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all text-left group ${
+                    isActive
+                      ? 'bg-indigo-500/20 text-indigo-300 font-semibold border-l-2 border-indigo-400 shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-indigo-400' : 'text-slate-400'}`} />
+                  <span className="truncate">{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* AI & Workspace Tools */}
+        <div className="space-y-1">
+          <h3 className="px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+            AI Suite & Workspace
+          </h3>
+          <div className="space-y-0.5 pt-0.5">
+            {SHARED_NAV_ITEMS.slice(3).map(item => {
+              const Icon = item.icon;
+              const isActive = activeView === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all text-left group ${
+                    isActive
+                      ? 'bg-teal-500/15 text-teal-300 font-semibold border-l-2 border-teal-400 shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-teal-400' : 'text-slate-400'}`} />
+                  <span className="truncate">{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </nav>
 
       {/* Developer Credit & Info */}
       <div className="p-3 border-t border-slate-800/80 bg-slate-950/60 text-[11px] space-y-2 shrink-0">
         <div 
-          onClick={() => handleNavClick({ id: 'developer' })}
+          onClick={() => handleNavClick('developer')}
           title="Click to view all publications by Sumit Barik"
           className="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-teal-500/50 hover:bg-slate-800/80 flex items-center gap-2.5 shadow-sm cursor-pointer transition-all group"
         >
@@ -169,14 +301,14 @@ export default function Sidebar({
           </div>
         </div>
 
-        <div className="text-[10px] text-slate-400 space-y-0.5 px-0.5">
+        <div className="text-[10px] text-slate-400 space-y-0.5 px-0.5 font-mono">
           <div className="flex items-center justify-between">
-            <span>Indexed Scope</span>
-            <span className="text-slate-300 font-mono">2020–2026+</span>
+            <span>Historical Scope</span>
+            <span className="text-slate-300">1950–2026+</span>
           </div>
           <div className="flex items-center justify-between">
-            <span>Sources</span>
-            <span className="text-slate-300">OpenAlex, Crossref</span>
+            <span>Literature APIs</span>
+            <span className="text-slate-300">OpenAlex, Crossref, PMC</span>
           </div>
         </div>
       </div>
