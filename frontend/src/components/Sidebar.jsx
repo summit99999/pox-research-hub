@@ -44,6 +44,8 @@ export const PRIMARY_NAV_ITEMS = [
 ];
 
 export const WORKSPACE_NAV_ITEMS = [
+  { id: 'pdf_library', label: 'My PDF Library', icon: FileText, badge: 'PDF', color: 'emerald', shortcut: '⌘P' },
+  { id: 'watchlist', label: 'My Watchlist', icon: BookMarked, badge: 'Track', color: 'violet', shortcut: '⌘W' },
   { id: 'library', label: 'Saved Papers', icon: Bookmark, badge: 'Library' },
   { id: 'publications', label: 'Research Collections', icon: Boxes },
   { id: 'summaries', label: 'AI Research Assistant', icon: Sparkles, color: 'purple', badge: 'AI' },

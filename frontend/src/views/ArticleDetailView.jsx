@@ -20,7 +20,14 @@ import {
   Building2, 
   CheckCircle2, 
   FlaskConical, 
-  RefreshCw 
+  RefreshCw,
+  Upload,
+  Download,
+  Trash2,
+  Clock,
+  Edit3,
+  ChevronDown,
+  BookMarked
 } from 'lucide-react';
 import { api } from '../lib/api';
 import { getOfficialPublisherUrl, formatDoiDisplay, cleanDoi } from '../lib/doiHelper';
@@ -28,6 +35,8 @@ import { getJournalImpactFactor } from '../lib/journalMeta';
 import { CLASSIFICATION_CATEGORIES } from '../lib/polymerClassifier';
 import PaperTOC from '../components/PaperTOC';
 import AISummaryViewer from '../components/AISummaryViewer';
+import PDFReaderModal from '../components/PDFReaderModal';
+import PDFUploadModal from '../components/PDFUploadModal';
 
 export default function ArticleDetailView({ 
   articleId, 
@@ -48,9 +57,59 @@ export default function ArticleDetailView({
   const [isSaved, setIsSaved] = useState(false);
   const [isFav, setIsFav] = useState(false);
 
+  // PDF Library & Watchlist States
+  const [hasPdf, setHasPdf] = useState(false);
+  const [pdfRecord, setPdfRecord] = useState(null);
+  const [isWatchlisted, setIsWatchlisted] = useState(false);
+  const [watchlistRecord, setWatchlistRecord] = useState(null);
+  const [readingStatus, setReadingStatus] = useState('to_read');
+  const [personalNote, setPersonalNote] = useState('');
+  const [isReaderOpen, setIsReaderOpen] = useState(false);
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [isReplacingPdf, setIsReplacingPdf] = useState(false);
+  const [pdfReaderUrl, setPdfReaderUrl] = useState('');
+  const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+  const [isEditingNote, setIsEditingNote] = useState(false);
+  const [noteInput, setNoteInput] = useState('');
+
   useEffect(() => {
     loadArticle();
   }, [articleId]);
+
+  useEffect(() => {
+    const handlePdfUpdate = (e) => {
+      if (e.detail?.articleId === articleId || (paper?.doi && e.detail?.doi === paper.doi)) {
+        if (e.detail.deleted) {
+          setHasPdf(false);
+          setPdfRecord(null);
+        } else if (e.detail.pdf) {
+          setHasPdf(true);
+          setPdfRecord(e.detail.pdf);
+        }
+      }
+    };
+
+    const handleWatchlistUpdate = (e) => {
+      if (e.detail?.articleId === articleId || (paper?.doi && e.detail?.doi === paper.doi)) {
+        if (e.detail.isWatchlisted !== undefined) {
+          setIsWatchlisted(e.detail.isWatchlisted);
+        }
+        if (e.detail.record) {
+          setWatchlistRecord(e.detail.record);
+          setReadingStatus(e.detail.record.reading_status || 'to_read');
+          setPersonalNote(e.detail.record.personal_note || '');
+        }
+      }
+    };
+
+    window.addEventListener('prih-pdf-library-updated', handlePdfUpdate);
+    window.addEventListener('prih-watchlist-updated', handleWatchlistUpdate);
+    return () => {
+      window.removeEventListener('prih-pdf-library-updated', handlePdfUpdate);
+      window.removeEventListener('prih-watchlist-updated', handleWatchlistUpdate);
+    };
+  }, [articleId, paper?.doi]);
 
   const loadArticle = async () => {
     if (!articleId) {
@@ -68,6 +127,31 @@ export default function ArticleDetailView({
         setPaper(data);
         setIsSaved(Boolean(data.is_saved));
         setIsFav(Boolean(data.is_favourite));
+
+        // Sync PDF status
+        const pdfStatus = await api.getArticlePdf(articleId);
+        setHasPdf(Boolean(pdfStatus?.has_pdf || data.has_pdf));
+        setPdfRecord(pdfStatus?.pdf || data.pdf_record || null);
+
+        // Sync Watchlist status
+        const isW = api.isArticleInWatchlist(articleId) || Boolean(data.is_watchlisted);
+        setIsWatchlisted(isW);
+        if (data.watchlist_record) {
+          setWatchlistRecord(data.watchlist_record);
+          setReadingStatus(data.watchlist_record.reading_status || 'to_read');
+          setPersonalNote(data.watchlist_record.personal_note || '');
+          setNoteInput(data.watchlist_record.personal_note || '');
+        } else {
+          const wList = await api.getWatchlist();
+          const match = wList.find(w => w.article_id === articleId || (data.doi && cleanDoi(w.doi) === cleanDoi(data.doi)));
+          if (match) {
+            setIsWatchlisted(true);
+            setWatchlistRecord(match);
+            setReadingStatus(match.reading_status || 'to_read');
+            setPersonalNote(match.personal_note || '');
+            setNoteInput(match.personal_note || '');
+          }
+        }
       } else {
         setNotFound(true);
       }
@@ -131,6 +215,117 @@ export default function ArticleDetailView({
     if (onToggleFavourite) {
       onToggleFavourite(paper.id, nextFav);
     }
+  };
+
+  // Watchlist Actions
+  const handleToggleWatchlist = async () => {
+    if (!paper) return;
+    if (isWatchlisted) {
+      await api.removeFromWatchlist(paper.id);
+      setIsWatchlisted(false);
+      setWatchlistRecord(null);
+    } else {
+      const record = await api.addToWatchlist(paper.id, {
+        paper,
+        reading_status: readingStatus || 'to_read',
+        personal_note: personalNote
+      });
+      setIsWatchlisted(true);
+      setWatchlistRecord(record);
+    }
+  };
+
+  const handleUpdateStatus = async (status) => {
+    setReadingStatus(status);
+    setShowStatusDropdown(false);
+    if (!isWatchlisted) {
+      const rec = await api.addToWatchlist(paper.id, {
+        paper,
+        reading_status: status,
+        personal_note: personalNote
+      });
+      setIsWatchlisted(true);
+      setWatchlistRecord(rec);
+    } else {
+      await api.updateWatchlist(paper.id, { reading_status: status });
+    }
+  };
+
+  const handleSaveNote = async () => {
+    setPersonalNote(noteInput);
+    setIsEditingNote(false);
+    if (!isWatchlisted) {
+      const rec = await api.addToWatchlist(paper.id, {
+        paper,
+        reading_status: readingStatus,
+        personal_note: noteInput
+      });
+      setIsWatchlisted(true);
+      setWatchlistRecord(rec);
+    } else {
+      await api.updateWatchlist(paper.id, { personal_note: noteInput });
+    }
+  };
+
+  // PDF Actions
+  const handleOpenReader = async () => {
+    try {
+      const idToLookup = pdfRecord?.id || paper?.id;
+      const res = await api.getSignedPdfUrl(idToLookup, 'read');
+      if (res?.url) {
+        setPdfReaderUrl(res.url);
+        setIsReaderOpen(true);
+      }
+    } catch (err) {
+      console.error('Failed to get PDF read URL:', err);
+      // Fallback: if open access url exists, try opening directly
+      if (paper?.open_access_url) {
+        setPdfReaderUrl(paper.open_access_url);
+        setIsReaderOpen(true);
+      } else {
+        alert('Could not open PDF reader: ' + (err.message || 'File not available'));
+      }
+    }
+  };
+
+  const handleDownloadPdf = async () => {
+    try {
+      const idToLookup = pdfRecord?.id || paper?.id;
+      const res = await api.getSignedPdfUrl(idToLookup, 'download');
+      if (res?.url) {
+        const a = document.createElement('a');
+        a.href = res.url;
+        a.download = pdfRecord?.original_filename || res.filename || `${(paper?.title || 'article').slice(0, 30)}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    } catch (err) {
+      console.error('Failed to download PDF:', err);
+      if (paper?.open_access_url) {
+        window.open(paper.open_access_url, '_blank');
+      } else {
+        alert('Could not download PDF: ' + (err.message || 'File not available'));
+      }
+    }
+  };
+
+  const handleRemovePdf = async () => {
+    try {
+      await api.removeArticlePdf(pdfRecord?.id, paper?.id);
+      setHasPdf(false);
+      setPdfRecord(null);
+      setShowRemoveConfirm(false);
+    } catch (err) {
+      alert('Failed to remove PDF: ' + err.message);
+    }
+  };
+
+  const handleUploadSuccess = (record) => {
+    setHasPdf(true);
+    setPdfRecord(record);
+    setIsUploadOpen(false);
+    setIsReplacingPdf(false);
   };
 
   // =========================================================================
@@ -257,6 +452,99 @@ export default function ArticleDetailView({
               title="Official publisher article URL is unavailable for this record"
             >
               <span>Publisher Link Unavailable</span>
+            </button>
+          )}
+
+          {/* Watchlist Toggle with Dropdown */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={handleToggleWatchlist}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
+                isWatchlisted
+                  ? 'bg-violet-600 text-white border-violet-500 shadow-sm shadow-violet-600/30'
+                  : 'bg-slate-800/90 hover:bg-slate-750 text-slate-300 border-slate-700'
+              }`}
+              title={isWatchlisted ? 'In Watchlist (Click to remove)' : 'Add to Research Watchlist'}
+            >
+              <BookMarked className="w-3.5 h-3.5" />
+              <span>{isWatchlisted ? 'In Watchlist' : 'Watchlist'}</span>
+              {isWatchlisted && (
+                <span className="ml-1 px-1.5 py-0.5 rounded bg-violet-950/80 border border-violet-400/30 text-[10px] uppercase font-mono tracking-wider">
+                  {readingStatus === 'to_read' ? 'To Read' : readingStatus === 'reading' ? 'Reading' : 'Read'}
+                </span>
+              )}
+            </button>
+            {isWatchlisted && (
+              <button
+                type="button"
+                onClick={() => setShowStatusDropdown(!showStatusDropdown)}
+                className="absolute -right-1.5 -top-1.5 p-0.5 rounded-full bg-violet-700 border border-violet-400 text-white hover:bg-violet-600 shadow-sm"
+                title="Change reading status"
+              >
+                <ChevronDown className="w-2.5 h-2.5" />
+              </button>
+            )}
+
+            {showStatusDropdown && (
+              <div className="absolute right-0 mt-1 w-36 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl py-1 z-30">
+                <button
+                  type="button"
+                  onClick={() => handleUpdateStatus('to_read')}
+                  className={`w-full text-left px-3 py-1.5 text-xs font-medium hover:bg-slate-800 flex items-center justify-between ${
+                    readingStatus === 'to_read' ? 'text-violet-400 font-semibold' : 'text-slate-300'
+                  }`}
+                >
+                  <span>To Read</span>
+                  {readingStatus === 'to_read' && <Check className="w-3 h-3" />}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleUpdateStatus('reading')}
+                  className={`w-full text-left px-3 py-1.5 text-xs font-medium hover:bg-slate-800 flex items-center justify-between ${
+                    readingStatus === 'reading' ? 'text-violet-400 font-semibold' : 'text-slate-300'
+                  }`}
+                >
+                  <span>Reading</span>
+                  {readingStatus === 'reading' && <Check className="w-3 h-3" />}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleUpdateStatus('read')}
+                  className={`w-full text-left px-3 py-1.5 text-xs font-medium hover:bg-slate-800 flex items-center justify-between ${
+                    readingStatus === 'read' ? 'text-violet-400 font-semibold' : 'text-slate-300'
+                  }`}
+                >
+                  <span>Read</span>
+                  {readingStatus === 'read' && <Check className="w-3 h-3" />}
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Quick PDF Action */}
+          {hasPdf ? (
+            <button
+              type="button"
+              onClick={handleOpenReader}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/25 transition-all"
+              title="Open full-text in-app PDF reader"
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>Read PDF</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setIsReplacingPdf(false);
+                setIsUploadOpen(true);
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600/90 hover:bg-indigo-600 text-white text-xs font-semibold shadow-sm transition-all"
+              title="Upload PDF to your private cloud library"
+            >
+              <Upload className="w-3.5 h-3.5" />
+              <span>Upload PDF</span>
             </button>
           )}
 
@@ -391,6 +679,294 @@ export default function ArticleDetailView({
           </div>
         </div>
       </div>
+
+      {/* ========================================================================= */}
+      {/* PERSONAL ARTICLE PDF LIBRARY CARD */}
+      {/* ========================================================================= */}
+      <section className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400">
+              <FileText className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider flex items-center gap-2">
+                <span>Personal Article PDF Library</span>
+              </h3>
+              <p className="text-xs text-slate-400">
+                In-app scientific PDF reader, local downloads, and encrypted cloud storage
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {hasPdf ? (
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 flex items-center gap-1.5 shadow-sm">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <span>PDF Available in Library</span>
+              </span>
+            ) : paper.open_access_url ? (
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Open Access Publisher PDF</span>
+              </span>
+            ) : (
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/40 flex items-center gap-1.5">
+                <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
+                <span>Institutional Access Required</span>
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* State 3: PDF already stored in user's library */}
+        {hasPdf ? (
+          <div className="p-5 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-1.5 min-w-0">
+              <div className="flex items-center gap-2 text-xs">
+                <span className="font-semibold text-slate-100 truncate max-w-sm sm:max-w-md">
+                  {pdfRecord?.original_filename || 'article.pdf'}
+                </span>
+                <span className="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-300 font-mono">
+                  {pdfRecord?.file_size ? `${(pdfRecord.file_size / (1024 * 1024)).toFixed(2)} MB` : 'Full Article'}
+                </span>
+              </div>
+              <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
+                <span className="flex items-center gap-1 text-emerald-400">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>{pdfRecord?.source_type === 'institutional_access' ? 'Institutional Subscription' : pdfRecord?.source_type === 'open_access' ? 'Open Access Document' : 'User Cloud Vault'}</span>
+                </span>
+                <span>•</span>
+                <span>Saved: {pdfRecord?.created_at ? new Date(pdfRecord.created_at).toLocaleDateString() : 'Today'}</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={handleOpenReader}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-lg shadow-emerald-600/25 transition-all"
+              >
+                <BookOpen className="w-4 h-4" />
+                <span>Read PDF</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDownloadPdf}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-colors"
+                title="Download PDF directly to your computer"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsReplacingPdf(true);
+                  setIsUploadOpen(true);
+                }}
+                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors"
+                title="Replace with updated PDF file"
+              >
+                <RefreshCw className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowRemoveConfirm(true)}
+                className="p-2 rounded-xl bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-slate-700 transition-colors"
+                title="Remove PDF from library"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        ) : paper.open_access_url ? (
+          /* State 1: Publisher PDF accessible via Open Access or direct link */
+          <div className="p-5 rounded-2xl bg-cyan-950/20 border border-cyan-500/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <h4 className="text-xs font-bold text-cyan-300 uppercase tracking-wider">
+                Full-Text Open Access PDF Ready
+              </h4>
+              <p className="text-xs text-slate-300 max-w-xl">
+                This article is released under Open Access licensing. You can read the official publisher copy or upload it to your private cloud storage for permanent offline archiving.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <a
+                href={paper.open_access_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold shadow-md transition-all"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span>View Publisher PDF</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsReplacingPdf(false);
+                  setIsUploadOpen(true);
+                }}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold transition-colors"
+              >
+                <Upload className="w-4 h-4 text-indigo-400" />
+                <span>Save to Cloud Library</span>
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* State 2: Publisher PDF not accessible directly (paywalled / institutional) */
+          <div className="p-5 rounded-2xl bg-slate-950/60 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <h4 className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                <AlertCircle className="w-3.5 h-3.5 text-amber-400" />
+                <span>Institutional Subscription or Preprint Upload</span>
+              </h4>
+              <p className="text-xs text-slate-400 max-w-xl">
+                This publication requires institutional journal authentication or campus proxy. If you have retrieved the authorized PDF through your university library or author preprint, upload it below to read and store it inside your personal hub.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setIsReplacingPdf(false);
+                setIsUploadOpen(true);
+              }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-semibold shadow-lg shadow-indigo-600/25 shrink-0 transition-all"
+            >
+              <Upload className="w-4 h-4" />
+              <span>Upload Article PDF</span>
+            </button>
+          </div>
+        )}
+      </section>
+
+      {/* ========================================================================= */}
+      {/* RESEARCH WATCHLIST & READING NOTES CARD */}
+      {/* ========================================================================= */}
+      <section className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-violet-500/10 border border-violet-500/30 text-violet-400">
+              <BookMarked className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">
+                Research Watchlist & Personal Notes
+              </h3>
+              <p className="text-xs text-slate-400">
+                Track reading milestones, synthesis notes, and research priority
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleToggleWatchlist}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border ${
+                isWatchlisted
+                  ? 'bg-violet-600 text-white border-violet-500 shadow-sm'
+                  : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border-slate-700'
+              }`}
+            >
+              <BookMarked className="w-3.5 h-3.5" />
+              <span>{isWatchlisted ? 'In Watchlist' : 'Add to Watchlist'}</span>
+            </button>
+          </div>
+        </div>
+
+        {isWatchlisted ? (
+          <div className="space-y-4 pt-1">
+            {/* Reading Status Selector Buttons */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-semibold text-slate-400 mr-2">Reading Status:</span>
+              {[
+                { id: 'to_read', label: 'To Read', color: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
+                { id: 'reading', label: 'Currently Reading', color: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' },
+                { id: 'read', label: 'Completed / Read', color: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' }
+              ].map(st => (
+                <button
+                  key={st.id}
+                  type="button"
+                  onClick={() => handleUpdateStatus(st.id)}
+                  className={`px-3 py-1 rounded-xl text-xs font-medium border transition-all ${
+                    readingStatus === st.id
+                      ? `${st.color} font-semibold shadow-sm`
+                      : 'bg-slate-950/60 text-slate-400 border-slate-800 hover:text-slate-200'
+                  }`}
+                >
+                  {st.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Personal Research Note */}
+            <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                  <Edit3 className="w-3.5 h-3.5 text-violet-400" />
+                  <span>Personal Research Notes</span>
+                </span>
+                {!isEditingNote && (
+                  <button
+                    type="button"
+                    onClick={() => setIsEditingNote(true)}
+                    className="text-xs text-indigo-400 hover:text-indigo-300 font-medium"
+                  >
+                    {personalNote ? 'Edit Note' : 'Add Note'}
+                  </button>
+                )}
+              </div>
+
+              {isEditingNote ? (
+                <div className="space-y-2 pt-1">
+                  <textarea
+                    rows={3}
+                    value={noteInput}
+                    onChange={(e) => setNoteInput(e.target.value)}
+                    placeholder="Record key synthesis conditions, LCST cloud point, functional monomer tags, or hypothesis..."
+                    className="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 resize-none font-sans"
+                  />
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setNoteInput(personalNote);
+                        setIsEditingNote(false);
+                      }}
+                      className="px-3 py-1 rounded-lg text-xs text-slate-400 hover:text-slate-200"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSaveNote}
+                      className="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-sm"
+                    >
+                      Save Note
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-xs text-slate-300 italic">
+                  {personalNote || 'No personal research notes recorded yet. Click "Add Note" to write observations.'}
+                </p>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="py-2 text-xs text-slate-400">
+            Keep track of this paper in your active queue by clicking <strong className="text-slate-200">"Add to Watchlist"</strong> above.
+          </div>
+        )}
+      </section>
 
       {/* Tabs Navigation (Overview & Abstract, TOC / Graphical Abstract, AI Summary) */}
       <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
@@ -589,6 +1165,64 @@ export default function ArticleDetailView({
       {activeTab === 'summary' && (
         <div className="space-y-4 animate-in fade-in duration-200">
           <AISummaryViewer paper={paper} />
+        </div>
+      )}
+
+      {/* PDF Reader Modal */}
+      <PDFReaderModal
+        isOpen={isReaderOpen}
+        onClose={() => setIsReaderOpen(false)}
+        pdf={pdfRecord}
+        paper={paper}
+        pdfUrl={pdfReaderUrl}
+      />
+
+      {/* PDF Upload / Replace Modal */}
+      <PDFUploadModal
+        isOpen={isUploadOpen}
+        onClose={() => {
+          setIsUploadOpen(false);
+          setIsReplacingPdf(false);
+        }}
+        paper={paper}
+        isReplacement={isReplacingPdf}
+        onUploadSuccess={handleUploadSuccess}
+      />
+
+      {/* Remove PDF Confirmation Dialog */}
+      {showRemoveConfirm && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="w-full max-w-md bg-slate-900 border border-slate-750 rounded-2xl p-6 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3 text-rose-400">
+              <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20">
+                <Trash2 className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-semibold text-white">Remove PDF from Library?</h3>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Are you sure you want to remove <strong className="text-white font-mono">{pdfRecord?.original_filename || 'this PDF'}</strong> from your personal cloud storage? The metadata and research notes will be preserved.
+            </p>
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowRemoveConfirm(false)}
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleRemovePdf}
+                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold shadow-lg shadow-rose-600/20 transition-all"
+              >
+                Yes, Remove PDF
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

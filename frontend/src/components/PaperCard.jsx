@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Star, 
   ExternalLink, 
   Sparkles, 
   BookMarked, 
+  Bookmark,
   CheckCircle2, 
   XCircle, 
   HelpCircle, 
@@ -14,10 +15,12 @@ import {
   Award,
   Image as ImageIcon,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  FileText
 } from 'lucide-react';
 import { getJournalImpactFactor } from '../lib/journalMeta';
 import { getPaperDoiUrl, getOfficialPublisherUrl, formatDoiDisplay, cleanDoi } from '../lib/doiHelper';
+import { api } from '../lib/api';
 
 export default function PaperCard({ 
   paper, 
@@ -30,6 +33,47 @@ export default function PaperCard({
   onUpdateScreening 
 }) {
   const [expandedAbstract, setExpandedAbstract] = useState(false);
+  const [isWatchlisted, setIsWatchlisted] = useState(Boolean(paper.is_watchlisted));
+  const [hasPdf, setHasPdf] = useState(Boolean(paper.has_pdf));
+
+  useEffect(() => {
+    setIsWatchlisted(Boolean(paper.is_watchlisted || api.isArticleInWatchlist(paper.id)));
+    setHasPdf(Boolean(paper.has_pdf));
+  }, [paper.id, paper.is_watchlisted, paper.has_pdf]);
+
+  useEffect(() => {
+    const handleWatchlistChange = (e) => {
+      if (e.detail?.articleId === paper.id || (paper.doi && cleanDoi(e.detail?.doi) === cleanDoi(paper.doi))) {
+        if (e.detail.isWatchlisted !== undefined) {
+          setIsWatchlisted(e.detail.isWatchlisted);
+        }
+      }
+    };
+    const handlePdfChange = (e) => {
+      if (e.detail?.articleId === paper.id || (paper.doi && cleanDoi(e.detail?.doi) === cleanDoi(paper.doi))) {
+        setHasPdf(!e.detail.deleted);
+      }
+    };
+
+    window.addEventListener('prih-watchlist-updated', handleWatchlistChange);
+    window.addEventListener('prih-pdf-library-updated', handlePdfChange);
+    return () => {
+      window.removeEventListener('prih-watchlist-updated', handleWatchlistChange);
+      window.removeEventListener('prih-pdf-library-updated', handlePdfChange);
+    };
+  }, [paper.id, paper.doi]);
+
+  const handleToggleWatchlist = async (e) => {
+    e.stopPropagation();
+    if (isWatchlisted) {
+      await api.removeFromWatchlist(paper.id);
+      setIsWatchlisted(false);
+    } else {
+      await api.addToWatchlist(paper.id, { paper, reading_status: 'to_read' });
+      setIsWatchlisted(true);
+    }
+  };
+
   const authorsList = paper.authors?.map(a => a.name).join(', ') || 'Authors not listed';
   const publisherUrl = getOfficialPublisherUrl(paper);
   const displayDoi = formatDoiDisplay(paper.doi);
@@ -107,6 +151,14 @@ export default function PaperCard({
             {paper.open_access_url && (
               <span className="text-[11px] font-medium text-emerald-300 bg-emerald-950/60 border border-emerald-700/50 px-2 py-0.5 rounded-md shadow-sm">
                 Open Access
+              </span>
+            )}
+
+            {/* PDF Available in Library Indicator */}
+            {hasPdf && (
+              <span className="flex items-center gap-1 text-[11px] font-medium text-emerald-300 bg-emerald-950/70 border border-emerald-600/50 px-2 py-0.5 rounded-md shadow-sm" title="Full-text PDF saved in personal library">
+                <FileText className="w-3 h-3 text-emerald-400" />
+                <span>PDF Stored</span>
               </span>
             )}
 
@@ -273,6 +325,20 @@ export default function PaperCard({
                 <option value="in_progress">Reading</option>
                 <option value="completed">Read</option>
               </select>
+
+              {/* Watchlist Toggle Button */}
+              <button
+                type="button"
+                onClick={handleToggleWatchlist}
+                className={`p-1.5 rounded-lg border transition-all ${
+                  isWatchlisted 
+                    ? 'bg-violet-600/20 border-violet-500/50 text-violet-300 shadow-sm' 
+                    : 'bg-slate-800 border-slate-700 text-slate-500 hover:text-violet-300'
+                }`}
+                title={isWatchlisted ? 'In Watchlist (Click to remove)' : 'Add to Watchlist'}
+              >
+                <Bookmark className={`w-3.5 h-3.5 ${isWatchlisted ? 'fill-violet-400 text-violet-400' : ''}`} />
+              </button>
 
               {/* Favourite Star Toggle */}
               <button

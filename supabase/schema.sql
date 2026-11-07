@@ -502,3 +502,47 @@ VALUES
     ('ACS Applied Materials & Interfaces', 'ACS Applied Materials & Interfaces', 'ACS Appl. Mater. Interfaces', 'ACS Appl. Mater. Interfaces', 'American Chemical Society (ACS)', '1944-8244', '1944-8252', '9.5', 'Q1 · Functional Materials & Interfacial Science', TRUE, 'Leading ACS journal dedicated to functional materials and interfacial systems. Monitored strictly for polymer coatings, antifouling surfaces, hydrogel adhesives, and polymer composites.', 'from-indigo-600 to-slate-900')
 ON CONFLICT (canonical_title) DO NOTHING;
 
+
+-- 13. ARTICLE_PDFS TABLE (Personal Article PDF Cloud Storage)
+CREATE TABLE IF NOT EXISTS public.article_pdfs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    article_id TEXT NOT NULL,
+    doi TEXT,
+    user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+    storage_path TEXT NOT NULL UNIQUE,
+    original_filename TEXT NOT NULL,
+    mime_type TEXT NOT NULL DEFAULT 'application/pdf',
+    file_size BIGINT NOT NULL,
+    checksum TEXT,
+    source_type TEXT NOT NULL DEFAULT 'manual_upload' CHECK (source_type IN ('publisher_authorized', 'manual_upload', 'institutional_proxy', 'open_access')),
+    upload_status TEXT NOT NULL DEFAULT 'completed' CHECK (upload_status IN ('pending', 'completed', 'failed')),
+    created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_article_pdfs_article ON public.article_pdfs (article_id);
+CREATE INDEX IF NOT EXISTS idx_article_pdfs_doi ON public.article_pdfs (doi);
+CREATE INDEX IF NOT EXISTS idx_article_pdfs_user ON public.article_pdfs (user_id);
+CREATE INDEX IF NOT EXISTS idx_article_pdfs_created ON public.article_pdfs (created_at DESC);
+
+
+-- 14. ARTICLE_WATCHLIST TABLE (Personal Research Watchlist)
+CREATE TABLE IF NOT EXISTS public.article_watchlist (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    article_id TEXT NOT NULL,
+    doi TEXT,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    reading_status TEXT NOT NULL DEFAULT 'to_read' CHECK (reading_status IN ('to_read', 'reading', 'read')),
+    personal_note TEXT,
+    tags TEXT[] DEFAULT '{}',
+    added_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL,
+    CONSTRAINT uq_user_article_watchlist UNIQUE (user_id, article_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_watchlist_user ON public.article_watchlist (user_id);
+CREATE INDEX IF NOT EXISTS idx_watchlist_article ON public.article_watchlist (article_id);
+CREATE INDEX IF NOT EXISTS idx_watchlist_status ON public.article_watchlist (user_id, reading_status);
+CREATE INDEX IF NOT EXISTS idx_watchlist_added ON public.article_watchlist (added_at DESC);
+
+

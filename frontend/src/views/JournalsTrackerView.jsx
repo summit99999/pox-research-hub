@@ -50,6 +50,7 @@ import {
   cleanDoi, 
   formatDoiDisplay 
 } from '../lib/doiHelper.js';
+import { api } from '../lib/api.js';
 import PaperDetailModal from '../components/PaperDetailModal';
 import ThreeDTiltCard from '../components/ThreeDTiltCard';
 
@@ -66,6 +67,71 @@ export default function JournalsTrackerView({
   const [refreshingFeed, setRefreshingFeed] = useState(false);
   const [reclassifying, setReclassifying] = useState(false);
   const [auditMessage, setAuditMessage] = useState(null);
+
+  // Watchlist & PDF Library Sync
+  const [watchlistMap, setWatchlistMap] = useState(new Set());
+  const [pdfMap, setPdfMap] = useState(new Set());
+
+  const syncWatchlistAndPdfs = async () => {
+    try {
+      const [wList, pList] = await Promise.all([
+        api.getWatchlist(),
+        api.getPdfLibrary()
+      ]);
+      const wSet = new Set();
+      wList.forEach(w => {
+        if (w.article_id) wSet.add(String(w.article_id));
+        if (w.doi) wSet.add(cleanDoi(w.doi).toLowerCase());
+      });
+      setWatchlistMap(wSet);
+
+      const pSet = new Set();
+      pList.forEach(p => {
+        if (p.article_id) pSet.add(String(p.article_id));
+        if (p.doi) pSet.add(cleanDoi(p.doi).toLowerCase());
+      });
+      setPdfMap(pSet);
+    } catch (e) {
+      console.debug('Failed to sync watchlist/pdf maps:', e);
+    }
+  };
+
+  useEffect(() => {
+    syncWatchlistAndPdfs();
+    const handleWChange = () => syncWatchlistAndPdfs();
+    const handlePChange = () => syncWatchlistAndPdfs();
+    window.addEventListener('prih-watchlist-updated', handleWChange);
+    window.addEventListener('prih-pdf-library-updated', handlePChange);
+    return () => {
+      window.removeEventListener('prih-watchlist-updated', handleWChange);
+      window.removeEventListener('prih-pdf-library-updated', handlePChange);
+    };
+  }, []);
+
+  const handleToggleWatchlist = async (e, article) => {
+    e.stopPropagation();
+    const artId = String(article.id);
+    const cleaned = article.doi ? cleanDoi(article.doi).toLowerCase() : '';
+    const isW = watchlistMap.has(artId) || (cleaned && watchlistMap.has(cleaned));
+
+    if (isW) {
+      await api.removeFromWatchlist(artId);
+      setWatchlistMap(prev => {
+        const next = new Set(prev);
+        next.delete(artId);
+        if (cleaned) next.delete(cleaned);
+        return next;
+      });
+    } else {
+      await api.addToWatchlist(artId, { paper: article, reading_status: 'to_read' });
+      setWatchlistMap(prev => {
+        const next = new Set(prev);
+        next.add(artId);
+        if (cleaned) next.add(cleaned);
+        return next;
+      });
+    }
+  };
 
   // Filters for individual journal feed
   const [dateRange, setDateRange] = useState('all'); // '7d' | '30d' | '3m' | '6m' | '12m' | 'all'
@@ -563,6 +629,14 @@ export default function JournalsTrackerView({
                       <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-800 text-slate-300 border border-slate-700">
                         {article.article_type || 'Research Article'}
                       </span>
+
+                      {/* PDF Available in Library Badge */}
+                      {(pdfMap.has(String(article.id)) || (article.doi && pdfMap.has(cleanDoi(article.doi).toLowerCase()))) && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-950/70 border border-emerald-600/50 text-emerald-300 flex items-center gap-1 shadow-sm" title="Full-text PDF saved in personal library">
+                          <FileText className="w-3 h-3 text-emerald-400" />
+                          <span>PDF Stored</span>
+                        </span>
+                      )}
                     </div>
 
                     {/* Date indicators */}
@@ -724,6 +798,30 @@ export default function JournalsTrackerView({
                     </div>
 
                     <div className="flex items-center gap-2">
+                      {/* Watchlist Toggle Button */}
+                      <button
+                        type="button"
+                        onClick={(e) => handleToggleWatchlist(e, article)}
+                        className={`p-1.5 rounded-lg border transition-all ${
+                          watchlistMap.has(String(article.id)) || (article.doi && watchlistMap.has(cleanDoi(article.doi).toLowerCase()))
+                            ? 'bg-violet-600/25 border-violet-500/60 text-violet-300 shadow-sm'
+                            : 'bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-violet-300 border-slate-700'
+                        }`}
+                        title={
+                          watchlistMap.has(String(article.id)) || (article.doi && watchlistMap.has(cleanDoi(article.doi).toLowerCase()))
+                            ? 'In Watchlist (Click to remove)'
+                            : 'Add to Watchlist'
+                        }
+                      >
+                        <Bookmark
+                          className={`w-3.5 h-3.5 ${
+                            watchlistMap.has(String(article.id)) || (article.doi && watchlistMap.has(cleanDoi(article.doi).toLowerCase()))
+                              ? 'text-violet-400 fill-violet-400'
+                              : ''
+                          }`}
+                        />
+                      </button>
+
                       {onToggleFavourite && (
                         <button
                           type="button"

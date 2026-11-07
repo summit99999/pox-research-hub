@@ -19,7 +19,10 @@ import {
   Zap,
   CheckCircle2,
   Compass,
-  Boxes
+  Boxes,
+  FileText,
+  BookMarked,
+  Bookmark
 } from 'lucide-react';
 import { 
   ResponsiveContainer, 
@@ -70,7 +73,8 @@ export default function DashboardView({
   onUpdateReadingStatus,
   onUpdateScreening,
   onOpenDeveloperView,
-  onOpenDomains
+  onOpenDomains,
+  onNavigateToView
 }) {
   const [analytics, setAnalytics] = useState(DEFAULT_ANALYTICS);
   const [recentPapers, setRecentPapers] = useState([]);
@@ -79,20 +83,38 @@ export default function DashboardView({
   const [quickQuery, setQuickQuery] = useState('');
   const [chartMode, setChartMode] = useState('3d'); // '3d' | 'area'
   const [recentTab, setRecentTab] = useState('all'); // 'all' | '2026' | 'ai'
+  const [pdfStats, setPdfStats] = useState({ total_pdfs: 0, total_bytes: 0 });
+  const [watchStats, setWatchStats] = useState({ total: 0, to_read: 0, reading: 0, read: 0 });
 
   const isPOx = engine === ENGINE_SCOPES.POX;
 
   useEffect(() => {
     loadDashboardData();
+
+    const handlePdfUpdate = () => {
+      api.getPdfLibraryStats().then(setPdfStats).catch(() => {});
+    };
+    const handleWatchUpdate = () => {
+      api.getWatchlistStats().then(setWatchStats).catch(() => {});
+    };
+
+    window.addEventListener('prih-pdf-library-updated', handlePdfUpdate);
+    window.addEventListener('prih-watchlist-updated', handleWatchUpdate);
+    return () => {
+      window.removeEventListener('prih-pdf-library-updated', handlePdfUpdate);
+      window.removeEventListener('prih-watchlist-updated', handleWatchUpdate);
+    };
   }, [engine]);
 
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      const [analyticsData, papersData, categoriesData] = await Promise.all([
+      const [analyticsData, papersData, categoriesData, pStats, wStats] = await Promise.all([
         api.getAnalyticsOverview(engine).catch(() => null),
         api.getPapers({ engine, page_size: 10, sort_by: 'publication_date', sort_order: 'desc' }).catch(() => ({ items: [] })),
-        api.getCategories(engine).catch(() => [])
+        api.getCategories(engine).catch(() => []),
+        api.getPdfLibraryStats().catch(() => ({ total_pdfs: 0, total_bytes: 0 })),
+        api.getWatchlistStats().catch(() => ({ total: 0, to_read: 0, reading: 0, read: 0 }))
       ]);
 
       if (analyticsData) setAnalytics(analyticsData);
@@ -100,6 +122,8 @@ export default function DashboardView({
         setRecentPapers(papersData.items);
       }
       if (categoriesData && categoriesData.length > 0) setCategories(categoriesData);
+      if (pStats) setPdfStats(pStats);
+      if (wStats) setWatchStats(wStats);
     } catch (e) {
       console.debug('Dashboard load error', e);
     } finally {
@@ -445,6 +469,75 @@ export default function DashboardView({
             </ThreeDTiltCard>
           </>
         )}
+      </div>
+
+      {/* Personal Research Workspace Strip (PDF Library & Watchlist) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* PDF Library Card */}
+        <div 
+          onClick={() => onNavigateToView && onNavigateToView('pdf_library')}
+          className="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/30 border border-slate-800 hover:border-emerald-500/40 shadow-lg hover:shadow-xl transition-all cursor-pointer group flex items-start justify-between gap-4"
+        >
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                <FileText className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  Personal PDF Library
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Read research PDFs in-app & save full texts
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 pt-1 text-xs text-slate-300">
+              <span className="font-mono text-emerald-400 font-bold text-sm">
+                {pdfStats.total_pdfs}
+              </span>
+              <span>documents stored in secure cloud vault</span>
+            </div>
+          </div>
+          <span className="p-2 rounded-xl bg-slate-800 text-slate-400 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all shrink-0">
+            <ArrowRight className="w-4 h-4" />
+          </span>
+        </div>
+
+        {/* Research Watchlist Card */}
+        <div 
+          onClick={() => onNavigateToView && onNavigateToView('watchlist')}
+          className="p-5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-violet-950/30 border border-slate-800 hover:border-violet-500/40 shadow-lg hover:shadow-xl transition-all cursor-pointer group flex items-start justify-between gap-4"
+        >
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-xl bg-violet-500/10 border border-violet-500/30 text-violet-400">
+                <BookMarked className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white group-hover:text-violet-300 transition-colors">
+                  Research Watchlist
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Track reading priority & personal synthesis notes
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2.5 pt-1 text-xs text-slate-300">
+              <span className="font-mono text-violet-400 font-bold text-sm">
+                {watchStats.total}
+              </span>
+              <span>queued</span>
+              <span className="text-slate-600">•</span>
+              <span className="text-amber-400 font-medium">{watchStats.to_read} to read</span>
+              <span className="text-slate-600">•</span>
+              <span className="text-cyan-400 font-medium">{watchStats.reading} reading</span>
+            </div>
+          </div>
+          <span className="p-2 rounded-xl bg-slate-800 text-slate-400 group-hover:text-violet-400 group-hover:translate-x-1 transition-all shrink-0">
+            <ArrowRight className="w-4 h-4" />
+          </span>
+        </div>
       </div>
 
       {/* Research Trends Chart: 3D Isometric Bar Chart vs Smooth Area Gradient Toggle */}

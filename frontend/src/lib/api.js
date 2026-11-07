@@ -14,6 +14,7 @@ import {
   ENGINE_SCOPES 
 } from './searchEngine';
 import { cleanDoi } from './doiHelper';
+import { savePdfBlob, getPdfBlob, deletePdfBlob } from './pdfStorage';
 
 export const POX_CATEGORIES = poxCategories;
 export const UNIVERSAL_CATEGORIES = universalCategories;
@@ -32,12 +33,71 @@ const STORAGE_GAPS_KEY = 'prih_gap_reports_v3';
 const STORAGE_LOGS_KEY = 'prih_collection_logs_v3';
 const STORAGE_SAVED_SEARCHES_KEY = 'prih_saved_searches_v3';
 const STORAGE_SEARCH_HISTORY_KEY = 'prih_search_history_v3';
+const STORAGE_PDF_LIBRARY_KEY = 'prih_user_pdf_library_v3';
+const STORAGE_WATCHLIST_KEY = 'prih_article_watchlist_v3';
+
+const INITIAL_PDF_LIBRARY_SEED = [
+  {
+    id: 'pdf-seed-1',
+    article_id: 'univ-seed-1',
+    doi: '10.1021/ma9804951',
+    original_filename: 'Living_Free_Radical_Polymerization_RAFT_Macromolecules_1998.pdf',
+    file_size: 2458120,
+    mime_type: 'application/pdf',
+    source_type: 'institutional_access',
+    upload_status: 'completed',
+    created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+    updated_at: new Date(Date.now() - 86400000 * 2).toISOString()
+  },
+  {
+    id: 'pdf-seed-2',
+    article_id: 'univ-seed-2',
+    doi: '10.1021/ja00125a035',
+    original_filename: 'Controlled_Living_Radical_Polymerization_ATRP_JACS_1995.pdf',
+    file_size: 1982400,
+    mime_type: 'application/pdf',
+    source_type: 'institutional_access',
+    upload_status: 'completed',
+    created_at: new Date(Date.now() - 86400000 * 4).toISOString(),
+    updated_at: new Date(Date.now() - 86400000 * 4).toISOString()
+  }
+];
+
+const INITIAL_WATCHLIST_SEED = [
+  {
+    id: 'watch-seed-1',
+    article_id: 'univ-seed-1',
+    doi: '10.1021/ma9804951',
+    reading_status: 'reading',
+    personal_note: 'Analyzing chain transfer agent (CTA) degradation and dithioester synthesis protocols for precision block copolymerization.',
+    tags: ['Controlled Polymerization', 'RAFT', 'Copolymers'],
+    added_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+    updated_at: new Date(Date.now() - 86400000 * 2).toISOString()
+  },
+  {
+    id: 'watch-seed-2',
+    article_id: 'univ-seed-2',
+    doi: '10.1021/ja00125a035',
+    reading_status: 'to_read',
+    personal_note: 'Compare Cu(I)/bpy catalyst ratios with standard cationic ring-opening polymerization (CROP) termination kinetics.',
+    tags: ['ATRP', 'Living Radical', 'Kinetics'],
+    added_at: new Date(Date.now() - 86400000 * 5).toISOString(),
+    updated_at: new Date(Date.now() - 86400000 * 5).toISOString()
+  }
+];
 
 function getStoredArray(key, fallback = []) {
   try {
     const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : fallback;
+    if (!raw) {
+      if (key === STORAGE_PDF_LIBRARY_KEY) return INITIAL_PDF_LIBRARY_SEED;
+      if (key === STORAGE_WATCHLIST_KEY) return INITIAL_WATCHLIST_SEED;
+      return fallback;
+    }
+    return JSON.parse(raw);
   } catch {
+    if (key === STORAGE_PDF_LIBRARY_KEY) return INITIAL_PDF_LIBRARY_SEED;
+    if (key === STORAGE_WATCHLIST_KEY) return INITIAL_WATCHLIST_SEED;
     return fallback;
   }
 }
@@ -61,6 +121,20 @@ function getAllPapers() {
 
   const summaries = getStoredArray(STORAGE_SUMMARIES_KEY, {});
 
+  const pdfLibrary = getStoredArray(STORAGE_PDF_LIBRARY_KEY, []);
+  const pdfMap = new Map();
+  pdfLibrary.forEach(pdf => {
+    if (pdf.article_id) pdfMap.set(String(pdf.article_id), pdf);
+    if (pdf.doi) pdfMap.set(cleanDoi(pdf.doi).toLowerCase(), pdf);
+  });
+
+  const watchlist = getStoredArray(STORAGE_WATCHLIST_KEY, []);
+  const watchMap = new Map();
+  watchlist.forEach(w => {
+    if (w.article_id) watchMap.set(String(w.article_id), w);
+    if (w.doi) watchMap.set(cleanDoi(w.doi).toLowerCase(), w);
+  });
+
   // Combine initial curated POx papers + universal seed papers + extra collected papers
   const combinedRaw = [...initialPapers, ...universalSeedPapers, ...extraPapers];
   const deduplicated = deduplicatePapers(combinedRaw);
@@ -69,6 +143,10 @@ function getAllPapers() {
     const lib = libMap.get(p.id);
     const scr = screenMap.get(p.id);
     const hasSummary = Boolean(p.has_summary || summaries[p.id]);
+
+    const cDoi = p.doi ? cleanDoi(p.doi).toLowerCase() : '';
+    const pdfRecord = pdfMap.get(String(p.id)) || (cDoi ? pdfMap.get(cDoi) : null);
+    const watchRecord = watchMap.get(String(p.id)) || (cDoi ? watchMap.get(cDoi) : null);
 
     const isPOx = p.is_pox_relevant !== undefined ? p.is_pox_relevant : isPaperPOxRelevant(p);
     const isUniversal = true;
@@ -79,8 +157,13 @@ function getAllPapers() {
       is_universal_relevant: isUniversal,
       is_saved: Boolean(lib),
       is_favourite: Boolean(lib?.is_favourite),
-      reading_status: lib?.reading_status || 'unread',
-      personal_notes: lib?.notes || '',
+      is_watchlisted: Boolean(watchRecord),
+      watchlist_record: watchRecord || null,
+      has_pdf: Boolean(pdfRecord),
+      pdf_id: pdfRecord?.id || null,
+      pdf_record: pdfRecord || null,
+      reading_status: watchRecord?.reading_status || lib?.reading_status || 'unread',
+      personal_notes: watchRecord?.personal_note || lib?.notes || '',
       screening_status: scr?.screening_status || 'pending',
       exclusion_reason: scr?.exclusion_reason || null,
       has_summary: hasSummary
@@ -317,17 +400,27 @@ export const api = {
           (cleanedInputDoi && a.id?.replace(/^cr-/, '') === cleanedInputDoi)
         );
         if (match) {
-          // Decorate with library & screening status
+          // Decorate with library, PDF & watchlist status
           const library = getStoredArray(STORAGE_LIBRARY_KEY, []);
           const lib = library.find(l => l.paper_id === match.id || l.paper_id === match.doi);
           const screening = getStoredArray(STORAGE_SCREENING_KEY, []);
           const scr = screening.find(s => s.paper_id === match.id || s.paper_id === match.doi);
+          const pdfLib = getStoredArray(STORAGE_PDF_LIBRARY_KEY, []);
+          const pdfRecord = pdfLib.find(p => p.article_id === match.id || (cleanedInputDoi && cleanDoi(p.doi) === cleanedInputDoi));
+          const watchList = getStoredArray(STORAGE_WATCHLIST_KEY, []);
+          const watchRecord = watchList.find(w => w.article_id === match.id || (cleanedInputDoi && cleanDoi(w.doi) === cleanedInputDoi));
+
           return {
             ...match,
             is_saved: Boolean(lib),
             is_favourite: Boolean(lib?.is_favourite),
-            reading_status: lib?.reading_status || 'unread',
-            personal_notes: lib?.notes || '',
+            is_watchlisted: Boolean(watchRecord),
+            watchlist_record: watchRecord || null,
+            has_pdf: Boolean(pdfRecord),
+            pdf_id: pdfRecord?.id || null,
+            pdf_record: pdfRecord || null,
+            reading_status: watchRecord?.reading_status || lib?.reading_status || 'unread',
+            personal_notes: watchRecord?.personal_note || lib?.notes || '',
             screening_status: scr?.screening_status || 'pending'
           };
         }
@@ -859,5 +952,515 @@ export const api = {
     a.download = `prih_export_${Date.now()}.bib`;
     a.click();
     window.URL.revokeObjectURL(url);
+  },
+
+  // =========================================================================
+  // PERSONAL ARTICLE PDF LIBRARY
+  // =========================================================================
+
+  getArticlePdf: async (articleId) => {
+    if (!articleId) return { has_pdf: false, pdf: null };
+    const cleaned = cleanDoi(articleId);
+
+    // 1. Try backend API
+    try {
+      const res = await request(`/pdf/status/${encodeURIComponent(articleId)}`);
+      if (res && res.has_pdf && res.pdf) {
+        return res;
+      }
+    } catch (e) {
+      console.debug('Backend PDF status check error:', e);
+    }
+
+    // 2. Check local PDF library
+    const lib = getStoredArray(STORAGE_PDF_LIBRARY_KEY, []);
+    const match = lib.find(p => 
+      p.article_id === articleId || 
+      p.id === articleId || 
+      (cleaned && cleanDoi(p.doi) === cleaned)
+    );
+
+    if (match) {
+      return { has_pdf: true, pdf: match };
+    }
+
+    return { has_pdf: false, pdf: null };
+  },
+
+  uploadArticlePdf: async ({ articleId, doi, file, sourceType = 'manual_upload', paper = null }) => {
+    if (!articleId) throw new Error('Article ID is required for PDF upload');
+    if (!file) throw new Error('No PDF file provided');
+
+    // Validate MIME type & size
+    const isPdfType = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+    if (!isPdfType) {
+      throw new Error('Only valid PDF files (.pdf) are permitted.');
+    }
+    const MAX_SIZE = 50 * 1024 * 1024; // 50MB
+    if (file.size > MAX_SIZE) {
+      throw new Error('PDF file exceeds the maximum 50MB limit.');
+    }
+
+    // Read file as base64 for backend transmission
+    let fileBase64 = '';
+    try {
+      fileBase64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Failed to read PDF file'));
+        reader.readAsDataURL(file);
+      });
+    } catch (err) {
+      console.warn('Could not read file as base64 for API:', err);
+    }
+
+    const pdfId = `pdf-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    const cleanedDoi = doi || (paper?.doi ? cleanDoi(paper.doi) : '');
+
+    // Save binary blob into IndexedDB for instant, zero-latency viewing
+    await savePdfBlob(pdfId, articleId, cleanedDoi, file, {
+      filename: file.name,
+      file_size: file.size
+    });
+
+    let backendRecord = null;
+    try {
+      const res = await request('/pdf/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          article_id: articleId,
+          doi: cleanedDoi,
+          original_filename: file.name,
+          file_size: file.size,
+          mime_type: 'application/pdf',
+          source_type: sourceType,
+          file_base64: fileBase64
+        })
+      });
+      if (res && res.pdf) {
+        backendRecord = res.pdf;
+      }
+    } catch (e) {
+      console.warn('Backend upload fell back to local storage:', e);
+    }
+
+    const newRecord = {
+      id: backendRecord?.id || pdfId,
+      article_id: String(articleId),
+      doi: cleanedDoi,
+      original_filename: file.name,
+      file_size: file.size,
+      mime_type: 'application/pdf',
+      source_type: sourceType,
+      upload_status: 'completed',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      paper: paper ? {
+        id: paper.id,
+        title: paper.title,
+        journal: paper.journal,
+        publication_year: paper.publication_year,
+        authors: paper.authors,
+        doi: paper.doi,
+        open_access_url: paper.open_access_url,
+        landing_page_url: paper.landing_page_url
+      } : null
+    };
+
+    const currentLib = getStoredArray(STORAGE_PDF_LIBRARY_KEY, []);
+    const filtered = currentLib.filter(p => p.article_id !== String(articleId) && p.id !== newRecord.id);
+    const updatedLib = [newRecord, ...filtered];
+    setStoredArray(STORAGE_PDF_LIBRARY_KEY, updatedLib);
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('prih-pdf-library-updated', { detail: { articleId, pdf: newRecord } }));
+    }
+
+    return newRecord;
+  },
+
+  getSignedPdfUrl: async (pdfIdOrArticleId, action = 'read') => {
+    if (!pdfIdOrArticleId) throw new Error('PDF identifier is required');
+
+    // 1. Try remote API for cloud signed URL
+    try {
+      const endpoint = action === 'download' 
+        ? `/pdf/download-url/${encodeURIComponent(pdfIdOrArticleId)}`
+        : `/pdf/read-url/${encodeURIComponent(pdfIdOrArticleId)}`;
+      const res = await request(endpoint);
+      if (res && (res.signed_url || res.download_url)) {
+        return {
+          url: res.signed_url || res.download_url,
+          filename: res.original_filename || 'article.pdf',
+          isBlob: false
+        };
+      }
+    } catch (e) {
+      console.debug('Backend signed URL lookup error:', e);
+    }
+
+    // 2. Check IndexedDB cached blob
+    const cached = await getPdfBlob(pdfIdOrArticleId);
+    if (cached && cached.blob) {
+      const objUrl = URL.createObjectURL(cached.blob);
+      return {
+        url: objUrl,
+        filename: cached.filename || 'article.pdf',
+        isBlob: true
+      };
+    }
+
+    // 3. Fallback: check paper open_access_url
+    const papers = getAllPapers();
+    const match = papers.find(p => p.id === pdfIdOrArticleId || p.pdf_id === pdfIdOrArticleId);
+    if (match?.open_access_url) {
+      return {
+        url: match.open_access_url,
+        filename: `${(match.title || 'article').slice(0, 30)}.pdf`,
+        isBlob: false
+      };
+    }
+
+    throw new Error('PDF file could not be located in cloud storage or local cache');
+  },
+
+  replaceArticlePdf: async ({ pdfId, articleId, file, sourceType = 'replacement_upload', paper = null }) => {
+    return api.uploadArticlePdf({
+      articleId,
+      doi: paper?.doi,
+      file,
+      sourceType,
+      paper
+    });
+  },
+
+  removeArticlePdf: async (pdfId, articleId) => {
+    // 1. Try backend delete
+    try {
+      await request(`/pdf/${encodeURIComponent(pdfId || articleId)}`, { method: 'DELETE' });
+    } catch (e) {
+      console.debug('Backend PDF delete error:', e);
+    }
+
+    // 2. Delete from IndexedDB
+    if (pdfId) await deletePdfBlob(pdfId);
+    if (articleId) await deletePdfBlob(articleId);
+
+    // 3. Delete from localStorage
+    const currentLib = getStoredArray(STORAGE_PDF_LIBRARY_KEY, []);
+    const updated = currentLib.filter(p => p.id !== pdfId && p.article_id !== articleId);
+    setStoredArray(STORAGE_PDF_LIBRARY_KEY, updated);
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('prih-pdf-library-updated', { detail: { articleId, pdfId, deleted: true } }));
+    }
+
+    return { status: 'success' };
+  },
+
+  getPdfLibrary: async (params = {}) => {
+    const query = (params.query || '').trim().toLowerCase();
+    const journal = (params.journal || '').trim().toLowerCase();
+    const sortBy = params.sort_by || 'created_at';
+    const sortOrder = params.sort_order === 'asc' ? 'asc' : 'desc';
+
+    const localLib = getStoredArray(STORAGE_PDF_LIBRARY_KEY, []);
+    let items = [...localLib];
+
+    // Try merging with backend library
+    try {
+      const res = await request('/pdf/library');
+      if (res && Array.isArray(res.items)) {
+        const localIds = new Set(items.map(i => i.id));
+        res.items.forEach(remoteItem => {
+          if (!localIds.has(remoteItem.id)) {
+            items.push(remoteItem);
+          }
+        });
+      }
+    } catch (e) {
+      console.debug('Remote PDF library fetch warning:', e);
+    }
+
+    // Enrich with canonical paper data
+    const allPapers = getAllPapers();
+    const paperMap = new Map();
+    allPapers.forEach(p => {
+      paperMap.set(String(p.id), p);
+      if (p.doi) paperMap.set(cleanDoi(p.doi).toLowerCase(), p);
+    });
+
+    const enriched = items.map(item => {
+      const cDoi = item.doi ? cleanDoi(item.doi).toLowerCase() : '';
+      const paper = paperMap.get(String(item.article_id)) || (cDoi ? paperMap.get(cDoi) : null) || item.paper;
+      return {
+        ...item,
+        paper: paper || {
+          id: item.article_id,
+          title: item.original_filename,
+          journal: 'Imported Document',
+          publication_year: new Date(item.created_at || Date.now()).getFullYear(),
+          authors: []
+        }
+      };
+    });
+
+    let filtered = enriched;
+    if (query) {
+      filtered = filtered.filter(item => {
+        const text = `${item.paper?.title || ''} ${item.original_filename || ''} ${item.paper?.journal || ''} ${(item.paper?.authors || []).map(a => a.name || a.author).join(' ')}`.toLowerCase();
+        return text.includes(query);
+      });
+    }
+
+    if (journal) {
+      filtered = filtered.filter(item => (item.paper?.journal || '').toLowerCase().includes(journal));
+    }
+
+    filtered.sort((a, b) => {
+      if (sortBy === 'title') {
+        const tA = (a.paper?.title || a.original_filename || '').toLowerCase();
+        const tB = (b.paper?.title || b.original_filename || '').toLowerCase();
+        return sortOrder === 'asc' ? tA.localeCompare(tB) : tB.localeCompare(tA);
+      }
+      if (sortBy === 'file_size') {
+        return sortOrder === 'asc' ? (a.file_size || 0) - (b.file_size || 0) : (b.file_size || 0) - (a.file_size || 0);
+      }
+      if (sortBy === 'year') {
+        const yA = a.paper?.publication_year || 0;
+        const yB = b.paper?.publication_year || 0;
+        return sortOrder === 'asc' ? yA - yB : yB - yA;
+      }
+      // default: created_at
+      const dateA = new Date(a.created_at || 0).getTime();
+      const dateB = new Date(b.created_at || 0).getTime();
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+
+    return filtered;
+  },
+
+  getPdfLibraryStats: async () => {
+    const lib = await api.getPdfLibrary();
+    const totalBytes = lib.reduce((acc, curr) => acc + (curr.file_size || 0), 0);
+    const journals = new Set(lib.map(i => i.paper?.journal).filter(Boolean));
+    return {
+      total_pdfs: lib.length,
+      total_bytes: totalBytes,
+      journals_count: journals.size
+    };
+  },
+
+  // =========================================================================
+  // ARTICLE WATCHLIST
+  // =========================================================================
+
+  getWatchlist: async (params = {}) => {
+    const statusFilter = params.reading_status || 'all';
+    const query = (params.query || '').trim().toLowerCase();
+
+    const localList = getStoredArray(STORAGE_WATCHLIST_KEY, []);
+    let items = [...localList];
+
+    // Try merging with backend
+    try {
+      const res = await request('/watchlist');
+      if (res && Array.isArray(res.items)) {
+        const localIds = new Set(items.map(i => i.article_id));
+        res.items.forEach(remoteItem => {
+          if (!localIds.has(remoteItem.article_id)) {
+            items.push(remoteItem);
+          }
+        });
+      }
+    } catch (e) {
+      console.debug('Backend watchlist fetch error:', e);
+    }
+
+    const allPapers = getAllPapers();
+    const paperMap = new Map();
+    allPapers.forEach(p => {
+      paperMap.set(String(p.id), p);
+      if (p.doi) paperMap.set(cleanDoi(p.doi).toLowerCase(), p);
+    });
+
+    const pdfLib = getStoredArray(STORAGE_PDF_LIBRARY_KEY, []);
+    const pdfMap = new Map();
+    pdfLib.forEach(p => {
+      if (p.article_id) pdfMap.set(String(p.article_id), p);
+      if (p.doi) pdfMap.set(cleanDoi(p.doi).toLowerCase(), p);
+    });
+
+    const enriched = items.map(entry => {
+      const cDoi = entry.doi ? cleanDoi(entry.doi).toLowerCase() : '';
+      const paper = paperMap.get(String(entry.article_id)) || (cDoi ? paperMap.get(cDoi) : null) || entry.paper;
+      const pdf = pdfMap.get(String(entry.article_id)) || (cDoi ? pdfMap.get(cDoi) : null);
+
+      return {
+        ...entry,
+        paper: paper || {
+          id: entry.article_id,
+          title: 'Article in Watchlist',
+          journal: 'Research Publication',
+          publication_year: new Date(entry.added_at || Date.now()).getFullYear(),
+          authors: []
+        },
+        has_pdf: Boolean(pdf),
+        pdf_id: pdf?.id || null,
+        pdf: pdf || null
+      };
+    });
+
+    let filtered = enriched;
+    if (statusFilter && statusFilter !== 'all') {
+      filtered = filtered.filter(item => item.reading_status === statusFilter);
+    }
+
+    if (query) {
+      filtered = filtered.filter(item => {
+        const text = `${item.paper?.title || ''} ${item.paper?.journal || ''} ${item.personal_note || ''} ${(item.paper?.authors || []).map(a => a.name || a.author).join(' ')}`.toLowerCase();
+        return text.includes(query);
+      });
+    }
+
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.added_at || 0).getTime();
+      const dateB = new Date(b.added_at || 0).getTime();
+      return dateB - dateA;
+    });
+
+    return filtered;
+  },
+
+  addToWatchlist: async (articleId, { reading_status = 'to_read', personal_note = '', tags = [], paper = null } = {}) => {
+    if (!articleId) throw new Error('articleId is required to add to watchlist');
+    const cleanedDoi = paper?.doi ? cleanDoi(paper.doi) : '';
+
+    const newRecord = {
+      id: `watch-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      article_id: String(articleId),
+      doi: cleanedDoi,
+      reading_status: reading_status || 'to_read',
+      personal_note: personal_note || '',
+      tags: tags || [],
+      added_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      paper: paper ? {
+        id: paper.id,
+        title: paper.title,
+        journal: paper.journal,
+        publication_year: paper.publication_year,
+        authors: paper.authors,
+        doi: paper.doi
+      } : null
+    };
+
+    const currentList = getStoredArray(STORAGE_WATCHLIST_KEY, []);
+    const filtered = currentList.filter(item => item.article_id !== String(articleId) && item.id !== newRecord.id);
+    const updatedList = [newRecord, ...filtered];
+    setStoredArray(STORAGE_WATCHLIST_KEY, updatedList);
+
+    try {
+      await request('/watchlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          article_id: articleId,
+          doi: cleanedDoi,
+          reading_status,
+          personal_note,
+          tags
+        })
+      });
+    } catch (e) {
+      console.debug('Backend addToWatchlist error (cached locally):', e);
+    }
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('prih-watchlist-updated', { detail: { articleId, isWatchlisted: true, record: newRecord } }));
+    }
+
+    return newRecord;
+  },
+
+  removeFromWatchlist: async (articleId) => {
+    if (!articleId) return;
+    const currentList = getStoredArray(STORAGE_WATCHLIST_KEY, []);
+    const updatedList = currentList.filter(item => item.article_id !== String(articleId) && item.id !== String(articleId));
+    setStoredArray(STORAGE_WATCHLIST_KEY, updatedList);
+
+    try {
+      await request(`/watchlist/${encodeURIComponent(articleId)}`, { method: 'DELETE' });
+    } catch (e) {
+      console.debug('Backend removeFromWatchlist error:', e);
+    }
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('prih-watchlist-updated', { detail: { articleId, isWatchlisted: false } }));
+    }
+
+    return { status: 'success' };
+  },
+
+  updateWatchlist: async (articleId, { reading_status, personal_note, tags }) => {
+    if (!articleId) return;
+    const currentList = getStoredArray(STORAGE_WATCHLIST_KEY, []);
+    const index = currentList.findIndex(item => item.article_id === String(articleId) || item.id === String(articleId));
+
+    if (index !== -1) {
+      const updated = {
+        ...currentList[index],
+        ...(reading_status !== undefined ? { reading_status } : {}),
+        ...(personal_note !== undefined ? { personal_note } : {}),
+        ...(tags !== undefined ? { tags } : {}),
+        updated_at: new Date().toISOString()
+      };
+      currentList[index] = updated;
+      setStoredArray(STORAGE_WATCHLIST_KEY, currentList);
+
+      try {
+        await request(`/watchlist/${encodeURIComponent(articleId)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reading_status, personal_note, tags })
+        });
+      } catch (e) {
+        console.debug('Backend updateWatchlist error:', e);
+      }
+
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('prih-watchlist-updated', { detail: { articleId, record: updated } }));
+      }
+
+      return updated;
+    }
+  },
+
+  isArticleInWatchlist: (articleId) => {
+    if (!articleId) return false;
+    const currentList = getStoredArray(STORAGE_WATCHLIST_KEY, []);
+    const cleaned = cleanDoi(articleId);
+    return currentList.some(item => 
+      item.article_id === String(articleId) || 
+      item.id === String(articleId) ||
+      (cleaned && cleanDoi(item.doi) === cleaned)
+    );
+  },
+
+  getWatchlistStats: async () => {
+    const list = await api.getWatchlist();
+    const toRead = list.filter(i => i.reading_status === 'to_read').length;
+    const reading = list.filter(i => i.reading_status === 'reading').length;
+    const read = list.filter(i => i.reading_status === 'read').length;
+    const withPdf = list.filter(i => i.has_pdf).length;
+
+    return {
+      total: list.length,
+      to_read: toRead,
+      reading: reading,
+      read: read,
+      with_pdf: withPdf
+    };
   }
 };

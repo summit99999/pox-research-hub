@@ -14,6 +14,8 @@ import DeveloperPublicationsView from './views/DeveloperPublicationsView';
 import JournalsTrackerView from './views/JournalsTrackerView';
 import ArticleDetailView from './views/ArticleDetailView';
 import PolymerDomainsView from './views/PolymerDomainsView';
+import PdfLibraryView from './views/PdfLibraryView';
+import WatchlistView from './views/WatchlistView';
 import PaperDetailModal from './components/PaperDetailModal';
 import CollectorModal from './components/CollectorModal';
 import AuthModal from './components/AuthModal';
@@ -93,6 +95,16 @@ export default function App() {
       if ((e.ctrlKey || e.metaKey) && (e.key === 'b' || e.key === 'B')) {
         e.preventDefault();
         setSidebarOpen(prev => !prev);
+      }
+
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P')) {
+        e.preventDefault();
+        setActiveView('pdf_library');
+      }
+
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'w' || e.key === 'W')) {
+        e.preventDefault();
+        setActiveView('watchlist');
       }
 
       if (e.key === 'Escape') {
@@ -431,6 +443,7 @@ export default function App() {
               onUpdateScreening={handleUpdateScreening}
               onOpenDeveloperView={() => setActiveView('developer')}
               onOpenDomains={handleOpenDomain}
+              onNavigateToView={setActiveView}
             />
           )}
 
@@ -714,6 +727,20 @@ export default function App() {
               onUpdateReadingStatus={handleUpdateReadingStatus}
               onUpdateScreening={handleUpdateScreening}
               initialTab="synthesis"
+            />
+          )}
+
+          {activeView === 'pdf_library' && (
+            <PdfLibraryView
+              onOpenDetails={handleOpenDetails}
+              onNavigateToSearch={handleNavigateToSearch}
+            />
+          )}
+
+          {activeView === 'watchlist' && (
+            <WatchlistView
+              onOpenDetails={handleOpenDetails}
+              onNavigateToSearch={handleNavigateToSearch}
             />
           )}
 
